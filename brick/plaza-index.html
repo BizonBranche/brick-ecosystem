@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🪙 List Your Token - $BRICK PLAZA</title>
+
+ <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧱</text></svg>">
+
+
+    <script src="https://unpkg.com/@solana/web3.js@latest/lib/index.iife.js"></script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #e8fff5, #fff);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 24px;
+            padding: 32px;
+            box-shadow: 0 10px 40px #00aa8820;
+            border: 1px solid #00aa88;
+        }
+        h1 {
+            font-size: 32px;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: #1a1a1a;
+        }
+        h1 span { font-size: 40px; }
+        .subtitle {
+            color: #666;
+            margin-bottom: 32px;
+            font-size: 16px;
+            border-left: 4px solid #00aa88;
+            padding-left: 16px;
+            background: #e8fff5;
+            padding: 16px;
+            border-radius: 12px;
+        }
+        .wallet-section {
+            background: #f8f9fa;
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 24px;
+        }
+        .wallet-button {
+            background: #00aa88;
+            color: white;
+            border: none;
+            padding: 14px 28px;
+            border-radius: 40px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+        }
+        .wallet-button:hover {
+            background: #00cc99;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px #00aa8860;
+        }
+        .wallet-button.connected {
+            background: white;
+            color: #00aa88;
+            border: 2px solid #00aa88;
+        }
+        .wallet-info {
+            margin-top: 12px;
+            padding: 12px;
+            background: white;
+            border-radius: 12px;
+            font-size: 14px;
+            display: none;
+        }
+        .wallet-info.show { display: block; }
+        .form-group { margin-bottom: 20px; }
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #333;
+            font-size: 14px;
+        }
+        input, textarea {
+            width: 100%;
+            padding: 14px;
+            border: 2px solid #aaffdd;
+            border-radius: 12px;
+            font-size: 15px;
+            background: white;
+        }
+        input:focus, textarea:focus {
+            border-color: #00aa88;
+            outline: none;
+            box-shadow: 0 0 0 4px #00aa8820;
+        }
+        .image-upload {
+            border: 2px dashed #00aa88;
+            border-radius: 16px;
+            padding: 32px;
+            text-align: center;
+            cursor: pointer;
+            background: #fafafa;
+        }
+        .image-upload:hover {
+            background: #e8fff5;
+        }
+        .image-upload input { display: none; }
+        .image-preview {
+            max-width: 100%;
+            max-height: 200px;
+            margin-top: 16px;
+            border-radius: 12px;
+            display: none;
+        }
+        .image-preview.show { display: block; }
+        .price-section {
+            background: linear-gradient(135deg, #e8fff5, #d0ffe8);
+            border-radius: 16px;
+            padding: 20px;
+            margin: 24px 0;
+        }
+        .price {
+            font-size: 32px;
+            font-weight: 700;
+            color: #00aa88;
+            text-align: center;
+        }
+        .pay-button {
+            background: #00aa88;
+            color: white;
+            border: none;
+            padding: 18px;
+            border-radius: 40px;
+            font-size: 18px;
+            font-weight: 700;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 16px;
+        }
+        .pay-button:hover:not(:disabled) {
+            background: #00cc99;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px #00aa8860;
+        }
+        .pay-button:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+        .back-link {
+            display: inline-block;
+            margin-top: 24px;
+            color: #666;
+            text-decoration: none;
+        }
+        .back-link:hover { color: #00aa88; }
+        .status {
+            margin-top: 16px;
+            padding: 12px;
+            border-radius: 12px;
+            display: none;
+        }
+        .status.show { display: block; }
+        .status.success {
+            background: #e8fff5;
+            color: #00aa88;
+            border: 1px solid #00aa88;
+        }
+        .status.error {
+            background: #ffe6e6;
+            color: #cc0000;
+            border: 1px solid #ff9999;
+        }
+        .status.info {
+            background: #e6f3ff;
+            color: #0066cc;
+        }
+        .social-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+        }
+        .contract-input input {
+            font-family: monospace;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1><span>🪙</span> List Your Token</h1>
+        <div class="subtitle">
+            $BRICK PLAZA · 0.5 SOL · Showcase your memecoin
+        </div>
+
+        <input type="hidden" id="cell-field" value="">
+
+        <div class="wallet-section">
+            <button id="wallet-btn" class="wallet-button">🔌 Connect Wallet</button>
+            <div id="wallet-info" class="wallet-info">
+                <strong>Wallet connected:</strong><br>
+                <span id="wallet-address"></span>
+            </div>
+        </div>
+
+        <form id="purchase-form">
+            <div class="form-group contract-input">
+                <label>📋 Contract Address (required)</label>
+                <input type="text" id="contract" placeholder="Solana token contract address..." pattern="[A-Za-z0-9]{32,44}" required>
+            </div>
+
+            <div class="form-group">
+                <label>📝 Description (max 200)</label>
+                <textarea id="message" maxlength="200" rows="3" placeholder="Describe your token..." required></textarea>
+                <div style="text-align:right; font-size:12px; color:#666; margin-top:4px">
+                    <span id="char-count">0</span>/200
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>🌐 Links</label>
+                <div class="social-grid">
+                    <input type="url" id="twitter" placeholder="🐦 Twitter">
+                    <input type="url" id="telegram" placeholder="✈️ Telegram">
+                    <input type="url" id="discord" placeholder="💬 Discord">
+                    <input type="url" id="website" placeholder="🌍 Website" value="https://">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>🖼️ Token Image</label>
+                <div id="image-upload" class="image-upload">
+                    <span style="font-size: 40px;">🪙</span><br>
+                    <strong>Click to upload logo</strong>
+                    <input type="file" id="image" accept="image/*">
+                    <img id="image-preview" class="image-preview">
+                </div>
+            </div>
+
+            <div class="price-section">
+                <div class="price">
+                    0.5 SOL
+                </div>
+            </div>
+
+            <button type="submit" id="pay-btn" class="pay-button" disabled>
+                🪙 LIST TOKEN · 0.5 SOL
+            </button>
+        </form>
+
+        <div id="status" class="status"></div>
+        <a href="plaza.html" class="back-link">← Back to Plaza</a>
+    </div>
+
+    <div id="success-popup" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); backdrop-filter: blur(5px); z-index: 1000; align-items: center; justify-content: center;">
+        <div style="background: white; max-width: 400px; padding: 40px; border-radius: 32px; text-align: center; border: 2px solid #00aa88;">
+            <div style="font-size: 80px;">🪙✨</div>
+            <h2 style="color: #00aa88; margin: 20px 0;">TOKEN LISTED!</h2>
+            <p>Pending moderation</p>
+            <a href="plaza.html" style="display: block; background: #00aa88; color: white; padding: 18px; border-radius: 40px; text-decoration: none; margin-top: 20px;">
+                SEE ON PLAZA
+            </a>
+        </div>
+    </div>
+
+    <script>
+        const CONFIG = {
+            TO_WALLET: '6ieEMVMJMjjFUW35KrjTdG6cEqy6mxRGZHLdKsXwp6r3'
+        };
+
+        // DOM Elements
+        const walletBtn = document.getElementById('wallet-btn');
+        const walletInfo = document.getElementById('wallet-info');
+        const walletAddress = document.getElementById('wallet-address');
+        const payBtn = document.getElementById('pay-btn');
+        const statusDiv = document.getElementById('status');
+        const imageUpload = document.getElementById('image-upload');
+        const imageInput = document.getElementById('image');
+        const imagePreview = document.getElementById('image-preview');
+        const messageInput = document.getElementById('message');
+        const charCount = document.getElementById('char-count');
+        const cellField = document.getElementById('cell-field');
+        const contractInput = document.getElementById('contract');
+        
+        const twitter = document.getElementById('twitter');
+        const telegram = document.getElementById('telegram');
+        const discord = document.getElementById('discord');
+        const website = document.getElementById('website');
+
+        let wallet = null;
+        let publicKey = null;
+        let compressedImage = null;
+
+        // Get cell from URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const cellFromUrl = urlParams.get('cell');
+        let selectedCell = cellFromUrl ? cellFromUrl.toUpperCase() : '';
+        if (selectedCell) {
+            cellField.value = selectedCell;
+        }
+
+        // Char count
+        messageInput.addEventListener('input', function() {
+            charCount.textContent = this.value.length;
+        });
+
+        // Connect wallet
+        async function connectWallet() {
+            try {
+                if (!window.solana || !window.solana.isPhantom) {
+                    alert('Please install Phantom wallet');
+                    window.open('https://phantom.app', '_blank');
+                    return;
+                }
+
+                const response = await window.solana.connect();
+                publicKey = response.publicKey.toString();
+                wallet = window.solana;
+                
+                walletBtn.textContent = `✅ ${publicKey.slice(0,4)}...${publicKey.slice(-4)}`;
+                walletBtn.classList.add('connected');
+                walletAddress.textContent = publicKey;
+                walletInfo.classList.add('show');
+                payBtn.disabled = false;
+                
+                showStatus('✅ Wallet connected', 'success');
+                
+            } catch (error) {
+                showStatus('❌ Connection failed', 'error');
+            }
+        }
+
+        walletBtn.addEventListener('click', connectWallet);
+
+        // Auto-connect
+        window.addEventListener('load', async () => {
+            if (window.solana?.isPhantom) {
+                try {
+                    const response = await window.solana.connect({ onlyIfTrusted: true });
+                    publicKey = response.publicKey.toString();
+                    wallet = window.solana;
+                    walletBtn.textContent = `✅ ${publicKey.slice(0,4)}...${publicKey.slice(-4)}`;
+                    walletBtn.classList.add('connected');
+                    walletAddress.textContent = publicKey;
+                    walletInfo.classList.add('show');
+                    payBtn.disabled = false;
+                } catch (error) {}
+            }
+        });
+
+        // Image upload
+        imageUpload.addEventListener('click', () => imageInput.click());
+        
+        imageInput.addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+
+            if (file.size > 5 * 1024 * 1024) {
+                showStatus('❌ Image too large (max 5MB)', 'error');
+                return;
+            }
+
+            const reader = new FileReader();
+            reader.onload = function(ev) {
+                const img = new Image();
+                img.onload = function() {
+                    const canvas = document.createElement('canvas');
+                    let w = img.width, h = img.height;
+                    
+                    if (w > h) {
+                        if (w > 200) { h *= 200 / w; w = 200; }
+                    } else {
+                        if (h > 200) { w *= 200 / h; h = 200; }
+                    }
+                    
+                    canvas.width = Math.round(w);
+                    canvas.height = Math.round(h);
+                    canvas.getContext('2d').drawImage(img, 0, 0, canvas.width, canvas.height);
+                    
+                    compressedImage = canvas.toDataURL('image/jpeg', 0.7);
+                    
+                    imagePreview.src = compressedImage;
+                    imagePreview.classList.add('show');
+                };
+                img.src = ev.target.result;
+            };
+            reader.readAsDataURL(file);
+        });
+
+        // Payment
+        async function payWithSOL(amount) {
+            if (!wallet) throw new Error('Wallet not connected');
+            
+            const connection = new solanaWeb3.Connection('https://solana.publicnode.com');
+            const { blockhash } = await connection.getLatestBlockhash();
+            
+            const transaction = new solanaWeb3.Transaction({
+                recentBlockhash: blockhash,
+                feePayer: wallet.publicKey
+            }).add(
+                solanaWeb3.SystemProgram.transfer({
+                    fromPubkey: wallet.publicKey,
+                    toPubkey: new solanaWeb3.PublicKey(CONFIG.TO_WALLET),
+                    lamports: amount * solanaWeb3.LAMPORTS_PER_SOL
+                })
+            );
+
+            const signature = await wallet.signAndSendTransaction(transaction);
+            return signature;
+        }
+
+        // Form submit
+        async function handleSubmit(e) {
+            e.preventDefault();
+            
+            if (!publicKey) {
+                showStatus('❌ Connect wallet first', 'error');
+                return;
+            }
+
+            const cell = selectedCell;
+            const message = messageInput.value.trim();
+            const contract = contractInput.value.trim();
+            
+            if (!cell) {
+                showStatus('❌ No cell selected', 'error');
+                return;
+            }
+
+            if (!contract) {
+                showStatus('❌ Contract address required', 'error');
+                return;
+            }
+
+            if (!message) {
+                showStatus('❌ Description required', 'error');
+                return;
+            }
+
+            if (!compressedImage) {
+                showStatus('❌ Image required', 'error');
+                return;
+            }
+
+            try {
+                showStatus('💸 Sending payment...', 'info');
+                payBtn.disabled = true;
+                
+                const signature = await payWithSOL(0.5);
+                
+                const socialLinks = {
+                    twitter: twitter.value,
+                    telegram: telegram.value,
+                    discord: discord.value,
+                    website: website.value
+                };
+                
+                const plazaData = {
+                    wallet: publicKey,
+                    contract: contract,
+                    message: message,
+                    socials: socialLinks,
+                    image: compressedImage,
+                    timestamp: Date.now(),
+                    signature: typeof signature === 'string' ? signature : signature.signature || signature.toString(),
+                    cell: cell
+                };
+                
+                localStorage.setItem('plaza_' + cell, JSON.stringify(plazaData));
+                
+                document.getElementById('success-popup').style.display = 'flex';
+                
+            } catch (error) {
+                console.error(error);
+                showStatus('❌ Error: ' + error.message, 'error');
+                payBtn.disabled = false;
+            }
+        }
+
+        document.getElementById('purchase-form').addEventListener('submit', handleSubmit);
+
+        function showStatus(message, type) {
+            statusDiv.textContent = message;
+            statusDiv.className = 'status show ' + type;
+        }
+    </script>
+</body>
+</html>

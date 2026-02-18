@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🪙 $BRICK PLAZA - View Token</title>
+    <style>
+        body {
+            background: #f8fafc;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        .token-card {
+            background: white;
+            border-radius: 32px;
+            padding: 40px;
+            max-width: 500px;
+            text-align: center;
+            box-shadow: 0 20px 40px #00aa8820;
+            border: 2px solid #00aa88;
+        }
+        .token-image {
+            width: 200px;
+            height: 200px;
+            border-radius: 20px;
+            object-fit: cover;
+            margin-bottom: 20px;
+            border: 3px solid #00aa88;
+        }
+        .token-cell {
+            font-size: 48px;
+            color: #00aa88;
+            font-weight: 800;
+            margin-bottom: 10px;
+        }
+        .token-message {
+            font-size: 18px;
+            color: #1e293b;
+            margin: 20px 0;
+            padding: 20px;
+            background: #f1f5f9;
+            border-radius: 16px;
+        }
+        .token-wallet {
+            font-family: monospace;
+            color: #64748b;
+            background: #f8fafc;
+            padding: 10px;
+            border-radius: 40px;
+            margin: 20px 0;
+        }
+        .token-contract {
+            background: #e8fff5;
+            padding: 10px;
+            border-radius: 8px;
+            font-size: 12px;
+            word-break: break-all;
+            margin: 20px 0;
+        }
+        .back-link {
+            display: inline-block;
+            margin-top: 20px;
+            color: #00aa88;
+            text-decoration: none;
+            font-weight: 600;
+        }
+        .social-links {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+        .social-link {
+            background: #f0f0f0;
+            padding: 8px 16px;
+            border-radius: 40px;
+            text-decoration: none;
+            color: #333;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <div class="token-card" id="token-card">
+        <div id="content">
+            <!-- Rempli par JS -->
+        </div>
+        <a href="plaza.html" class="back-link">← Back to Plaza</a>
+    </div>
+
+    <script>
+        const urlParams = new URLSearchParams(window.location.search);
+        const cell = urlParams.get('cell');
+        
+        if (!cell) {
+            window.location.href = 'plaza.html';
+        } else {
+            const tokenData = localStorage.getItem('plaza_' + cell);
+            if (!tokenData) {
+                document.getElementById('content').innerHTML = `
+                    <div style="font-size: 48px;">😢</div>
+                    <h2>Token ${cell} not found</h2>
+                    <p>This spot is still available!</p>
+                    <a href="plaza-index.html?cell=${cell}" style="display: inline-block; background: #00aa88; color: white; padding: 15px 30px; border-radius: 60px; text-decoration: none; margin: 20px 0;">🪙 List your token</a>
+                `;
+            } else {
+                const token = JSON.parse(tokenData);
+                let socialsHtml = '';
+                if (token.socials) {
+                    const links = [
+                        { url: token.socials.twitter, icon: '🐦' },
+                        { url: token.socials.telegram, icon: '✈️' },
+                        { url: token.socials.discord, icon: '💬' },
+                        { url: token.socials.website, icon: '🌍' }
+                    ];
+                    links.forEach(link => {
+                        if (link.url) {
+                            socialsHtml += `<a href="${link.url}" target="_blank" class="social-link">${link.icon}</a>`;
+                        }
+                    });
+                }
+                
+                document.getElementById('content').innerHTML = `
+                    <img class="token-image" src="${token.image}" onerror="this.src='https://placehold.co/200x200/00aa88/FFFFFF?text=🪙'">
+                    <div class="token-cell">🪙 ${token.cell}</div>
+                    <div class="token-message">"${token.message}"</div>
+                    <div class="token-wallet">${token.wallet.slice(0,4)}...${token.wallet.slice(-4)}</div>
+                    <div class="token-contract">Contract: ${token.contract.slice(0,12)}...${token.contract.slice(-8)}</div>
+                    ${socialsHtml ? `<div class="social-links">${socialsHtml}</div>` : ''}
+                `;
+            }
+        }
+    </script>
+</body>
+</html>

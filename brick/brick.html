@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🧱 BRICK - View a Brick</title>
+    <style>
+        body {
+            background: #f8fafc;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        .brick-card {
+            background: white;
+            border-radius: 32px;
+            padding: 40px;
+            max-width: 500px;
+            text-align: center;
+            box-shadow: 0 20px 40px #FF44AA20;
+            border: 2px solid #FF44AA;
+        }
+        .brick-image {
+            width: 200px;
+            height: 200px;
+            border-radius: 20px;
+            object-fit: cover;
+            margin-bottom: 20px;
+            border: 3px solid #FF44AA;
+        }
+        .brick-cell {
+            font-size: 48px;
+            color: #FF44AA;
+            font-weight: 800;
+            margin-bottom: 10px;
+        }
+        .brick-message {
+            font-size: 18px;
+            color: #1e293b;
+            margin: 20px 0;
+            padding: 20px;
+            background: #f1f5f9;
+            border-radius: 16px;
+        }
+        .brick-wallet {
+            font-family: monospace;
+            color: #64748b;
+            background: #f8fafc;
+            padding: 10px;
+            border-radius: 40px;
+            margin: 20px 0;
+        }
+        .back-link {
+            display: inline-block;
+            margin-top: 20px;
+            color: #FF44AA;
+            text-decoration: none;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+    <div class="brick-card" id="brick-card">
+        <div id="content">
+            <!-- Rempli par JS -->
+        </div>
+        <a href="canvas.html" class="back-link">← Back to Canvas</a>
+    </div>
+
+    <script>
+        const urlParams = new URLSearchParams(window.location.search);
+        const cell = urlParams.get('cell');
+        
+        if (!cell) {
+            window.location.href = 'canvas.html';
+        } else {
+            const brickData = localStorage.getItem('brick_' + cell);
+            if (!brickData) {
+                document.getElementById('content').innerHTML = `
+                    <div style="font-size: 48px;">😢</div>
+                    <h2>Brick ${cell} not found</h2>
+                    <p>This brick hasn't been claimed yet!</p>
+                    <a href="buy-original.html?cell=${cell}" style="display: inline-block; background: #FF44AA; color: white; padding: 15px 30px; border-radius: 60px; text-decoration: none; margin: 20px 0;">🧱 Claim this brick</a>
+                `;
+            } else {
+                const brick = JSON.parse(brickData);
+                document.getElementById('content').innerHTML = `
+                    <img class="brick-image" src="${brick.image}" onerror="this.src='https://placehold.co/200x200/FF44AA/FFFFFF?text=🧱'">
+                    <div class="brick-cell">🧱 ${brick.cell}</div>
+                    <div class="brick-message">"${brick.message}"</div>
+                    <div class="brick-wallet">${brick.wallet.slice(0,4)}...${brick.wallet.slice(-4)}</div>
+                `;
+            }
+        }
+    </script>
+</body>
+</html>

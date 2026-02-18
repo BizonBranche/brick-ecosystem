@@ -1,0 +1,745 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🧱 BRICK CANVAS - 400 unique bricks</title>
+    
+    <!-- Favicon -->
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧱</text></svg>">
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Solana Web3 -->
+    <script src="https://unpkg.com/@solana/web3.js@latest/lib/index.iife.js"></script>
+    
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #fff0f5, white);
+            min-height: 100vh;
+            padding: 30px 20px;
+            position: relative;
+        }
+
+        /* ===== STICKY MENU PROFESSIONNEL ===== */
+        .nav {
+            background: white;
+            backdrop-filter: blur(10px);
+            border-bottom: 2px solid #FF44AA20;
+            padding: 12px 24px;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 4px 20px rgba(255,68,170,0.1);
+            margin-bottom: 20px;
+        }
+
+        .nav-inner {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            gap: 24px;
+        }
+
+        .brand a {
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .nav-links a {
+            color: #64748b;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 15px;
+            padding: 8px 16px;
+            border-radius: 40px;
+            transition: all 0.2s;
+        }
+
+        .nav-links a:hover {
+            color: #FF44AA;
+            background: #fff0f5;
+        }
+
+        .nav-links a.active {
+            color: #FF44AA;
+            background: #fff0f5;
+            border: 1px solid #FF44AA20;
+        }
+
+        .spacer {
+            flex: 1;
+        }
+
+        .wallet-badge {
+            background: #fff0f5;
+            border: 1px solid #FF44AA;
+            padding: 6px 16px;
+            border-radius: 40px;
+            font-size: 13px;
+            font-weight: 600;
+            color: #FF44AA;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        #whoamiNav {
+            font-weight: 600;
+            font-size: 13px;
+        }
+
+        .btn-connect {
+            background: #FF44AA;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 40px;
+            color: white;
+            font-weight: 700;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-family: 'Inter', sans-serif;
+            box-shadow: 0 4px 10px rgba(255,68,170,0.3);
+        }
+
+        .btn-connect:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(255,68,170,0.4);
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            text-align: center;
+            position: relative;
+        }
+
+        h1 {
+            font-size: 48px;
+            margin-bottom: 8px;
+            color: #1a1a1a;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            padding-top: 20px;
+        }
+        
+        h1 span {
+            font-size: 56px;
+            animation: bounce 2s infinite ease-in-out;
+        }
+        
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
+        }
+
+        .subtitle {
+            color: #666;
+            margin-bottom: 40px;
+            font-size: 18px;
+            background: linear-gradient(145deg, #FF44AA20, #FF44AA40);
+            display: inline-block;
+            padding: 8px 24px;
+            border-radius: 60px;
+            border: 1px solid #FF44AA;
+            backdrop-filter: blur(10px);
+        }
+
+        .grid-container {
+            background: white;
+            border-radius: 32px;
+            padding: 24px;
+            box-shadow: 0 20px 40px -10px #FF44AA20;
+            border: 1px solid #FF44AA;
+            position: relative;
+            transition: all 0.3s ease;
+            margin-bottom: 20px;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(20, 1fr);
+            gap: 4px;
+            aspect-ratio: 1;
+            width: 100%;
+            max-width: 640px;
+            margin: 0 auto;
+            padding: 4px;
+        }
+
+        .cell {
+            aspect-ratio: 1;
+            background: #fafafa;
+            border: 1px solid #ffaacc;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 2px 4px #FF44AA20;
+        }
+
+        .cell:not(.filled)::after {
+            content: "🧱";
+            opacity: 0.2;
+            transition: all 0.2s;
+            font-size: 20px;
+        }
+
+        .cell:not(.filled):hover::after {
+            opacity: 0.6;
+            transform: scale(1.2);
+            color: #FF44AA;
+        }
+
+        .cell:hover {
+            border-color: #FF44AA;
+            transform: scale(0.94);
+            box-shadow: 0 0 15px #FF44AA60, 0 0 30px #FF44AA40;
+            z-index: 30;
+        }
+
+        .cell.filled {
+            background: linear-gradient(145deg, #ffe6f0, #ffd0e0);
+            border: 2px solid #FF44AA;
+            box-shadow: 0 4px 12px #FF44AA40;
+        }
+
+        .cell.filled::after {
+            display: none;
+        }
+
+        .cell-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .cell:hover .cell-image {
+            transform: scale(1.25);
+        }
+
+        .stats {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 24px;
+            padding: 20px 32px;
+            background: linear-gradient(145deg, white, #ffe6f0);
+            border-radius: 48px;
+            border: 1px solid #FF44AA;
+            box-shadow: 0 8px 20px #FF44AA20;
+        }
+
+        .stat-item {
+            text-align: center;
+            flex: 1;
+        }
+
+        .stat-value {
+            font-size: 32px;
+            font-weight: 800;
+            color: #FF44AA;
+            letter-spacing: -0.5px;
+        }
+
+        .stat-label {
+            color: #666;
+            font-size: 14px;
+            margin-top: 6px;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .buy-button {
+            background: linear-gradient(145deg, #FF44AA, #FF66AA);
+            color: white;
+            border: none;
+            padding: 18px 42px;
+            border-radius: 60px;
+            font-size: 20px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            text-decoration: none;
+            display: inline-block;
+            margin-top: 28px;
+            box-shadow: 0 10px 25px #FF44AA60;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            letter-spacing: 1px;
+        }
+
+        .buy-button:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 35px #FF44AA90;
+            background: linear-gradient(145deg, #FF66AA, #FF44AA);
+        }
+
+        /* Popup styles (inchangés) */
+        .brick-popup {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            backdrop-filter: blur(8px);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .brick-popup-content {
+            background: white;
+            max-width: 480px;
+            width: 90%;
+            padding: 30px 20px;
+            border-radius: 40px;
+            text-align: center;
+            box-shadow: 0 30px 80px #FF44AA60;
+            border: 2px solid #FF44AA;
+            animation: popIn 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        @keyframes popIn {
+            0% { transform: scale(0.8); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        .brick-popup-image {
+            width: 150px;
+            height: 150px;
+            border-radius: 20px;
+            object-fit: cover;
+            margin-bottom: 20px;
+            border: 3px solid #FF44AA;
+            box-shadow: 0 10px 30px #FF44AA60;
+        }
+
+        .like-section {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            margin: 15px 0;
+            padding: 8px;
+            background: #fff0f7;
+            border-radius: 40px;
+        }
+
+        .like-button {
+            background: none;
+            border: 2px solid #FF44AA;
+            color: #FF44AA;
+            font-size: 16px;
+            padding: 6px 20px;
+            border-radius: 40px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .like-button:hover {
+            background: #FF44AA;
+            color: white;
+        }
+
+        .like-button.liked {
+            background: #FF44AA;
+            color: white;
+            border-color: #FF44AA;
+        }
+
+        .like-count {
+            font-size: 16px;
+            font-weight: 600;
+            color: #FF44AA;
+        }
+
+        .like-count span {
+            font-size: 18px;
+            margin-right: 5px;
+        }
+
+        .share-buttons {
+            display: flex;
+            gap: 8px;
+            justify-content: center;
+            margin: 15px 0;
+            flex-wrap: wrap;
+        }
+
+        .share-btn {
+            border: none;
+            padding: 10px 18px;
+            border-radius: 40px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 600;
+            transition: all 0.2s;
+        }
+
+        .share-btn.copy {
+            background: #3b82f6;
+            color: white;
+        }
+
+        .share-btn.twitter {
+            background: #1DA1F2;
+            color: white;
+        }
+
+        .share-btn.copy:hover, .share-btn.twitter:hover {
+            transform: translateY(-2px);
+        }
+
+        .last-update {
+            color: #999;
+            font-size: 13px;
+            margin-top: 16px;
+            font-style: italic;
+        }
+
+        /* Responsive */
+        @media (max-width: 800px) {
+            .nav-inner {
+                flex-wrap: wrap;
+                gap: 12px;
+            }
+            .nav-links {
+                order: 3;
+                width: 100%;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<!-- ===== STICKY MENU AVEC LOGO + $BRICK ===== -->
+<div class="nav">
+    <div class="nav-inner">
+        <div class="brand">
+            <a href="index.html" style="display: flex; align-items: center; text-decoration: none;">
+                <img src="images/logo/brick_token.png" 
+                     alt="BRICK" 
+                     height="36" 
+                     style="margin-right: 8px; border-radius: 8px;">
+                <span style="font-weight: 800; font-size: 22px; background: linear-gradient(135deg, #FF44AA, #B87CFF); -webkit-background-clip: text; -webkit-text-fill-color: transparent; letter-spacing: -0.5px;">$BRICK</span>
+            </a>
+        </div>
+        
+        <div class="nav-links">
+            <a href="index.html">Home</a>
+            <a href="canvas.html">Canvas</a>
+            <a href="plaza.html">Plaza</a>
+            <a href="eternal-moments.html">Eternal</a>
+            <a href="how-it-works.html">How it works</a>
+            <a href="referrals.html">Referrals</a>
+            <a href="daily.html">Daily</a>
+        </div>
+        
+        <div class="spacer"></div>
+        
+        <div class="wallet-badge">
+            <span>🔌</span>
+            <span id="whoamiNav">Not connected</span>
+        </div>
+        
+        <button class="btn-connect" onclick="connectWallet()" data-connect-wallet>
+            Connect Wallet
+        </button>
+    </div>
+</div>
+
+<div class="container">
+    <h1>
+        <span>🧱</span> BRICK CANVAS
+    </h1>
+    <div class="subtitle">
+        20x20 = 400 unique bricks MODERATED
+    </div>
+
+    <div class="grid-container">
+        <div class="grid" id="grid"></div>
+        
+        <div class="stats">
+            <div class="stat-item">
+                <div class="stat-value" id="bricks-sold">0</div>
+                <div class="stat-label">SOLD</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value" id="bricks-remaining">400</div>
+                <div class="stat-label">AVAILABLE</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value">0.1</div>
+                <div class="stat-label">SOL</div>
+            </div>
+        </div>
+
+        <a href="buy-original.html" class="buy-button">
+            🧱 BUY A BRICK
+        </a>
+        
+        <div class="last-update" id="last-update">
+            ✨ Last update: --
+        </div>
+    </div>
+
+    <!-- Popup -->
+    <div id="brick-popup" class="brick-popup">
+        <div class="brick-popup-content">
+            <img id="popup-image" class="brick-popup-image" src="" alt="Brick">
+            <div id="popup-message" style="font-size: 16px; color: #333; margin-bottom: 16px;"></div>
+            <div id="popup-wallet" style="font-family: monospace; color: #666; background: #f5f5f5; padding: 8px; border-radius: 12px; margin-bottom: 15px; font-size: 14px;"></div>
+            
+            <div class="share-buttons">
+                <button class="share-btn copy" onclick="copyBrickLink()" id="copy-btn">
+                    🔗 Copy Link
+                </button>
+                <button class="share-btn twitter" onclick="shareTwitter()" id="twitter-btn">
+                    🐦 Share
+                </button>
+            </div>
+
+            <div id="popup-socials" style="display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; margin-bottom: 20px;"></div>
+            <button onclick="document.getElementById('brick-popup').style.display='none'" style="background: #FF44AA; color: white; border: none; padding: 12px 28px; border-radius: 60px; font-size: 15px; font-weight: 600; cursor: pointer;">
+                ✨ CLOSE
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- Script unifié -->
+<script>
+    const CONFIG = {
+        GRID_SIZE: 20,
+        REFRESH_INTERVAL: 3000
+    };
+
+    const TOTAL_CELLS = CONFIG.GRID_SIZE * CONFIG.GRID_SIZE;
+    let currentBrickCell = null;
+    let publicKey = null;
+
+    // ===== WALLET FUNCTIONS =====
+    window.connectWallet = async function() {
+        try {
+            const provider = window.phantom?.solana || window.solflare;
+            if (!provider) {
+                alert('Please install Phantom or Solflare wallet');
+                window.open('https://phantom.app/', '_blank');
+                return;
+            }
+            const resp = await provider.connect();
+            publicKey = provider.publicKey?.toString() || resp.publicKey?.toString();
+            updateWalletDisplay();
+        } catch (e) {
+            alert('Connection failed: ' + e.message);
+        }
+    };
+
+    function updateWalletDisplay() {
+        const whoamiNav = document.getElementById('whoamiNav');
+        if (publicKey) {
+            whoamiNav.textContent = `Connected: ${publicKey.slice(0,4)}...${publicKey.slice(-4)}`;
+            whoamiNav.style.color = '#FF44AA';
+        } else {
+            whoamiNav.textContent = 'Not connected';
+            whoamiNav.style.color = '';
+        }
+    }
+
+    // ===== CANVAS FUNCTIONS =====
+    function getCellIdFromIndex(index) {
+        const row = Math.floor(index / 20);
+        const col = index % 20;
+        return `${String.fromCharCode(65 + row)}${col + 1}`;
+    }
+
+    function renderGrid() {
+        const grid = document.getElementById('grid');
+        grid.innerHTML = '';
+        let sold = 0;
+
+        for (let i = 0; i < TOTAL_CELLS; i++) {
+            const cellId = getCellIdFromIndex(i);
+            const brickKey = 'brick_' + cellId;
+            const brickData = localStorage.getItem(brickKey);
+            const brick = brickData ? JSON.parse(brickData) : null;
+            
+            const cell = document.createElement('div');
+            cell.className = 'cell';
+            
+            if (brick) {
+                sold++;
+                cell.classList.add('filled');
+                
+                const img = document.createElement('img');
+                img.src = brick.image || 'https://placehold.co/100x100/FF44AA/FFFFFF?text=🧱';
+                img.className = 'cell-image';
+                img.onerror = () => img.src = 'https://placehold.co/100x100/FF44AA/FFFFFF?text=🧱';
+                cell.appendChild(img);
+                
+                cell.onclick = () => showPopup(brick);
+            } else {
+                cell.onclick = () => window.location.href = 'buy-original.html?cell=' + cellId;
+            }
+            
+            grid.appendChild(cell);
+        }
+        
+        document.getElementById('bricks-sold').textContent = sold;
+        document.getElementById('bricks-remaining').textContent = TOTAL_CELLS - sold;
+        document.getElementById('last-update').innerHTML = `✨ Last update: ${new Date().toLocaleTimeString()}`;
+    }
+
+    function showPopup(brick) {
+        currentBrickCell = brick.cell;
+        const popup = document.getElementById('brick-popup');
+        
+        const likesKey = 'likes_' + brick.cell;
+        let likesData = JSON.parse(localStorage.getItem(likesKey)) || { count: 0, likers: [] };
+        const hasLiked = publicKey && likesData.likers.includes(publicKey);
+        
+        document.getElementById('popup-image').src = brick.image || 'https://placehold.co/200x200/FF44AA/FFFFFF?text=🧱';
+        document.getElementById('popup-message').textContent = brick.message || '🧱 Brick';
+        document.getElementById('popup-wallet').textContent = `${brick.wallet.slice(0,4)}...${brick.wallet.slice(-4)}`;
+        
+        const oldLikeSection = document.getElementById('like-section');
+        if (oldLikeSection) oldLikeSection.remove();
+        
+        const likeSection = document.createElement('div');
+        likeSection.className = 'like-section';
+        likeSection.id = 'like-section';
+        likeSection.innerHTML = `
+            <div class="like-count">
+                <span>❤️</span> ${likesData.count}
+            </div>
+            <button class="like-button ${hasLiked ? 'liked' : ''}" id="like-btn" ${hasLiked ? 'disabled' : ''}>
+                ${hasLiked ? '👍 LIKED' : '❤️ LIKE'}
+            </button>
+        `;
+        
+        document.getElementById('popup-wallet').insertAdjacentElement('afterend', likeSection);
+        
+        document.getElementById('like-btn').addEventListener('click', function() {
+            if (!publicKey) {
+                alert('🔌 Connect your wallet to like!');
+                return;
+            }
+            
+            likesData.count++;
+            likesData.likers.push(publicKey);
+            localStorage.setItem(likesKey, JSON.stringify(likesData));
+            
+            document.querySelector('.like-count').innerHTML = `<span>❤️</span> ${likesData.count}`;
+            this.textContent = '👍 LIKED';
+            this.classList.add('liked');
+            this.disabled = true;
+        });
+        
+        document.getElementById('copy-btn').setAttribute('onclick', `copyBrickLink('${brick.cell}')`);
+        document.getElementById('twitter-btn').setAttribute('onclick', `shareTwitter('${brick.cell}')`);
+        
+        const socials = document.getElementById('popup-socials');
+        socials.innerHTML = '';
+        
+        if (brick.socials) {
+            const links = [
+                { url: brick.socials.twitter, icon: '🐦', name: 'Twitter' },
+                { url: brick.socials.telegram, icon: '✈️', name: 'Telegram' },
+                { url: brick.socials.discord, icon: '💬', name: 'Discord' },
+                { url: brick.socials.website, icon: '🌍', name: 'Website' }
+            ];
+            
+            links.forEach(link => {
+                if (link.url) {
+                    const a = document.createElement('a');
+                    a.href = link.url;
+                    a.target = '_blank';
+                    a.style.cssText = 'background: #f0f0f0; padding: 6px 12px; border-radius: 40px; text-decoration: none; color: #333; font-size: 12px; margin:4px; display: inline-block;';
+                    a.onmouseover = () => { a.style.background = '#FF44AA'; a.style.color = 'white'; };
+                    a.onmouseout = () => { a.style.background = '#f0f0f0'; a.style.color = '#333'; };
+                    a.textContent = `${link.icon} ${link.name}`;
+                    socials.appendChild(a);
+                }
+            });
+        }
+        
+        popup.style.display = 'flex';
+    }
+
+    function copyBrickLink(cell) {
+        const url = `${window.location.origin}/brick/brick.html?cell=${cell}`;
+        navigator.clipboard.writeText(url).then(() => {
+            alert('✅ Link copied!');
+        }).catch(() => {
+            prompt('📋 Copy:', url);
+        });
+    }
+
+    function shareTwitter(cell) {
+        const text = `🧱 Check out my brick ${cell} on $BRICK Canvas!`;
+        const url = `${window.location.origin}/brick/brick.html?cell=${cell}`;
+        window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(url)}`, '_blank');
+    }
+
+    // ===== INIT =====
+    window.addEventListener('load', async () => {
+        // Check if wallet already connected
+        if (window.solana?.isPhantom) {
+            try {
+                const response = await window.solana.connect({ onlyIfTrusted: true });
+                publicKey = response.publicKey.toString();
+                updateWalletDisplay();
+            } catch (error) {}
+        }
+        renderGrid();
+        setInterval(renderGrid, CONFIG.REFRESH_INTERVAL);
+    });
+</script>
+
+<!-- Footer -->
+<footer style="margin-top: 60px; padding-top: 30px; border-top: 2px solid #FF44AA20;">
+    <div style="display: flex; justify-content: center; gap: 2rem; flex-wrap: wrap; max-width: 1200px; margin: 0 auto; padding: 0 20px;">
+        <a href="index.html" style="color: #666; text-decoration: none; font-weight: 500;" onmouseover="this.style.color='#FF44AA'" onmouseout="this.style.color='#666'">🧱 Home</a>
+        <a href="canvas.html" style="color: #666; text-decoration: none; font-weight: 500;" onmouseover="this.style.color='#FF44AA'" onmouseout="this.style.color='#666'">🎨 Canvas</a>
+        <a href="plaza.html" style="color: #666; text-decoration: none; font-weight: 500;" onmouseover="this.style.color='#FF44AA'" onmouseout="this.style.color='#666'">🪙 Plaza</a>
+        <a href="eternal-moments.html" style="color: #FF44AA; text-decoration: none; font-weight: 500;">✨ Eternal</a>
+        <a href="how-it-works.html" style="color: #666; text-decoration: none; font-weight: 500;" onmouseover="this.style.color='#FF44AA'" onmouseout="this.style.color='#666'">📚 How it works</a>
+        <a href="tokenomics.html" style="color: #666; text-decoration: none; font-weight: 500;" onmouseover="this.style.color='#FF44AA'" onmouseout="this.style.color='#666'">📊 Tokenomics</a>
+        <a href="referrals.html" style="color: #666; text-decoration: none; font-weight: 500;" onmouseover="this.style.color='#FF44AA'" onmouseout="this.style.color='#666'">🤝 Referrals</a>
+        <a href="daily.html" style="color: #666; text-decoration: none; font-weight: 500;" onmouseover="this.style.color='#FF44AA'" onmouseout="this.style.color='#666'">📅 Daily</a>
+        <a href="https://x.com/TokenForgeApp" target="_blank" style="color: #666; text-decoration: none; font-weight: 500;" onmouseover="this.style.color='#FF44AA'" onmouseout="this.style.color='#666'">🐦 Twitter</a>
+        <a href="https://t.me/brick_fusion_news" target="_blank" style="color: #666; text-decoration: none; font-weight: 500;" onmouseover="this.style.color='#FF44AA'" onmouseout="this.style.color='#666'">📢 Telegram News</a>
+        <a href="https://t.me/brick_community" target="_blank" style="color: #666; text-decoration: none; font-weight: 500;" onmouseover="this.style.color='#FF44AA'" onmouseout="this.style.color='#666'">💬 Telegram Group</a>
+        <a href="mailto:foundrix@protonmail.com" style="color: #666; text-decoration: none; font-weight: 500;" onmouseover="this.style.color='#FF44AA'" onmouseout="this.style.color='#666'">📧 Email</a>
+    </div>
+    <div style="text-align: center; margin: 30px 0 20px; color: #aaa; font-size: 14px;">
+        🧱 BRICK · The immortal meme coin · Built on Solana · 2026
+    </div>
+</footer>
+
+</body>
+</html>

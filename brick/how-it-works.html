@@ -1,0 +1,1164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>⛏️ How It Works - $BRICK Mining & Rewards</title>
+    
+    <!-- Favicon -->
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧱</text></svg>">
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            background: #f8fafc;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            color: #1e293b;
+            padding: 40px 20px;
+        }
+
+        /* ===== STICKY MENU ===== */
+        .nav {
+            background: white;
+            backdrop-filter: blur(10px);
+            border-bottom: 2px solid #FF44AA20;
+            padding: 12px 24px;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 4px 20px rgba(255,68,170,0.1);
+            margin-bottom: 30px;
+            border-radius: 60px;
+        }
+
+        .nav-inner {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            gap: 24px;
+        }
+
+        .brand a {
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .nav-links a {
+            color: #64748b;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 15px;
+            padding: 8px 16px;
+            border-radius: 40px;
+            transition: all 0.2s;
+        }
+
+        .nav-links a:hover {
+            color: #FF44AA;
+            background: #fff0f5;
+        }
+
+        .nav-links a.active {
+            color: #FF44AA;
+            background: #fff0f5;
+            border: 1px solid #FF44AA20;
+        }
+
+        .spacer {
+            flex: 1;
+        }
+
+        .wallet-badge {
+            background: #fff0f5;
+            border: 1px solid #FF44AA;
+            padding: 6px 16px;
+            border-radius: 40px;
+            font-size: 13px;
+            font-weight: 600;
+            color: #FF44AA;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        #whoamiNav {
+            font-weight: 600;
+            font-size: 13px;
+        }
+
+        .btn-connect {
+            background: #FF44AA;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 40px;
+            color: white;
+            font-weight: 700;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-family: 'Inter', sans-serif;
+            box-shadow: 0 4px 10px rgba(255,68,170,0.3);
+        }
+
+        .btn-connect:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(255,68,170,0.4);
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            font-size: 48px;
+            margin-bottom: 16px;
+            background: linear-gradient(135deg, #f97316, #FF44AA);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            display: inline-block;
+        }
+
+        .subtitle {
+            color: #64748b;
+            font-size: 18px;
+            margin-bottom: 60px;
+            border-left: 4px solid #f97316;
+            padding-left: 20px;
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-bottom: 30px;
+            color: #64748b;
+            text-decoration: none;
+            font-size: 16px;
+        }
+
+        .back-link:hover {
+            color: #f97316;
+        }
+
+        /* Mining Section */
+        .mining-section {
+            background: white;
+            border-radius: 24px;
+            padding: 40px;
+            margin: 40px 0;
+            border: 2px solid #f97316;
+            box-shadow: 0 20px 25px -5px rgba(249, 115, 22, 0.1);
+        }
+
+        .section-title {
+            color: #f97316;
+            font-size: 32px;
+            margin-bottom: 30px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .section-title span {
+            font-size: 40px;
+        }
+
+        .grid-2 {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        .info-card {
+            background: #fff7ed;
+            padding: 30px;
+            border-radius: 20px;
+        }
+
+        .info-card h3 {
+            color: #1e293b;
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+
+        .info-card p {
+            color: #475569;
+            line-height: 1.8;
+            margin-bottom: 15px;
+        }
+
+        .highlight {
+            color: #f97316;
+            font-weight: 700;
+        }
+
+        .example-box {
+            background: linear-gradient(145deg, #1e293b, #0f172a);
+            color: white;
+            padding: 40px;
+            border-radius: 20px;
+            margin: 40px 0;
+        }
+
+        .example-box h3 {
+            color: #f97316;
+            font-size: 28px;
+            margin-bottom: 20px;
+        }
+
+        .example-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+        }
+
+        .example-step {
+            margin-bottom: 15px;
+            line-height: 1.6;
+        }
+
+        .example-step strong {
+            color: #f97316;
+        }
+
+        .example-highlight {
+            background: rgba(249, 115, 22, 0.2);
+            padding: 20px;
+            border-radius: 16px;
+            margin-top: 20px;
+            text-align: center;
+            font-size: 18px;
+            border: 1px solid #f97316;
+        }
+
+        .example-highlight strong {
+            color: #f97316;
+            font-size: 24px;
+        }
+
+        .visual-summary {
+            display: flex;
+            justify-content: space-around;
+            text-align: center;
+            margin: 40px 0;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .visual-item {
+            flex: 1;
+            min-width: 120px;
+        }
+
+        .visual-icon {
+            font-size: 40px;
+            margin-bottom: 10px;
+        }
+
+        .visual-title {
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+
+        .visual-desc {
+            color: #666;
+            font-size: 14px;
+        }
+
+        .visual-arrow {
+            font-size: 40px;
+            color: #f97316;
+            display: flex;
+            align-items: center;
+        }
+
+        .summary-banner {
+            background: #f97316;
+            color: white;
+            padding: 20px;
+            border-radius: 60px;
+            text-align: center;
+            font-size: 18px;
+            margin-top: 30px;
+            font-weight: 600;
+        }
+
+        /* Canvas Names Section */
+        .canvas-names {
+            background: linear-gradient(145deg, #f97316, #f59e0b);
+            color: white;
+            padding: 30px;
+            border-radius: 20px;
+            margin: 30px 0;
+            text-align: center;
+        }
+
+        .canvas-names h3 {
+            font-size: 24px;
+            margin-bottom: 15px;
+        }
+
+        .canvas-names-grid {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+            margin-top: 20px;
+        }
+
+        .canvas-name-card {
+            background: rgba(255,255,255,0.2);
+            padding: 15px 25px;
+            border-radius: 40px;
+            font-weight: 600;
+            backdrop-filter: blur(5px);
+        }
+
+        /* ========== IMMORTALITY SECTION ========== */
+        .immortality-section {
+            background: linear-gradient(145deg, #2d1b3a, #1a1a2e);
+            color: white;
+            padding: 40px;
+            border-radius: 24px;
+            margin: 40px 0;
+            border: 2px solid gold;
+        }
+
+        .immortality-header {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .immortality-header-icon {
+            font-size: 64px;
+        }
+
+        .immortality-header h2 {
+            color: gold;
+            font-size: 32px;
+            margin: 0;
+        }
+
+        .immortality-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 30px;
+        }
+
+        .immortality-text p {
+            font-size: 18px;
+            line-height: 1.8;
+            margin-bottom: 20px;
+        }
+
+        .immortality-text strong {
+            color: gold;
+        }
+
+        .immortality-quote {
+            background: rgba(255, 215, 0, 0.1);
+            padding: 20px;
+            border-radius: 16px;
+            margin: 20px 0;
+            font-style: italic;
+        }
+
+        .immortality-features {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin-top: 20px;
+        }
+
+        .immortality-feature {
+            background: #333;
+            padding: 15px;
+            border-radius: 12px;
+            flex: 1;
+            text-align: center;
+        }
+
+        .immortality-feature-icon {
+            font-size: 24px;
+        }
+
+        .immortality-feature-title {
+            font-weight: bold;
+        }
+
+        .immortality-feature-desc {
+            font-size: 13px;
+            opacity: 0.8;
+        }
+
+        .immortality-card {
+            background: rgba(255, 215, 0, 0.05);
+            border: 1px solid gold;
+            border-radius: 20px;
+            padding: 20px;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+
+        .immortality-card-icon {
+            margin-bottom: 15px;
+            flex-shrink: 0;
+        }
+
+        .immortality-card video {
+            width: 100%;
+            height: 260px;
+            object-fit: cover;
+            border-radius: 16px;
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+
+        .immortality-card video:hover {
+            transform: scale(1.02);
+        }
+
+        .immortality-card h3 {
+            color: gold;
+            margin: 10px 0 10px;
+            flex-shrink: 0;
+        }
+
+        .immortality-card p {
+            font-size: 14px;
+            opacity: 0.9;
+            margin-bottom: 15px;
+            flex-shrink: 0;
+        }
+
+        .immortality-card .middle-content {
+            margin: 10px 0;
+            flex-grow: 0;
+        }
+
+        .immortality-card .footer-content {
+            margin-top: auto;
+            border-top: 1px solid rgba(255, 215, 0, 0.3);
+            padding-top: 12px;
+        }
+
+        .daily-link {
+            display: inline-block;
+            margin-top: 12px;
+            padding: 8px 16px;
+            background: rgba(255, 215, 0, 0.15);
+            border: 1px solid gold;
+            border-radius: 40px;
+            color: gold;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 14px;
+            transition: all 0.2s;
+        }
+
+        .daily-link:hover {
+            background: gold;
+            color: #1a1a2e;
+            transform: scale(1.05);
+        }
+
+        .immortality-timeline {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 40px;
+            padding: 20px 0;
+            border-top: 1px solid gold;
+        }
+
+        .timeline-point {
+            text-align: center;
+        }
+
+        .timeline-year {
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        .timeline-label {
+            font-size: 12px;
+            opacity: 0.8;
+        }
+
+        .timeline-arrow {
+            color: gold;
+            font-size: 20px;
+        }
+
+        /* FAQ section */
+        .immortality-faq {
+            background: rgba(255, 215, 0, 0.05);
+            border-radius: 16px;
+            padding: 25px;
+            margin-top: 30px;
+            border: 1px solid gold;
+        }
+
+        .immortality-faq h3 {
+            color: gold;
+            font-size: 24px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .faq-question {
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 15px;
+            color: gold;
+        }
+
+        .faq-answer {
+            line-height: 1.8;
+            margin-bottom: 20px;
+        }
+
+        .faq-answer ol, .faq-answer ul {
+            margin-left: 25px;
+            margin-top: 10px;
+        }
+
+        .faq-note {
+            background: rgba(255, 215, 0, 0.15);
+            padding: 15px;
+            border-radius: 12px;
+            font-style: italic;
+            margin-top: 15px;
+        }
+
+        /* Marketplace Section */
+        .marketplace-section {
+            background: white;
+            border-radius: 24px;
+            padding: 40px;
+            margin: 40px 0;
+            border: 2px solid #3b82f6;
+            box-shadow: 0 20px 25px -5px rgba(59, 130, 246, 0.1);
+        }
+
+        .marketplace-title {
+            color: #3b82f6;
+            font-size: 32px;
+            margin-bottom: 30px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .marketplace-title span {
+            font-size: 40px;
+        }
+
+        .marketplace-intro {
+            color: #475569;
+            font-size: 18px;
+            margin-bottom: 30px;
+            line-height: 1.6;
+        }
+
+        .marketplace-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .marketplace-card {
+            background: #f8fafc;
+            padding: 30px;
+            border-radius: 20px;
+            text-align: center;
+            border: 2px solid transparent;
+            transition: all 0.3s;
+            display: block;
+            color: inherit;
+            cursor: default;
+        }
+
+        .marketplace-card:hover {
+            border-color: #3b82f6;
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(59, 130, 246, 0.2);
+        }
+
+        .marketplace-icon {
+            font-size: 48px;
+            margin-bottom: 15px;
+        }
+
+        .marketplace-card h3 {
+            color: #1e293b;
+            margin-bottom: 10px;
+            font-size: 20px;
+        }
+
+        .marketplace-card p {
+            color: #64748b;
+            font-size: 14px;
+            margin-bottom: 15px;
+        }
+
+        .marketplace-link {
+            color: #3b82f6;
+            font-weight: 600;
+        }
+
+        .marketplace-small-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            margin: 30px 0;
+        }
+
+        .marketplace-small-card {
+            background: #f8fafc;
+            padding: 20px;
+            border-radius: 16px;
+            text-align: center;
+            border: 2px solid transparent;
+            transition: all 0.3s;
+            display: block;
+            color: inherit;
+            cursor: default;
+        }
+
+        .marketplace-small-card:hover {
+            border-color: #3b82f6;
+            background: white;
+            transform: translateY(-3px);
+        }
+
+        .marketplace-small-card h4 {
+            color: #1e293b;
+            margin: 10px 0 5px;
+        }
+
+        .marketplace-note {
+            background: #e6f3ff;
+            padding: 20px;
+            border-radius: 16px;
+            margin-top: 30px;
+            color: #1e4b8f;
+            text-align: center;
+            line-height: 1.6;
+        }
+
+        /* Footer */
+        footer {
+            margin-top: 60px;
+            padding-top: 30px;
+            border-top: 2px solid #FF44AA20;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+            max-width: 1300px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .footer-links a {
+            color: #666;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: color 0.2s;
+        }
+
+        .footer-links a:hover {
+            color: #FF44AA;
+        }
+
+        .footer-copyright {
+            text-align: center;
+            margin: 30px 0 20px;
+            color: #aaa;
+            font-size: 14px;
+        }
+
+        @media (max-width: 768px) {
+            .nav-inner {
+                flex-wrap: wrap;
+                gap: 12px;
+            }
+            .nav-links {
+                order: 3;
+                width: 100%;
+                justify-content: center;
+            }
+            .grid-2, .example-grid, .marketplace-grid, .immortality-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .visual-summary {
+                flex-direction: column;
+            }
+            
+            .visual-arrow {
+                transform: rotate(90deg);
+            }
+
+            .immortality-header {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .immortality-timeline {
+                flex-direction: column;
+                gap: 10px;
+                align-items: center;
+            }
+
+            .timeline-arrow {
+                transform: rotate(90deg);
+            }
+        }
+    </style>
+</head>
+<body>
+
+<!-- ===== STICKY MENU AVEC LOGO + $BRICK ===== -->
+<div class="nav">
+    <div class="nav-inner">
+        <div class="brand">
+            <a href="index.html" style="display: flex; align-items: center; text-decoration: none;">
+                <img src="/brick/images/logo/brick_token.png" 
+                     alt="BRICK" 
+                     height="36" 
+                     style="margin-right: 8px; border-radius: 8px;">
+                <span style="font-weight: 800; font-size: 22px; background: linear-gradient(135deg, #FF44AA, #B87CFF); -webkit-background-clip: text; -webkit-text-fill-color: transparent; letter-spacing: -0.5px;">$BRICK</span>
+            </a>
+        </div>
+        
+        <div class="nav-links">
+            <a href="index.html">Home</a>
+            <a href="canvas.html">Canvas</a>
+            <a href="plaza.html">Plaza</a>
+            <a href="eternal-moments.html">Eternal</a>
+            <a href="how-it-works.html" class="active">How it works</a>
+            <a href="referrals.html">Referrals</a>
+            <a href="daily.html">Daily</a>
+            <a href="rules.html">Rules</a>
+        </div>
+        
+        <div class="spacer"></div>
+        
+        <div class="wallet-badge">
+            <span>🔌</span>
+            <span id="whoamiNav">Not connected</span>
+        </div>
+        
+        <button class="btn-connect" onclick="connectWallet()" data-connect-wallet>
+            Connect Wallet
+        </button>
+    </div>
+</div>
+
+<div class="container">
+    <!-- Back link -->
+    <a href="index.html" class="back-link">← Back to HUB</a>
+
+    <!-- Header -->
+    <h1>⛏️ How $BRICK Works</h1>
+    <div class="subtitle">
+        Mining, NFT auction, and rewards explained simply
+    </div>
+
+    <!-- ========== MINING EXPLANATION SECTION ========== -->
+    <div class="mining-section">
+        
+        <div class="section-title">
+            <span>⛏️</span> The Mining System
+        </div>
+
+        <!-- What is mining / The vision -->
+        <div class="grid-2">
+            
+            <!-- Left: What is mining -->
+            <div class="info-card">
+                <h3>🧱 What does "Miner" mean?</h3>
+                <p>
+                    In the $BRICK ecosystem, <strong class="highlight">being a "miner" simply means you own a brick</strong>. 
+                    When you buy a brick on the Original Canvas, you become one of the 400 owners of that canvas.
+                </p>
+                <p>
+                    Your message, your image, and your wallet are permanently part of this collective artwork.
+                </p>
+            </div>
+
+            <!-- Right: The vision -->
+            <div class="info-card" style="background: #f0f9ff;">
+                <h3>🎯 The Vision</h3>
+                <p>
+                    <strong class="highlight">The complete grid (400/400) becomes a unique NFT</strong> - a single artwork containing all bricks, messages, and images.
+                </p>
+                <p>
+                    This masterpiece is then auctioned on major marketplaces, and <strong class="highlight">95% of the sale goes to the 400 miners</strong>.
+                </p>
+            </div>
+        </div>
+
+        <!-- Concrete Example -->
+        <div class="example-box">
+            <h3>📊 Real Example</h3>
+            
+            <div class="example-grid">
+                <div>
+                    <div class="example-step">🔹 <strong>Step 1:</strong> You buy brick A1 → You become a <strong class="highlight">MINER</strong> and owner of that cell</div>
+                    <div class="example-step">🔹 <strong>Step 2:</strong> You invite friends, share on social media → The grid fills faster</div>
+                    <div class="example-step">🔹 <strong>Step 3:</strong> Canvas reaches <strong class="highlight">400/400 bricks</strong> → The COMPLETE GRID becomes a unique NFT artwork</div>
+                </div>
+                <div>
+                    <div class="example-step">🔹 <strong>Step 4:</strong> $BRICK team auctions the NFT on <strong class="highlight">Magic Eden, Tensor, Solanart</strong></div>
+                    <div class="example-step">🔹 <strong>Step 5:</strong> <strong class="highlight">95% of the auction price</strong> is shared among the 400 miners</div>
+                    <div class="example-step">🔹 <strong>Step 6:</strong> Each miner receives their share in $BRICK tokens</div>
+                </div>
+            </div>
+            
+            <!-- Visual example with numbers -->
+            <div class="example-highlight">
+                <p><strong>Example:</strong> If the complete canvas sells for <strong style="color: #f97316;">1000 SOL</strong></p>
+                <p>→ <strong style="color: #f97316; font-size: 28px;">950 SOL (95%)</strong> divided among 400 miners</p>
+                <p>→ <strong style="color: #f97316; font-size: 28px;">≈ 2.375 SOL per wallet</strong> (paid in $BRICK tokens)</p>
+                <p style="font-size: 14px; opacity: 0.8;">5% (50 SOL) goes to team for project development</p>
+            </div>
+        </div>
+
+        <!-- Canvas Names -->
+        <div class="canvas-names">
+            <h3>🏷️ Each completed canvas gets a unique name</h3>
+            <p>Making every artwork collectible and identifiable</p>
+            <div class="canvas-names-grid">
+                <span class="canvas-name-card">#1 "The Genesis Wall"</span>
+                <span class="canvas-name-card">#2 "Meme Valley"</span>
+                <span class="canvas-name-card">#3 "Solana Sunrise"</span>
+                <span class="canvas-name-card">#4 "Pixel Paradise"</span>
+            </div>
+        </div>
+
+        <!-- Visual summary -->
+        <div class="visual-summary">
+            <div class="visual-item">
+                <div class="visual-icon">🧱</div>
+                <div class="visual-title">Buy a brick</div>
+                <div class="visual-desc">Become a miner</div>
+            </div>
+            <div class="visual-arrow">→</div>
+            <div class="visual-item">
+                <div class="visual-icon">🤝</div>
+                <div class="visual-title">Spread the word</div>
+                <div class="visual-desc">Help fill the grid</div>
+            </div>
+            <div class="visual-arrow">→</div>
+            <div class="visual-item">
+                <div class="visual-icon">🎨</div>
+                <div class="visual-title">400/400 reached</div>
+                <div class="visual-desc">Grid becomes NFT</div>
+            </div>
+            <div class="visual-arrow">→</div>
+            <div class="visual-item">
+                <div class="visual-icon">💰</div>
+                <div class="visual-title">NFT auction</div>
+                <div class="visual-desc">95% to miners</div>
+            </div>
+        </div>
+
+        <!-- Simple summary -->
+        <div class="summary-banner">
+            ⛏️ Own a brick → Help fill the grid → When complete, 95% of NFT auction shared with ALL 400 miners!
+        </div>
+    </div>
+
+    <!-- ========== IMMORTALITY SECTION ========== -->
+    <div class="immortality-section">
+        
+        <div class="immortality-header">
+            <div class="immortality-header-icon">🏛️</div>
+            <h2>YOUR MESSAGE, FOREVER</h2>
+        </div>
+        
+        <div class="immortality-grid">
+            <div class="immortality-text">
+                <p>
+                    When a canvas completes (400/400), it becomes a <strong>unique NFT</strong> minted on the Solana blockchain. 
+                    Your message, your image, and your links are <strong>stored forever in the metadata</strong>.
+                </p>
+                
+                <div class="immortality-quote">
+                    <p style="margin: 0;">"In 10, 50, or 100 years, anyone can view your brick, read your message, and click your links."</p>
+                </div>
+                
+                <div class="immortality-features">
+                    <div class="immortality-feature">
+                        <div class="immortality-feature-icon">📜</div>
+                        <div class="immortality-feature-title">Messages</div>
+                        <div class="immortality-feature-desc">Stored forever</div>
+                    </div>
+                    <div class="immortality-feature">
+                        <div class="immortality-feature-icon">🖼️</div>
+                        <div class="immortality-feature-title">Images</div>
+                        <div class="immortality-feature-desc">Preserved in NFT</div>
+                    </div>
+                    <div class="immortality-feature">
+                        <div class="immortality-feature-icon">🔗</div>
+                        <div class="immortality-feature-title">Links</div>
+                        <div class="immortality-feature-desc">Always accessible</div>
+                    </div>
+                </div>
+
+                <!-- FAQ SUR L'IMMORTALITÉ -->
+                <div class="immortality-faq">
+                    <h3>❓ Frequently Asked Question</h3>
+                    
+                    <div class="faq-question">"Is my message on the blockchain right now?"</div>
+                    
+                    <div class="faq-answer">
+                        <p><strong>Great question! Here's how it works:</strong></p>
+                        
+                        <ol style="margin-top: 10px;">
+                            <li><strong>Now:</strong> Your image and message are securely stored in our database, linked to your specific cell (B7, F12, etc.)</li>
+                            <li><strong>When the canvas fills up:</strong> Once all 400 cells are sold, we mint the ENTIRE canvas as an NFT collection on Solana</li>
+                            <li><strong>Forever after:</strong> Each cell becomes a genuine, tradable NFT on the Solana blockchain. YOUR message becomes immortal.</li>
+                        </ol>
+                        
+                        <div class="faq-note">
+                            <strong>Why not directly on blockchain?</strong> Storing images directly is expensive (could cost 10x more per cell). This way, you pay 0.1 SOL instead of 1+ SOL, and STILL get immortality when the canvas completes.
+                        </div>
+                        
+                        <p style="margin-top: 15px;"><strong>So yes - your memory WILL be on the blockchain forever. Just with a clever, cost-efficient path to get there.</strong></p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- CARTE AVEC VIDÉOS TOKENFORGE ET BRICKPOST -->
+            <div class="immortality-card">
+                <!-- Première vidéo : tokenforge.mp4 -->
+                <div class="immortality-card-icon">
+                    <video 
+                        src="/brick/images/eternal/tokenforge.mp4"
+                        muted
+                        loop
+                        playsinline
+                        onmouseover="this.play()"
+                        onmouseout="this.pause(); this.currentTime=0;"
+                    ></video>
+                </div>
+                <h3>Digital Immortality</h3>
+                <p>Your brick becomes part of blockchain history. Museums, collectors, and future generations will see what you wrote.</p>
+                
+                <!-- MIDDLE CONTENT - STATS + MESSAGE IMMORTAL -->
+                <div class="middle-content">
+                    <!-- Stats rapides -->
+                    <div style="display: flex; justify-content: space-around; margin: 15px 0 12px; background: rgba(255,215,0,0.1); padding: 10px; border-radius: 12px;">
+                        <div>
+                            <div style="font-size: 18px; font-weight: bold; color: gold;">400</div>
+                            <div style="font-size: 10px; opacity: 0.7;">cells</div>
+                        </div>
+                        <div>
+                            <div style="font-size: 18px; font-weight: bold; color: gold;">95%</div>
+                            <div style="font-size: 10px; opacity: 0.7;">reward</div>
+                        </div>
+                        <div>
+                            <div style="font-size: 18px; font-weight: bold; color: gold;">∞</div>
+                            <div style="font-size: 10px; opacity: 0.7;">forever</div>
+                        </div>
+                    </div>
+                    
+                    <!-- Message immortel -->
+                    <div style="font-size: 11px; line-height: 1.6; color: rgba(255,215,0,0.9); border-top: 1px solid rgba(255,215,0,0.2); padding: 12px 0 8px; font-style: italic;">
+                        "💫 To those after: we were here.<br>
+                        United before the storm.<br>
+                        Build better."
+                    </div>
+                    
+                    <!-- Deuxième vidéo : brickpost.mp4 -->
+                    <div style="margin: 15px 0 10px;">
+                        <video 
+                            src="/brick/images/eternal/brickpost.mp4"
+                            muted
+                            loop
+                            playsinline
+                            style="width: 100%; height: 200px; object-fit: cover; border-radius: 16px; cursor: pointer;"
+                            onmouseover="this.play()"
+                            onmouseout="this.pause(); this.currentTime=0;"
+                        ></video>
+                    </div>
+
+                    <!-- NOUVEAU LIEN VERS DAILY.HTML -->
+                    <a href="daily.html" class="daily-link">📅 Check the Daily News →</a>
+                </div>
+
+                <!-- FOOTER DE LA CARTE -->
+                <div class="footer-content">
+                    <div style="font-size: 12px; color: rgba(255,215,0,0.7); margin-bottom: 6px;">
+                        🧱 BRICK · Powered by TokenForge · Built on Solana · 2026
+                    </div>
+                    <div style="font-size: 11px; color: gold; font-style: italic;">
+                        "Your memory, our code. Together, forever."
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Visual timeline -->
+        <div class="immortality-timeline">
+            <div class="timeline-point">
+                <div class="timeline-year">2025</div>
+                <div class="timeline-label">You buy a brick</div>
+            </div>
+            <div class="timeline-arrow">→</div>
+            <div class="timeline-point">
+                <div class="timeline-year">2026</div>
+                <div class="timeline-label">Canvas completes</div>
+            </div>
+            <div class="timeline-arrow">→</div>
+            <div class="timeline-point">
+                <div class="timeline-year">2030+</div>
+                <div class="timeline-label">Your message lives on</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========== MARKETPLACE SECTION ========== -->
+    <div class="marketplace-section">
+        
+        <div class="marketplace-title">
+            <span>🖼️</span> Where NFTs Are Sold
+        </div>
+
+        <p class="marketplace-intro">
+            Once a canvas is complete (400/400), we mint it as a unique NFT and auction it on these major marketplaces:
+        </p>
+
+        <!-- Main marketplaces -->
+        <div class="marketplace-grid">
+            
+            <!-- Magic Eden -->
+            <div class="marketplace-card">
+                <div class="marketplace-icon">✨</div>
+                <h3>Magic Eden</h3>
+                <p>The largest Solana NFT marketplace</p>
+                <div class="marketplace-link">magiceden.io</div>
+            </div>
+
+            <!-- Tensor -->
+            <div class="marketplace-card">
+                <div class="marketplace-icon">🌀</div>
+                <h3>Tensor</h3>
+                <p>Advanced trading with rewards</p>
+                <div class="marketplace-link">tensor.trade</div>
+            </div>
+
+            <!-- Solanart -->
+            <div class="marketplace-card">
+                <div class="marketplace-icon">🎨</div>
+                <h3>Solanart</h3>
+                <p>First Solana NFT marketplace</p>
+                <div class="marketplace-link">solanart.io</div>
+            </div>
+        </div>
+
+        <!-- Secondary marketplaces -->
+        <div class="marketplace-small-grid">
+            <!-- Exchange Art -->
+            <div class="marketplace-small-card">
+                <div style="font-size: 32px;">🖼️</div>
+                <h4>Exchange Art</h4>
+                <div style="color: #3b82f6; font-size: 14px;">exchange.art</div>
+            </div>
+
+            <!-- Hadeswap -->
+            <div class="marketplace-small-card">
+                <div style="font-size: 32px;">⚡</div>
+                <h4>Hadeswap</h4>
+                <div style="color: #3b82f6; font-size: 14px;">hadeswap.com</div>
+            </div>
+        </div>
+
+        <!-- Info note -->
+        <div class="marketplace-note">
+            <strong>📌 Important:</strong> When a canvas reaches 400/400, we mint it as an NFT collection with a unique name and auction it on all major platforms. <strong>95% of the final sale price goes directly to the 400 miners</strong> (paid in $BRICK tokens). The remaining 5% funds future development.
+        </div>
+    </div>
+
+    <!-- FOOTER COMPLET -->
+    <footer style="margin-top: 60px; padding-top: 30px; border-top: 2px solid #FF44AA20;">
+        <div style="display: flex; justify-content: center; gap: 1.5rem; flex-wrap: wrap; max-width: 1300px; margin: 0 auto; padding: 0 20px;">
+            <a href="index.html" style="color: #666; text-decoration: none; font-weight: 500; font-size: 0.95rem;" onmouseover="this.style.color='#FF44AA'" onmouseout="this.style.color='#666'">🧱 Home</a>
+            <a href="canvas.html" style="color: #666; text-decoration: none; font-weight: 500; font-size: 0.95rem;" onmouseover="this.style.color='#FF44AA'" onmouseout="this.style.color='#666'">🎨 Canvas</a>
+            <a href="plaza.html" style="color: #666; text-decoration: none; font-weight: 500; font-size: 0.95rem;" onmouseover="this.style.color='#FF44AA'" onmouseout="this.style.color='#666'">🪙 Plaza</a>
+            <a href="eternal-moments.html" style="color: #666; text-decoration: none; font-weight: 500; font-size: 0.95rem;" onmouseover="this.style.color='#FF44AA'" onmouseout="this.style.color='#666'">✨ Eternal</a>
+            <a href="how-it-works.html" style="color: #666; text-decoration: none; font-weight: 500; font-size: 0.95rem;" onmouseover="this.style.color='#FF44AA'" onmouseout="this.style.color='#666'">📚 How it works</a>
+            <a href="tokenomics.html" style="color: #666; text-decoration: none; font-weight: 500; font-size: 0.95rem;" onmouseover="this.style.color='#FF44AA'" onmouseout="this.style.color='#666'">📊 Tokenomics</a>
+            <a href="whitepaper.html" style="color: #666; text-decoration: none; font-weight: 500; font-size: 0.95rem;" onmouseover="this.style.color='#FF44AA'" onmouseout="this.style.color='#666'">📄 Whitepaper</a>
+            <a href="rules.html" style="color: #666; text-decoration: none; font-weight: 500; font-size: 0.95rem;" onmouseover="this.style.color='#FF44AA'" onmouseout="this.style.color='#666'">⚖️ Rules</a>
+            <a href="daily.html" style="color: #666; text-decoration: none; font-weight: 500; font-size: 0.95rem;" onmouseover="this.style.color='#FF44AA'" onmouseout="this.style.color='#666'">📅 Daily</a>
+            <a href="referrals.html" style="color: #666; text-decoration: none; font-weight: 500; font-size: 0.95rem;" onmouseover="this.style.color='#FF44AA'" onmouseout="this.style.color='#666'">🤝 Referrals</a>
+            <a href="https://x.com/TokenForgeApp" target="_blank" style="color: #666; text-decoration: none; font-weight: 500; font-size: 0.95rem;" onmouseover="this.style.color='#FF44AA'" onmouseout="this.style.color='#666'">🐦 Twitter</a>
+            <a href="https://t.me/brick_fusion_news" target="_blank" style="color: #666; text-decoration: none; font-weight: 500; font-size: 0.95rem;" onmouseover="this.style.color='#FF44AA'" onmouseout="this.style.color='#666'">📢 News</a>
+            <a href="https://t.me/brick_community" target="_blank" style="color: #666; text-decoration: none; font-weight: 500; font-size: 0.95rem;" onmouseover="this.style.color='#FF44AA'" onmouseout="this.style.color='#666'">💬 Chat</a>
+            <a href="mailto:foundrix@protonmail.com" style="color: #666; text-decoration: none; font-weight: 500; font-size: 0.95rem;" onmouseover="this.style.color='#FF44AA'" onmouseout="this.style.color='#666'">📧 Email</a>
+        </div>
+        <div style="text-align: center; margin: 30px 0 20px; color: #aaa; font-size: 14px;">
+            🧱 BRICK · The immortal meme coin · Built on Solana · 2026
+        </div>
+    </footer>
+</div>
+
+<script>
+    // Simple wallet connect for demo
+    const whoamiNav = document.getElementById('whoamiNav');
+    
+    window.connectWallet = async function() {
+        try {
+            const provider = window.phantom?.solana || window.solflare;
+            if (!provider) {
+                alert('Please install Phantom or Solflare wallet');
+                window.open('https://phantom.app/', '_blank');
+                return;
+            }
+            const resp = await provider.connect();
+            const publicKey = provider.publicKey?.toString() || resp.publicKey?.toString();
+            whoamiNav.textContent = `Connected: ${publicKey.slice(0,4)}...${publicKey.slice(-4)}`;
+        } catch (e) {
+            alert('Connection failed: ' + e.message);
+        }
+    };
+
+    // Check if already connected
+    window.addEventListener('load', () => {
+        const provider = window.phantom?.solana || window.solflare;
+        if (provider?.isConnected && provider.publicKey) {
+            const pubkey = provider.publicKey.toString();
+            whoamiNav.textContent = `Connected: ${pubkey.slice(0,4)}...${pubkey.slice(-4)}`;
+        }
+    });
+</script>
+
+</body>
+</html>

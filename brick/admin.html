@@ -1,0 +1,1084 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🧱 BRICK ADMIN - Suppression simple</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #0a0a0a;
+            font-family: 'Courier New', monospace;
+            color: #fff;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            color: #ff6600;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 0 0 10px rgba(255, 102, 0, 0.5);
+            text-transform: uppercase;
+        }
+
+        .subtitle {
+            color: #888;
+            margin-bottom: 30px;
+            font-size: 1.2em;
+            border-bottom: 1px solid #333;
+            padding-bottom: 20px;
+        }
+
+        /* ========== LOGIN SECTION ========== */
+        .login-section {
+            background: #1a1a1a;
+            border: 2px solid #ff6600;
+            border-radius: 10px;
+            padding: 40px;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .login-tabs {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .tab-btn {
+            background: none;
+            border: none;
+            color: #888;
+            font-size: 1.2em;
+            padding: 10px 30px;
+            cursor: pointer;
+            border-bottom: 2px solid transparent;
+        }
+
+        .tab-btn.active {
+            color: #ff6600;
+            border-bottom-color: #ff6600;
+        }
+
+        .login-form {
+            max-width: 400px;
+            margin: 0 auto;
+        }
+
+        .login-form input {
+            width: 100%;
+            padding: 15px;
+            background: #000;
+            border: 1px solid #333;
+            color: #fff;
+            border-radius: 5px;
+            margin-bottom: 15px;
+            font-size: 1em;
+        }
+
+        .login-btn {
+            background: #ff6600;
+            color: #000;
+            border: none;
+            padding: 15px 40px;
+            font-size: 1.2em;
+            font-weight: bold;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 100%;
+        }
+
+        .login-btn:hover {
+            background: #ff8533;
+        }
+
+        .wallet-status {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+
+        .authorized {
+            background: #003300;
+            border: 1px solid #00ff00;
+            color: #00ff00;
+        }
+
+        .unauthorized {
+            background: #330000;
+            border: 1px solid #ff0000;
+            color: #ff6666;
+        }
+
+        /* ========== ADMIN PANEL ========== */
+        .admin-panel {
+            display: none;
+        }
+
+        .admin-panel.active {
+            display: block;
+        }
+
+        /* ========== ALERTE NOUVEAUX POSTS ========== */
+        .alert-section {
+            background: #1a3300;
+            border: 2px solid #00ff00;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(0, 255, 0, 0.4); }
+            70% { box-shadow: 0 0 0 10px rgba(0, 255, 0, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(0, 255, 0, 0); }
+        }
+
+        .alert-content {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .alert-icon {
+            font-size: 2em;
+        }
+
+        .alert-text {
+            color: #00ff00;
+            font-weight: bold;
+            font-size: 1.2em;
+        }
+
+        .alert-count {
+            background: #00ff00;
+            color: #000;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-weight: bold;
+        }
+
+        .refresh-btn {
+            background: #333;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .refresh-btn:hover {
+            background: #444;
+        }
+
+        /* ========== SUPPRESSION ========== */
+        .delete-section {
+            background: #1a1a1a;
+            border: 2px solid #ff6600;
+            border-radius: 10px;
+            padding: 30px;
+            margin-bottom: 30px;
+        }
+
+        .section-title {
+            color: #ff6600;
+            font-size: 1.5em;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .delete-form {
+            display: flex;
+            gap: 15px;
+            align-items: flex-end;
+        }
+
+        .form-group {
+            flex: 1;
+        }
+
+        .form-group label {
+            display: block;
+            color: #888;
+            margin-bottom: 5px;
+            font-size: 0.9em;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 15px;
+            background: #000;
+            border: 1px solid #333;
+            color: #fff;
+            border-radius: 5px;
+            font-size: 1.2em;
+            font-weight: bold;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #ff6600;
+        }
+
+        .delete-btn {
+            background: #ff0000;
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            font-size: 1.2em;
+            font-weight: bold;
+            border-radius: 5px;
+            cursor: pointer;
+            white-space: nowrap;
+        }
+
+        .delete-btn:hover {
+            background: #cc0000;
+        }
+
+        .example {
+            color: #888;
+            font-size: 0.9em;
+            margin-top: 10px;
+        }
+
+        /* ========== OUTILS ========== */
+        .tools-section {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .tool-btn {
+            background: #333;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1em;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .tool-btn:hover {
+            background: #444;
+        }
+
+        .tool-btn.primary {
+            background: #ff6600;
+            color: #000;
+        }
+
+        .tool-btn.primary:hover {
+            background: #ff8533;
+        }
+
+        .tool-btn.success {
+            background: #00aa00;
+        }
+
+        .tool-btn.success:hover {
+            background: #00cc00;
+        }
+
+        /* ========== PLAN DE LA GRILLE SIMPLIFIÉ ========== */
+        .grid-map {
+            background: #000;
+            border: 2px solid #333;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 30px;
+            overflow-x: auto;
+        }
+
+        .grid-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .grid-header h3 {
+            color: #ff6600;
+            font-size: 1.3em;
+        }
+
+        .grid-legend {
+            display: flex;
+            gap: 20px;
+            color: #888;
+            font-size: 0.9em;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .legend-color {
+            width: 20px;
+            height: 20px;
+            border-radius: 3px;
+        }
+
+        .legend-color.occupied {
+            background: #ff6600;
+        }
+
+        .legend-color.empty {
+            background: transparent;
+            border: 1px solid #444;
+        }
+
+        /* Grille numérique simplifiée */
+        .simple-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            background: #1a1a1a;
+            padding: 10px;
+            border-radius: 5px;
+        }
+
+        .grid-row {
+            display: flex;
+            gap: 2px;
+        }
+
+        .grid-cell {
+            width: 45px;
+            height: 45px;
+            border: 1px solid #444;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 11px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.2s;
+            position: relative;
+        }
+
+        .grid-cell:hover {
+            border-color: #ff6600;
+            transform: scale(1.05);
+            z-index: 10;
+        }
+
+        .grid-cell.occupied {
+            background: #ff6600;
+            color: #000;
+            border-color: #fff;
+            box-shadow: 0 0 10px rgba(255, 102, 0, 0.5);
+        }
+
+        .grid-cell.occupied:hover {
+            background: #ff8533;
+        }
+
+        .grid-cell.empty {
+            color: #666;
+        }
+
+        .cell-number {
+            font-size: 10px;
+            opacity: 0.7;
+            margin-left: 2px;
+        }
+
+        .occupied .cell-number {
+            color: #000;
+        }
+
+        /* Marqueur pour nouveaux posts */
+        .grid-cell.new-post::after {
+            content: "🆕";
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            font-size: 12px;
+            filter: drop-shadow(0 0 5px #00ff00);
+        }
+
+        /* ========== LISTE DES BRIQUES ========== */
+        .list-section {
+            background: #1a1a1a;
+            border: 2px solid #333;
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 30px;
+        }
+
+        .list-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .list-title {
+            color: #ff6600;
+            font-size: 1.3em;
+        }
+
+        .bricks-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 10px;
+            max-height: 500px;
+            overflow-y: auto;
+            padding: 10px;
+            background: #000;
+            border-radius: 5px;
+        }
+
+        .brick-item {
+            background: #1a1a1a;
+            border: 1px solid #333;
+            border-radius: 5px;
+            padding: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+            position: relative;
+        }
+
+        .brick-item.new-brick {
+            border-color: #00ff00;
+            animation: glow 2s infinite;
+        }
+
+        @keyframes glow {
+            0% { box-shadow: 0 0 5px #00ff00; }
+            50% { box-shadow: 0 0 15px #00ff00; }
+            100% { box-shadow: 0 0 5px #00ff00; }
+        }
+
+        .brick-item:hover {
+            border-color: #ff6600;
+            transform: scale(1.02);
+            background: #222;
+        }
+
+        .brick-cell {
+            font-size: 1.3em;
+            font-weight: bold;
+            color: #ff6600;
+            margin-bottom: 5px;
+        }
+
+        .brick-message {
+            font-size: 0.9em;
+            color: #fff;
+            margin-bottom: 8px;
+            word-break: break-word;
+        }
+
+        .brick-wallet {
+            font-size: 0.7em;
+            color: #888;
+            margin-bottom: 5px;
+            font-family: monospace;
+        }
+
+        .brick-date {
+            font-size: 0.7em;
+            color: #666;
+        }
+
+        .brick-tag {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            background: #00ff00;
+            color: #000;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-size: 0.7em;
+            font-weight: bold;
+        }
+
+        .result-message {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 5px;
+            display: none;
+        }
+
+        .result-success {
+            background: #003300;
+            border: 1px solid #00ff00;
+            color: #00ff00;
+            display: block;
+        }
+
+        .result-error {
+            background: #330000;
+            border: 1px solid #ff0000;
+            color: #ff6666;
+            display: block;
+        }
+
+        .nav-links {
+            margin-top: 40px;
+            text-align: center;
+            color: #666;
+        }
+
+        .nav-links a {
+            color: #ff6600;
+            text-decoration: none;
+            margin: 0 10px;
+        }
+
+        .nav-links a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🧱 BRICK ADMIN</h1>
+        <div class="subtitle">
+            Suppression simple • Visualisation • Export
+        </div>
+
+        <!-- ========== SECTION CONNEXION ========== -->
+        <div id="loginSection" class="login-section">
+            <div class="login-tabs">
+                <button class="tab-btn active" onclick="switchLoginTab('wallet')">🔐 Wallet</button>
+                <button class="tab-btn" onclick="switchLoginTab('password')">🔑 Mot de passe</button>
+            </div>
+
+            <!-- Login Wallet -->
+            <div id="loginWallet" class="login-form">
+                <p style="margin-bottom: 20px; color: #888;">
+                    Connecte-toi avec ton wallet Phantom.
+                </p>
+                <button id="connectWalletBtn" class="login-btn">
+                    ⚡ CONNECTER PHANTOM
+                </button>
+            </div>
+
+            <!-- Login Password -->
+            <div id="loginPassword" class="login-form" style="display: none;">
+                <input type="password" id="adminPassword" placeholder="Mot de passe admin">
+                <button onclick="loginWithPassword()" class="login-btn">
+                    🔑 SE CONNECTER
+                </button>
+            </div>
+
+            <div id="walletStatus" class="wallet-status" style="display: none;"></div>
+        </div>
+
+        <!-- ========== PANEL ADMIN ========== -->
+        <div id="adminPanel" class="admin-panel">
+            <!-- ALERTE NOUVEAUX POSTS -->
+            <div id="alertSection" class="alert-section" style="display: none;">
+                <div class="alert-content">
+                    <span class="alert-icon">🆕</span>
+                    <span class="alert-text">NOUVEAU POST DÉTECTÉ !</span>
+                    <span id="newPostsCount" class="alert-count">0</span>
+                </div>
+                <button class="refresh-btn" onclick="checkNewPosts()">
+                    🔄 ACTUALISER
+                </button>
+            </div>
+
+            <!-- SECTION SUPPRESSION -->
+            <div class="delete-section">
+                <div class="section-title">
+                    🗑️ SUPPRIMER UNE BRIQUE
+                </div>
+                
+                <div class="delete-form">
+                    <div class="form-group">
+                        <label>Numéro de la brique (ex: A1, B5, T20, ou 1-400)</label>
+                        <input type="text" id="cellInput" placeholder="Ex: D9, 106, 347, A1" autocomplete="off">
+                    </div>
+                    <button class="delete-btn" onclick="deleteBrick()">
+                        🧱 SUPPRIMER
+                    </button>
+                </div>
+                <div class="example">
+                    Format accepté : A1 à T20, ou numéro de cellule (1-400)
+                </div>
+                <div id="deleteResult" class="result-message"></div>
+            </div>
+
+            <!-- OUTILS DE VISUALISATION -->
+            <div class="tools-section">
+                <button class="tool-btn primary" onclick="toggleGridMap()">
+                    🗺️ VOIR LE PLAN DES CELLULES
+                </button>
+                <button class="tool-btn success" onclick="exportBricksCSV()">
+                    📥 EXPORTER CSV
+                </button>
+                <button class="tool-btn" onclick="copyBricksList()">
+                    📋 COPIER LA LISTE
+                </button>
+            </div>
+
+            <!-- PLAN DE LA GRILLE SIMPLIFIÉ -->
+            <div id="gridMap" class="grid-map" style="display: none;">
+                <div class="grid-header">
+                    <h3>🗺️ PLAN DES CELLULES</h3>
+                    <div class="grid-legend">
+                        <div class="legend-item">
+                            <div class="legend-color occupied"></div>
+                            <span>Brique existante</span>
+                        </div>
+                        <div class="legend-item">
+                            <div class="legend-color empty"></div>
+                            <span>Libre</span>
+                        </div>
+                    </div>
+                </div>
+                <div id="mapContainer" class="simple-grid">
+                    <!-- Généré par JS -->
+                </div>
+                <p style="color: #888; margin-top: 15px; text-align: center;">
+                    Cliquez sur une cellule orange pour supprimer • Les 🆕 indiquent les nouveaux posts
+                </p>
+            </div>
+
+            <!-- LISTE DES BRIQUES -->
+            <div class="list-section">
+                <div class="list-header">
+                    <span class="list-title">📋 BRIQUES EXISTANTES</span>
+                    <span id="totalBricksCount" class="total-count">0</span>
+                </div>
+                <div id="bricksGrid" class="bricks-grid">
+                    <!-- Généré par JS -->
+                </div>
+            </div>
+        </div>
+
+        <!-- NAVIGATION -->
+        <div class="nav-links">
+            <a href="index.html">🏠 HUB</a> • 
+            <a href="canvas.html">🗺️ CANVAS</a> • 
+            <a href="daily.html">📅 DAILY</a> • 
+            <a href="plaza.html">🪙 PLAZA</a>
+        </div>
+    </div>
+
+    <script>
+        // ============================================
+        // CONFIGURATION
+        // ============================================
+        const CONFIG = {
+            ADMIN_WALLETS: new Set([
+                '6ieEMVMJMjjFUW35KrjTdG6cEqy6mxRGZHLdKsXwp6r3'
+            ]),
+            ADMIN_PASSWORD: 'OticBarotraumaBric737/'
+        };
+
+        // ============================================
+        // ÉTAT GLOBAL
+        // ============================================
+        let currentWallet = null;
+        let isAuthorized = false;
+        let lastKnownCount = 0;
+        let allBricks = [];
+        let newBricks = [];
+
+        // ============================================
+        // GESTION DES TABS DE CONNEXION
+        // ============================================
+        window.switchLoginTab = function(tab) {
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            document.getElementById('loginWallet').style.display = tab === 'wallet' ? 'block' : 'none';
+            document.getElementById('loginPassword').style.display = tab === 'password' ? 'block' : 'none';
+        };
+
+        // ============================================
+        // CONNEXION PAR MOT DE PASSE
+        // ============================================
+        window.loginWithPassword = function() {
+            const password = document.getElementById('adminPassword').value;
+            
+            if (password === CONFIG.ADMIN_PASSWORD) {
+                isAuthorized = true;
+                document.getElementById('loginSection').style.display = 'none';
+                document.getElementById('adminPanel').style.display = 'block';
+                loadBricks();
+                startNewPostDetection();
+            } else {
+                showWalletStatus('❌ Mot de passe incorrect', 'unauthorized');
+            }
+        };
+
+        // ============================================
+        // CONNEXION PHANTOM
+        // ============================================
+        document.getElementById('connectWalletBtn').addEventListener('click', async function() {
+            try {
+                if (!window.solana || !window.solana.isPhantom) {
+                    showWalletStatus('❌ Phantom non détecté', 'unauthorized');
+                    return;
+                }
+
+                const response = await window.solana.connect();
+                const wallet = window.solana.publicKey.toString();
+                currentWallet = wallet;
+
+                if (CONFIG.ADMIN_WALLETS.has(wallet)) {
+                    isAuthorized = true;
+                    showWalletStatus(`✅ ADMIN : ${wallet.slice(0,4)}...${wallet.slice(-4)}`, 'authorized');
+                    document.getElementById('loginSection').style.display = 'none';
+                    document.getElementById('adminPanel').style.display = 'block';
+                    loadBricks();
+                    startNewPostDetection();
+                } else {
+                    showWalletStatus(`❌ Accès refusé`, 'unauthorized');
+                    await window.solana.disconnect();
+                }
+                
+            } catch (error) {
+                showWalletStatus(`❌ Erreur: ${error.message}`, 'unauthorized');
+            }
+        });
+
+        // ============================================
+        // DÉTECTION NOUVEAUX POSTS
+        // ============================================
+        function startNewPostDetection() {
+            setInterval(checkNewPosts, 5000);
+        }
+
+        // ============================================
+        // CHARGER LES BRIQUES (VERSION CORRIGÉE)
+        // ============================================
+        function loadBricks() {
+            allBricks = [];
+            
+            // Parcourir tout le localStorage
+            for (let i = 0; i < localStorage.length; i++) {
+                const key = localStorage.key(i);
+                if (key.startsWith('brick_')) {
+                    try {
+                        const brick = JSON.parse(localStorage.getItem(key));
+                        // S'assurer que la brique a un format valide
+                        if (brick && brick.cell) {
+                            // Ajouter un timestamp si pas présent
+                            if (!brick.timestamp) {
+                                brick.timestamp = Date.now();
+                            }
+                            allBricks.push(brick);
+                        }
+                    } catch (e) {
+                        console.log('Erreur parsing brique:', key);
+                    }
+                }
+            }
+            
+            // Trier par cellule
+            allBricks.sort((a, b) => {
+                const numA = parseInt(a.cell.replace(/[^0-9]/g, '')) || 0;
+                const numB = parseInt(b.cell.replace(/[^0-9]/g, '')) || 0;
+                return numA - numB;
+            });
+            
+            // Afficher les briques
+            displayBricks(allBricks);
+            
+            // Afficher la grille
+            displaySimpleGrid(allBricks);
+            
+            // METTRE À JOUR LE COMPTEUR (CORRECTION ICI)
+            const count = allBricks.length;
+            document.getElementById('totalBricksCount').textContent = count;
+            
+            console.log('Briques chargées:', count);
+            
+            return allBricks;
+        }
+
+        // ============================================
+        // AFFICHER LES BRIQUES (VERSION CORRIGÉE)
+        // ============================================
+        function displayBricks(bricks) {
+            const grid = document.getElementById('bricksGrid');
+            
+            if (bricks.length === 0) {
+                grid.innerHTML = '<div style="grid-column: 1/-1; text-align: center; padding: 40px; color: #888;">🎉 Aucune brique pour le moment</div>';
+                document.getElementById('totalBricksCount').textContent = '0';
+                return;
+            }
+            
+            let html = '';
+            bricks.forEach(brick => {
+                const isNew = newBricks.some(b => b.cell === brick.cell);
+                const date = brick.timestamp ? new Date(brick.timestamp).toLocaleString() : 'Date inconnue';
+                const walletShort = brick.wallet ? `${brick.wallet.slice(0,4)}...${brick.wallet.slice(-4)}` : 'Inconnu';
+                
+                html += `
+                    <div class="brick-item ${isNew ? 'new-brick' : ''}" onclick="fillCell('${brick.cell}')">
+                        ${isNew ? '<span class="brick-tag">NOUVEAU</span>' : ''}
+                        <div class="brick-cell">🧱 ${brick.cell}</div>
+                        <div class="brick-message">${brick.message || 'Message vide'}</div>
+                        <div class="brick-wallet">${walletShort}</div>
+                        <div class="brick-date">${date}</div>
+                    </div>
+                `;
+            });
+            
+            grid.innerHTML = html;
+            
+            // METTRE À JOUR LE COMPTEUR ICI AUSSI
+            document.getElementById('totalBricksCount').textContent = bricks.length;
+        }
+
+        // ============================================
+        // GRILLE SIMPLIFIÉE
+        // ============================================
+        function displaySimpleGrid(bricks) {
+            const mapContainer = document.getElementById('mapContainer');
+            const occupiedCells = new Set(bricks.map(b => b.cell));
+            const newCells = new Set(newBricks.map(b => b.cell));
+            
+            let html = '';
+            
+            // 20 lignes (A à T)
+            for (let row = 0; row < 20; row++) {
+                html += '<div class="grid-row">';
+                const rowLetter = String.fromCharCode(65 + row);
+                
+                // 20 colonnes (1 à 20)
+                for (let col = 1; col <= 20; col++) {
+                    const cellId = `${rowLetter}${col}`;
+                    const cellNumber = (row * 20) + col;
+                    const isOccupied = occupiedCells.has(cellId);
+                    const isNew = newCells.has(cellId);
+                    
+                    html += `
+                        <div class="grid-cell ${isOccupied ? 'occupied' : 'empty'} ${isNew ? 'new-post' : ''}" 
+                             onclick="fillCell('${cellId}')"
+                             title="Cellule ${cellId} (n°${cellNumber})">
+                            ${cellId}
+                            <span class="cell-number">${cellNumber}</span>
+                        </div>
+                    `;
+                }
+                html += '</div>';
+            }
+            
+            mapContainer.innerHTML = html;
+        }
+
+        // ============================================
+        // VÉRIFIER NOUVEAUX POSTS
+        // ============================================
+        window.checkNewPosts = function() {
+            const currentBricks = loadBricks();
+            
+            if (lastKnownCount === 0) {
+                lastKnownCount = currentBricks.length;
+                return;
+            }
+            
+            if (currentBricks.length > lastKnownCount) {
+                newBricks = currentBricks.slice(lastKnownCount);
+                
+                const newCount = currentBricks.length - lastKnownCount;
+                document.getElementById('newPostsCount').textContent = newCount;
+                document.getElementById('alertSection').style.display = 'flex';
+                
+                displayBricks(currentBricks);
+                displaySimpleGrid(currentBricks);
+            } else {
+                newBricks = [];
+                document.getElementById('alertSection').style.display = 'none';
+            }
+        };
+
+        // ============================================
+        // SUPPRIMER UNE BRIQUE
+        // ============================================
+        window.deleteBrick = function() {
+            const input = document.getElementById('cellInput').value.trim().toUpperCase();
+            const resultDiv = document.getElementById('deleteResult');
+            
+            if (!input) {
+                showResult('❌ Entre un numéro de brique', 'error');
+                return;
+            }
+            
+            let cellId = input;
+            
+            if (!isNaN(input) && input >= 1 && input <= 400) {
+                const num = parseInt(input) - 1;
+                const row = Math.floor(num / 20);
+                const col = num % 20;
+                cellId = `${String.fromCharCode(65 + row)}${col + 1}`;
+            }
+            
+            const key = 'brick_' + cellId;
+            const brick = localStorage.getItem(key);
+            
+            if (!brick) {
+                showResult(`❌ Aucune brique trouvée pour ${cellId}`, 'error');
+                return;
+            }
+            
+            if (confirm(`🗑️ Supprimer la brique ${cellId} ?`)) {
+                localStorage.removeItem(key);
+                showResult(`✅ Brique ${cellId} supprimée !`, 'success');
+                document.getElementById('cellInput').value = '';
+                
+                const bricks = loadBricks();
+                lastKnownCount = bricks.length;
+                newBricks = newBricks.filter(b => b.cell !== cellId);
+            }
+        };
+
+        // ============================================
+        // AFFICHER/CACHER LE PLAN
+        // ============================================
+        window.toggleGridMap = function() {
+            const mapDiv = document.getElementById('gridMap');
+            if (mapDiv.style.display === 'none' || mapDiv.style.display === '') {
+                mapDiv.style.display = 'block';
+                displaySimpleGrid(allBricks);
+            } else {
+                mapDiv.style.display = 'none';
+            }
+        };
+
+        // ============================================
+        // EXPORTER CSV
+        // ============================================
+        window.exportBricksCSV = function() {
+            let csv = "Cellule,Numéro,Wallet,Message,Date\n";
+            
+            for (let i = 0; i < localStorage.length; i++) {
+                const key = localStorage.key(i);
+                if (key.startsWith('brick_')) {
+                    try {
+                        const brick = JSON.parse(localStorage.getItem(key));
+                        const date = brick.timestamp ? new Date(brick.timestamp).toLocaleString() : '';
+                        const message = brick.message ? brick.message.replace(/"/g, '""') : '';
+                        
+                        const row = brick.cell.charCodeAt(0) - 65;
+                        const col = parseInt(brick.cell.slice(1)) - 1;
+                        const number = (row * 20) + col + 1;
+                        
+                        csv += `${brick.cell},${number},"${brick.wallet || ''}","${message}","${date}"\n`;
+                    } catch (e) {}
+                }
+            }
+            
+            const blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8;' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `bricks_${new Date().toISOString().slice(0,10)}.csv`;
+            a.click();
+            window.URL.revokeObjectURL(url);
+            
+            showResult('✅ Fichier CSV exporté !', 'success');
+        };
+
+        // ============================================
+        // COPIER LA LISTE
+        // ============================================
+        window.copyBricksList = function() {
+            let text = "LISTE DES BRIQUES $BRICK\n";
+            text += `Générée le ${new Date().toLocaleString()}\n`;
+            text += "=".repeat(50) + "\n\n";
+            
+            for (let i = 0; i < localStorage.length; i++) {
+                const key = localStorage.key(i);
+                if (key.startsWith('brick_')) {
+                    try {
+                        const brick = JSON.parse(localStorage.getItem(key));
+                        const date = brick.timestamp ? new Date(brick.timestamp).toLocaleString() : '';
+                        
+                        const row = brick.cell.charCodeAt(0) - 65;
+                        const col = parseInt(brick.cell.slice(1)) - 1;
+                        const number = (row * 20) + col + 1;
+                        
+                        text += `🧱 [${number}] ${brick.cell} - ${brick.wallet?.slice(0,4)}...${brick.wallet?.slice(-4)} - "${brick.message || ''}" [${date}]\n`;
+                    } catch (e) {}
+                }
+            }
+            
+            navigator.clipboard.writeText(text).then(() => {
+                showResult('✅ Liste copiée dans le presse-papier !', 'success');
+            }).catch(() => {
+                showResult('❌ Erreur de copie', 'error');
+            });
+        };
+
+        // ============================================
+        // REMPLIR LE CHAMP
+        // ============================================
+        window.fillCell = function(cell) {
+            document.getElementById('cellInput').value = cell;
+        };
+
+        // ============================================
+        // AFFICHER RÉSULTAT
+        // ============================================
+        function showResult(message, type) {
+            const resultDiv = document.getElementById('deleteResult');
+            resultDiv.textContent = message;
+            resultDiv.className = 'result-message result-' + type;
+            resultDiv.style.display = 'block';
+            
+            setTimeout(() => {
+                resultDiv.style.display = 'none';
+            }, 3000);
+        }
+
+        // ============================================
+        // UTILITAIRES
+        // ============================================
+        function showWalletStatus(message, type) {
+            const statusDiv = document.getElementById('walletStatus');
+            statusDiv.style.display = 'block';
+            statusDiv.className = 'wallet-status ' + type;
+            statusDiv.textContent = message;
+        }
+
+        // Auto-connect au chargement
+        window.addEventListener('load', function() {
+            if (window.solana && window.solana.isPhantom && window.solana.publicKey) {
+                const wallet = window.solana.publicKey.toString();
+                if (CONFIG.ADMIN_WALLETS.has(wallet)) {
+                    currentWallet = wallet;
+                    isAuthorized = true;
+                    document.getElementById('loginSection').style.display = 'none';
+                    document.getElementById('adminPanel').style.display = 'block';
+                    loadBricks();
+                    startNewPostDetection();
+                }
+            }
+        });
+    </script>
+</body>
+</html>

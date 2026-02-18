@@ -1,0 +1,1115 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🪙 PLAZA ADMIN - Modération tokens</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #0a0a0a;
+            font-family: 'Courier New', monospace;
+            color: #fff;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            color: #00aa88;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 0 0 10px rgba(0, 170, 136, 0.5);
+            text-transform: uppercase;
+        }
+
+        .subtitle {
+            color: #888;
+            margin-bottom: 30px;
+            font-size: 1.2em;
+            border-bottom: 1px solid #333;
+            padding-bottom: 20px;
+        }
+
+        /* ========== LOGIN SECTION ========== */
+        .login-section {
+            background: #1a1a1a;
+            border: 2px solid #00aa88;
+            border-radius: 10px;
+            padding: 40px;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .login-tabs {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .tab-btn {
+            background: none;
+            border: none;
+            color: #888;
+            font-size: 1.2em;
+            padding: 10px 30px;
+            cursor: pointer;
+            border-bottom: 2px solid transparent;
+        }
+
+        .tab-btn.active {
+            color: #00aa88;
+            border-bottom-color: #00aa88;
+        }
+
+        .login-form {
+            max-width: 400px;
+            margin: 0 auto;
+        }
+
+        .login-form input {
+            width: 100%;
+            padding: 15px;
+            background: #000;
+            border: 1px solid #333;
+            color: #fff;
+            border-radius: 5px;
+            margin-bottom: 15px;
+            font-size: 1em;
+        }
+
+        .login-btn {
+            background: #00aa88;
+            color: #000;
+            border: none;
+            padding: 15px 40px;
+            font-size: 1.2em;
+            font-weight: bold;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 100%;
+        }
+
+        .login-btn:hover {
+            background: #00cc99;
+        }
+
+        .wallet-status {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+
+        .authorized {
+            background: #003300;
+            border: 1px solid #00ff00;
+            color: #00ff00;
+        }
+
+        .unauthorized {
+            background: #330000;
+            border: 1px solid #ff0000;
+            color: #ff6666;
+        }
+
+        /* ========== ADMIN PANEL ========== */
+        .admin-panel {
+            display: none;
+        }
+
+        .admin-panel.active {
+            display: block;
+        }
+
+        /* ========== ALERTE NOUVEAUX POSTS ========== */
+        .alert-section {
+            background: #1a3300;
+            border: 2px solid #00ff00;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(0, 255, 0, 0.4); }
+            70% { box-shadow: 0 0 0 10px rgba(0, 255, 0, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(0, 255, 0, 0); }
+        }
+
+        .alert-content {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .alert-icon {
+            font-size: 2em;
+        }
+
+        .alert-text {
+            color: #00ff00;
+            font-weight: bold;
+            font-size: 1.2em;
+        }
+
+        .alert-count {
+            background: #00ff00;
+            color: #000;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-weight: bold;
+        }
+
+        .refresh-btn {
+            background: #333;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .refresh-btn:hover {
+            background: #444;
+        }
+
+        /* ========== SUPPRESSION ========== */
+        .delete-section {
+            background: #1a1a1a;
+            border: 2px solid #00aa88;
+            border-radius: 10px;
+            padding: 30px;
+            margin-bottom: 30px;
+        }
+
+        .section-title {
+            color: #00aa88;
+            font-size: 1.5em;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .delete-form {
+            display: flex;
+            gap: 15px;
+            align-items: flex-end;
+        }
+
+        .form-group {
+            flex: 1;
+        }
+
+        .form-group label {
+            display: block;
+            color: #888;
+            margin-bottom: 5px;
+            font-size: 0.9em;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 15px;
+            background: #000;
+            border: 1px solid #333;
+            color: #fff;
+            border-radius: 5px;
+            font-size: 1.2em;
+            font-weight: bold;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #00aa88;
+        }
+
+        .delete-btn {
+            background: #ff0000;
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            font-size: 1.2em;
+            font-weight: bold;
+            border-radius: 5px;
+            cursor: pointer;
+            white-space: nowrap;
+        }
+
+        .delete-btn:hover {
+            background: #cc0000;
+        }
+
+        .example {
+            color: #888;
+            font-size: 0.9em;
+            margin-top: 10px;
+        }
+
+        /* ========== OUTILS ========== */
+        .tools-section {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .tool-btn {
+            background: #333;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1em;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .tool-btn:hover {
+            background: #444;
+        }
+
+        .tool-btn.primary {
+            background: #00aa88;
+            color: #000;
+        }
+
+        .tool-btn.primary:hover {
+            background: #00cc99;
+        }
+
+        .tool-btn.success {
+            background: #00aa00;
+        }
+
+        .tool-btn.success:hover {
+            background: #00cc00;
+        }
+
+        /* ========== PLAN DE LA GRILLE SIMPLIFIÉ ========== */
+        .grid-map {
+            background: #000;
+            border: 2px solid #333;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 30px;
+            overflow-x: auto;
+        }
+
+        .grid-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .grid-header h3 {
+            color: #00aa88;
+            font-size: 1.3em;
+        }
+
+        .grid-legend {
+            display: flex;
+            gap: 20px;
+            color: #888;
+            font-size: 0.9em;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .legend-color {
+            width: 20px;
+            height: 20px;
+            border-radius: 3px;
+        }
+
+        .legend-color.occupied {
+            background: #00aa88;
+        }
+
+        .legend-color.empty {
+            background: transparent;
+            border: 1px solid #444;
+        }
+
+        /* Grille numérique simplifiée */
+        .simple-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            background: #1a1a1a;
+            padding: 10px;
+            border-radius: 5px;
+        }
+
+        .grid-row {
+            display: flex;
+            gap: 2px;
+        }
+
+        .grid-cell {
+            width: 45px;
+            height: 45px;
+            border: 1px solid #444;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 11px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.2s;
+            position: relative;
+        }
+
+        .grid-cell:hover {
+            border-color: #00aa88;
+            transform: scale(1.05);
+            z-index: 10;
+        }
+
+        .grid-cell.occupied {
+            background: #00aa88;
+            color: #000;
+            border-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 170, 136, 0.5);
+        }
+
+        .grid-cell.occupied:hover {
+            background: #00cc99;
+        }
+
+        .grid-cell.empty {
+            color: #666;
+        }
+
+        .cell-number {
+            font-size: 10px;
+            opacity: 0.7;
+            margin-left: 2px;
+        }
+
+        .occupied .cell-number {
+            color: #000;
+        }
+
+        /* Marqueur pour nouveaux posts */
+        .grid-cell.new-post::after {
+            content: "🆕";
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            font-size: 12px;
+            filter: drop-shadow(0 0 5px #00ff00);
+        }
+
+        /* ========== LISTE DES TOKENS ========== */
+        .list-section {
+            background: #1a1a1a;
+            border: 2px solid #333;
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 30px;
+        }
+
+        .list-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .list-title {
+            color: #00aa88;
+            font-size: 1.3em;
+        }
+
+        .tokens-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 15px;
+            max-height: 600px;
+            overflow-y: auto;
+            padding: 10px;
+            background: #000;
+            border-radius: 5px;
+        }
+
+        .token-item {
+            background: #1a1a1a;
+            border: 1px solid #333;
+            border-radius: 10px;
+            padding: 15px;
+            cursor: pointer;
+            transition: all 0.2s;
+            position: relative;
+            display: flex;
+            gap: 12px;
+        }
+
+        .token-item.new-token {
+            border-color: #00ff00;
+            animation: glow 2s infinite;
+        }
+
+        .token-item:hover {
+            border-color: #00aa88;
+            transform: scale(1.02);
+            background: #222;
+        }
+
+        .token-image {
+            width: 60px;
+            height: 60px;
+            border-radius: 8px;
+            object-fit: cover;
+            border: 2px solid #00aa88;
+        }
+
+        .token-info {
+            flex: 1;
+        }
+
+        .token-cell {
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #00aa88;
+            margin-bottom: 5px;
+        }
+
+        .token-contract {
+            font-size: 0.7em;
+            color: #aaa;
+            font-family: monospace;
+            margin-bottom: 5px;
+            word-break: break-all;
+        }
+
+        .token-message {
+            font-size: 0.8em;
+            color: #fff;
+            margin-bottom: 5px;
+        }
+
+        .token-wallet {
+            font-size: 0.6em;
+            color: #666;
+        }
+
+        .token-tag {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            background: #00ff00;
+            color: #000;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-size: 0.7em;
+            font-weight: bold;
+        }
+
+        .result-message {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 5px;
+            display: none;
+        }
+
+        .result-success {
+            background: #003300;
+            border: 1px solid #00ff00;
+            color: #00ff00;
+            display: block;
+        }
+
+        .result-error {
+            background: #330000;
+            border: 1px solid #ff0000;
+            color: #ff6666;
+            display: block;
+        }
+
+        .nav-links {
+            margin-top: 40px;
+            text-align: center;
+            color: #666;
+        }
+
+        .nav-links a {
+            color: #00aa88;
+            text-decoration: none;
+            margin: 0 10px;
+        }
+
+        .nav-links a:hover {
+            text-decoration: underline;
+        }
+
+        .admin-switch {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin: 30px 0;
+        }
+
+        .admin-switch a {
+            padding: 10px 30px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .admin-switch .active {
+            background: #00aa88;
+            color: #000;
+        }
+
+        .admin-switch .inactive {
+            background: #333;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🪙 PLAZA ADMIN</h1>
+        <div class="subtitle">
+            Modération des tokens • Suppression
+        </div>
+
+        <!-- Switch Admin -->
+        <div class="admin-switch">
+            <a href="admin.html" class="inactive">🧱 BRICK ADMIN</a>
+            <a href="admin-plaza.html" class="active">🪙 PLAZA ADMIN</a>
+        </div>
+
+        <!-- ========== SECTION CONNEXION ========== -->
+        <div id="loginSection" class="login-section">
+            <div class="login-tabs">
+                <button class="tab-btn active" onclick="switchLoginTab('wallet')">🔐 Wallet</button>
+                <button class="tab-btn" onclick="switchLoginTab('password')">🔑 Mot de passe</button>
+            </div>
+
+            <!-- Login Wallet -->
+            <div id="loginWallet" class="login-form">
+                <p style="margin-bottom: 20px; color: #888;">
+                    Connecte-toi avec ton wallet Phantom.
+                </p>
+                <button id="connectWalletBtn" class="login-btn">
+                    ⚡ CONNECTER PHANTOM
+                </button>
+            </div>
+
+            <!-- Login Password -->
+            <div id="loginPassword" class="login-form" style="display: none;">
+                <input type="password" id="adminPassword" placeholder="Mot de passe admin">
+                <button onclick="loginWithPassword()" class="login-btn">
+                    🔑 SE CONNECTER
+                </button>
+            </div>
+
+            <div id="walletStatus" class="wallet-status" style="display: none;"></div>
+        </div>
+
+        <!-- ========== PANEL ADMIN ========== -->
+        <div id="adminPanel" class="admin-panel">
+            <!-- ALERTE NOUVEAUX POSTS -->
+            <div id="alertSection" class="alert-section" style="display: none;">
+                <div class="alert-content">
+                    <span class="alert-icon">🆕</span>
+                    <span class="alert-text">NOUVEAU TOKEN DÉTECTÉ !</span>
+                    <span id="newPostsCount" class="alert-count">0</span>
+                </div>
+                <button class="refresh-btn" onclick="checkNewPosts()">
+                    🔄 ACTUALISER
+                </button>
+            </div>
+
+            <!-- SECTION SUPPRESSION -->
+            <div class="delete-section">
+                <div class="section-title">
+                    🗑️ SUPPRIMER UN TOKEN
+                </div>
+                
+                <div class="delete-form">
+                    <div class="form-group">
+                        <label>Numéro de la cellule (ex: A1, B5, T20, ou 1-400)</label>
+                        <input type="text" id="cellInput" placeholder="Ex: D9, 106, 347, A1" autocomplete="off">
+                    </div>
+                    <button class="delete-btn" onclick="deleteToken()">
+                        🪙 SUPPRIMER
+                    </button>
+                </div>
+                <div class="example">
+                    Format accepté : A1 à T20, ou numéro de cellule (1-400)
+                </div>
+                <div id="deleteResult" class="result-message"></div>
+            </div>
+
+            <!-- OUTILS DE VISUALISATION -->
+            <div class="tools-section">
+                <button class="tool-btn primary" onclick="toggleGridMap()">
+                    🗺️ VOIR LE PLAN DES CELLULES
+                </button>
+                <button class="tool-btn success" onclick="exportTokensCSV()">
+                    📥 EXPORTER CSV
+                </button>
+                <button class="tool-btn" onclick="copyTokensList()">
+                    📋 COPIER LA LISTE
+                </button>
+            </div>
+
+            <!-- PLAN DE LA GRILLE SIMPLIFIÉ -->
+            <div id="gridMap" class="grid-map" style="display: none;">
+                <div class="grid-header">
+                    <h3>🗺️ PLAN DES CELLULES</h3>
+                    <div class="grid-legend">
+                        <div class="legend-item">
+                            <div class="legend-color occupied"></div>
+                            <span>Token existant</span>
+                        </div>
+                        <div class="legend-item">
+                            <div class="legend-color empty"></div>
+                            <span>Libre</span>
+                        </div>
+                    </div>
+                </div>
+                <div id="mapContainer" class="simple-grid">
+                    <!-- Généré par JS -->
+                </div>
+                <p style="color: #888; margin-top: 15px; text-align: center;">
+                    Cliquez sur une cellule verte pour supprimer • Les 🆕 indiquent les nouveaux tokens
+                </p>
+            </div>
+
+            <!-- LISTE DES TOKENS -->
+            <div class="list-section">
+                <div class="list-header">
+                    <span class="list-title">📋 TOKENS EXISTANTS</span>
+                    <span id="totalTokensCount" class="total-count">0</span>
+                </div>
+                <div id="tokensGrid" class="tokens-grid">
+                    <!-- Généré par JS -->
+                </div>
+            </div>
+        </div>
+
+        <!-- NAVIGATION -->
+        <div class="nav-links">
+            <a href="index.html">🏠 HUB</a> • 
+            <a href="canvas.html">🗺️ CANVAS</a> • 
+            <a href="daily.html">📅 DAILY</a> • 
+            <a href="plaza.html">🪙 PLAZA</a>
+        </div>
+    </div>
+
+    <script>
+        // ============================================
+        // CONFIGURATION
+        // ============================================
+        const CONFIG = {
+            ADMIN_WALLETS: new Set([
+                '6ieEMVMJMjjFUW35KrjTdG6cEqy6mxRGZHLdKsXwp6r3'
+            ]),
+            ADMIN_PASSWORD: 'OticBarotraumaBric737/'
+        };
+
+        // ============================================
+        // ÉTAT GLOBAL
+        // ============================================
+        let currentWallet = null;
+        let isAuthorized = false;
+        let lastKnownCount = 0;
+        let allTokens = [];
+        let newTokens = [];
+
+        // ============================================
+        // GESTION DES TABS DE CONNEXION
+        // ============================================
+        window.switchLoginTab = function(tab) {
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            document.getElementById('loginWallet').style.display = tab === 'wallet' ? 'block' : 'none';
+            document.getElementById('loginPassword').style.display = tab === 'password' ? 'block' : 'none';
+        };
+
+        // ============================================
+        // CONNEXION PAR MOT DE PASSE
+        // ============================================
+        window.loginWithPassword = function() {
+            const password = document.getElementById('adminPassword').value;
+            
+            if (password === CONFIG.ADMIN_PASSWORD) {
+                isAuthorized = true;
+                document.getElementById('loginSection').style.display = 'none';
+                document.getElementById('adminPanel').style.display = 'block';
+                loadTokens();
+                startNewTokenDetection();
+            } else {
+                showWalletStatus('❌ Mot de passe incorrect', 'unauthorized');
+            }
+        };
+
+        // ============================================
+        // CONNEXION PHANTOM
+        // ============================================
+        document.getElementById('connectWalletBtn').addEventListener('click', async function() {
+            try {
+                if (!window.solana || !window.solana.isPhantom) {
+                    showWalletStatus('❌ Phantom non détecté', 'unauthorized');
+                    return;
+                }
+
+                const response = await window.solana.connect();
+                const wallet = window.solana.publicKey.toString();
+                currentWallet = wallet;
+
+                if (CONFIG.ADMIN_WALLETS.has(wallet)) {
+                    isAuthorized = true;
+                    showWalletStatus(`✅ ADMIN : ${wallet.slice(0,4)}...${wallet.slice(-4)}`, 'authorized');
+                    document.getElementById('loginSection').style.display = 'none';
+                    document.getElementById('adminPanel').style.display = 'block';
+                    loadTokens();
+                    startNewTokenDetection();
+                } else {
+                    showWalletStatus(`❌ Accès refusé`, 'unauthorized');
+                    await window.solana.disconnect();
+                }
+                
+            } catch (error) {
+                showWalletStatus(`❌ Erreur: ${error.message}`, 'unauthorized');
+            }
+        });
+
+        // ============================================
+        // DÉTECTION NOUVEAUX TOKENS
+        // ============================================
+        function startNewTokenDetection() {
+            setInterval(checkNewTokens, 5000);
+        }
+
+        // ============================================
+        // CHARGER LES TOKENS
+        // ============================================
+        function loadTokens() {
+            allTokens = [];
+            
+            for (let i = 0; i < localStorage.length; i++) {
+                const key = localStorage.key(i);
+                if (key.startsWith('plaza_')) {
+                    try {
+                        const token = JSON.parse(localStorage.getItem(key));
+                        if (token && token.cell) {
+                            if (!token.timestamp) {
+                                token.timestamp = Date.now();
+                            }
+                            allTokens.push(token);
+                        }
+                    } catch (e) {
+                        console.log('Erreur parsing token:', key);
+                    }
+                }
+            }
+            
+            allTokens.sort((a, b) => {
+                const numA = parseInt(a.cell.replace(/[^0-9]/g, '')) || 0;
+                const numB = parseInt(b.cell.replace(/[^0-9]/g, '')) || 0;
+                return numA - numB;
+            });
+            
+            displayTokens(allTokens);
+            displaySimpleGrid(allTokens);
+            
+            const count = allTokens.length;
+            document.getElementById('totalTokensCount').textContent = count;
+            
+            console.log('Tokens chargés:', count);
+            
+            return allTokens;
+        }
+
+        // ============================================
+        // AFFICHER LES TOKENS
+        // ============================================
+        function displayTokens(tokens) {
+            const grid = document.getElementById('tokensGrid');
+            
+            if (tokens.length === 0) {
+                grid.innerHTML = '<div style="grid-column: 1/-1; text-align: center; padding: 40px; color: #888;">🎉 Aucun token pour le moment</div>';
+                document.getElementById('totalTokensCount').textContent = '0';
+                return;
+            }
+            
+            let html = '';
+            tokens.forEach(token => {
+                const isNew = newTokens.some(t => t.cell === token.cell);
+                const date = token.timestamp ? new Date(token.timestamp).toLocaleString() : 'Date inconnue';
+                const walletShort = token.wallet ? `${token.wallet.slice(0,4)}...${token.wallet.slice(-4)}` : 'Inconnu';
+                const contractShort = token.contract ? `${token.contract.slice(0,8)}...${token.contract.slice(-8)}` : 'N/A';
+                
+                html += `
+                    <div class="token-item ${isNew ? 'new-token' : ''}" onclick="fillCell('${token.cell}')">
+                        ${isNew ? '<span class="token-tag">NOUVEAU</span>' : ''}
+                        <img class="token-image" src="${token.image || 'https://placehold.co/60x60/00aa88/FFFFFF?text=🪙'}" 
+                             onerror="this.src='https://placehold.co/60x60/00aa88/FFFFFF?text=🪙'">
+                        <div class="token-info">
+                            <div class="token-cell">🪙 ${token.cell}</div>
+                            <div class="token-contract">📋 ${contractShort}</div>
+                            <div class="token-message">${token.message || 'Message vide'}</div>
+                            <div class="token-wallet">👤 ${walletShort}</div>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            grid.innerHTML = html;
+            document.getElementById('totalTokensCount').textContent = tokens.length;
+        }
+
+        // ============================================
+        // GRILLE SIMPLIFIÉE
+        // ============================================
+        function displaySimpleGrid(tokens) {
+            const mapContainer = document.getElementById('mapContainer');
+            const occupiedCells = new Set(tokens.map(t => t.cell));
+            const newCells = new Set(newTokens.map(t => t.cell));
+            
+            let html = '';
+            
+            for (let row = 0; row < 20; row++) {
+                html += '<div class="grid-row">';
+                const rowLetter = String.fromCharCode(65 + row);
+                
+                for (let col = 1; col <= 20; col++) {
+                    const cellId = `${rowLetter}${col}`;
+                    const cellNumber = (row * 20) + col;
+                    const isOccupied = occupiedCells.has(cellId);
+                    const isNew = newCells.has(cellId);
+                    
+                    html += `
+                        <div class="grid-cell ${isOccupied ? 'occupied' : 'empty'} ${isNew ? 'new-post' : ''}" 
+                             onclick="fillCell('${cellId}')"
+                             title="Cellule ${cellId} (n°${cellNumber})">
+                            ${cellId}
+                            <span class="cell-number">${cellNumber}</span>
+                        </div>
+                    `;
+                }
+                html += '</div>';
+            }
+            
+            mapContainer.innerHTML = html;
+        }
+
+        // ============================================
+        // VÉRIFIER NOUVEAUX TOKENS
+        // ============================================
+        window.checkNewTokens = function() {
+            const currentTokens = loadTokens();
+            
+            if (lastKnownCount === 0) {
+                lastKnownCount = currentTokens.length;
+                return;
+            }
+            
+            if (currentTokens.length > lastKnownCount) {
+                newTokens = currentTokens.slice(lastKnownCount);
+                
+                const newCount = currentTokens.length - lastKnownCount;
+                document.getElementById('newPostsCount').textContent = newCount;
+                document.getElementById('alertSection').style.display = 'flex';
+                
+                displayTokens(currentTokens);
+                displaySimpleGrid(currentTokens);
+            } else {
+                newTokens = [];
+                document.getElementById('alertSection').style.display = 'none';
+            }
+        };
+
+        // ============================================
+        // SUPPRIMER UN TOKEN
+        // ============================================
+        window.deleteToken = function() {
+            const input = document.getElementById('cellInput').value.trim().toUpperCase();
+            const resultDiv = document.getElementById('deleteResult');
+            
+            if (!input) {
+                showResult('❌ Entre un numéro de cellule', 'error');
+                return;
+            }
+            
+            let cellId = input;
+            
+            if (!isNaN(input) && input >= 1 && input <= 400) {
+                const num = parseInt(input) - 1;
+                const row = Math.floor(num / 20);
+                const col = num % 20;
+                cellId = `${String.fromCharCode(65 + row)}${col + 1}`;
+            }
+            
+            const key = 'plaza_' + cellId;
+            const token = localStorage.getItem(key);
+            
+            if (!token) {
+                showResult(`❌ Aucun token trouvé pour ${cellId}`, 'error');
+                return;
+            }
+            
+            if (confirm(`🗑️ Supprimer le token ${cellId} ?`)) {
+                localStorage.removeItem(key);
+                showResult(`✅ Token ${cellId} supprimé !`, 'success');
+                document.getElementById('cellInput').value = '';
+                
+                const tokens = loadTokens();
+                lastKnownCount = tokens.length;
+                newTokens = newTokens.filter(t => t.cell !== cellId);
+            }
+        };
+
+        // ============================================
+        // AFFICHER/CACHER LE PLAN
+        // ============================================
+        window.toggleGridMap = function() {
+            const mapDiv = document.getElementById('gridMap');
+            if (mapDiv.style.display === 'none' || mapDiv.style.display === '') {
+                mapDiv.style.display = 'block';
+                displaySimpleGrid(allTokens);
+            } else {
+                mapDiv.style.display = 'none';
+            }
+        };
+
+        // ============================================
+        // EXPORTER CSV
+        // ============================================
+        window.exportTokensCSV = function() {
+            let csv = "Cellule,Numéro,Wallet,Contract,Message,Twitter,Telegram,Discord,Website,Date\n";
+            
+            for (let i = 0; i < localStorage.length; i++) {
+                const key = localStorage.key(i);
+                if (key.startsWith('plaza_')) {
+                    try {
+                        const token = JSON.parse(localStorage.getItem(key));
+                        const date = token.timestamp ? new Date(token.timestamp).toLocaleString() : '';
+                        const message = token.message ? token.message.replace(/"/g, '""') : '';
+                        
+                        const row = token.cell.charCodeAt(0) - 65;
+                        const col = parseInt(token.cell.slice(1)) - 1;
+                        const number = (row * 20) + col + 1;
+                        
+                        csv += `${token.cell},${number},"${token.wallet || ''}","${token.contract || ''}","${message}","${token.socials?.twitter || ''}","${token.socials?.telegram || ''}","${token.socials?.discord || ''}","${token.socials?.website || ''}","${date}"\n`;
+                    } catch (e) {}
+                }
+            }
+            
+            const blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8;' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `tokens_plaza_${new Date().toISOString().slice(0,10)}.csv`;
+            a.click();
+            window.URL.revokeObjectURL(url);
+            
+            showResult('✅ Fichier CSV exporté !', 'success');
+        };
+
+        // ============================================
+        // COPIER LA LISTE
+        // ============================================
+        window.copyTokensList = function() {
+            let text = "LISTE DES TOKENS $BRICK PLAZA\n";
+            text += `Générée le ${new Date().toLocaleString()}\n`;
+            text += "=".repeat(50) + "\n\n";
+            
+            for (let i = 0; i < localStorage.length; i++) {
+                const key = localStorage.key(i);
+                if (key.startsWith('plaza_')) {
+                    try {
+                        const token = JSON.parse(localStorage.getItem(key));
+                        const date = token.timestamp ? new Date(token.timestamp).toLocaleString() : '';
+                        
+                        const row = token.cell.charCodeAt(0) - 65;
+                        const col = parseInt(token.cell.slice(1)) - 1;
+                        const number = (row * 20) + col + 1;
+                        
+                        text += `🪙 [${number}] ${token.cell} - ${token.wallet?.slice(0,4)}...${token.wallet?.slice(-4)} - ${token.contract?.slice(0,8)}... - "${token.message || ''}" [${date}]\n`;
+                    } catch (e) {}
+                }
+            }
+            
+            navigator.clipboard.writeText(text).then(() => {
+                showResult('✅ Liste copiée dans le presse-papier !', 'success');
+            }).catch(() => {
+                showResult('❌ Erreur de copie', 'error');
+            });
+        };
+
+        // ============================================
+        // REMPLIR LE CHAMP
+        // ============================================
+        window.fillCell = function(cell) {
+            document.getElementById('cellInput').value = cell;
+        };
+
+        // ============================================
+        // AFFICHER RÉSULTAT
+        // ============================================
+        function showResult(message, type) {
+            const resultDiv = document.getElementById('deleteResult');
+            resultDiv.textContent = message;
+            resultDiv.className = 'result-message result-' + type;
+            resultDiv.style.display = 'block';
+            
+            setTimeout(() => {
+                resultDiv.style.display = 'none';
+            }, 3000);
+        }
+
+        // ============================================
+        // UTILITAIRES
+        // ============================================
+        function showWalletStatus(message, type) {
+            const statusDiv = document.getElementById('walletStatus');
+            statusDiv.style.display = 'block';
+            statusDiv.className = 'wallet-status ' + type;
+            statusDiv.textContent = message;
+        }
+
+        // Auto-connect au chargement
+        window.addEventListener('load', function() {
+            if (window.solana && window.solana.isPhantom && window.solana.publicKey) {
+                const wallet = window.solana.publicKey.toString();
+                if (CONFIG.ADMIN_WALLETS.has(wallet)) {
+                    currentWallet = wallet;
+                    isAuthorized = true;
+                    document.getElementById('loginSection').style.display = 'none';
+                    document.getElementById('adminPanel').style.display = 'block';
+                    loadTokens();
+                    startNewTokenDetection();
+                }
+            }
+        });
+    </script>
+</body>
+</html>

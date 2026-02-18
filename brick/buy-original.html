@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🧱 Buy a Brick - Original Canvas</title>
+    <script src="https://unpkg.com/@solana/web3.js@latest/lib/index.iife.js"></script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #fff5f5 0%, #fff 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 24px;
+            padding: 32px;
+            box-shadow: 0 10px 40px rgba(255, 68, 170, 0.1);
+            border: 1px solid rgba(255, 68, 170, 0.2);
+        }
+        h1 {
+            font-size: 32px;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: #1a1a1a;
+        }
+        h1 span { font-size: 40px; }
+        .subtitle {
+            color: #666;
+            margin-bottom: 32px;
+            font-size: 16px;
+            border-left: 4px solid #FF44AA;
+            padding-left: 16px;
+            background: #fff5f9;
+            padding: 16px;
+            border-radius: 12px;
+        }
+        .wallet-section {
+            background: #f8f9fa;
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 24px;
+        }
+        .wallet-button {
+            background: #FF44AA;
+            color: white;
+            border: none;
+            padding: 14px 28px;
+            border-radius: 40px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            width: 100%;
+            border: 2px solid transparent;
+        }
+        .wallet-button:hover {
+            background: #ff6bb9;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(255, 68, 170, 0.3);
+        }
+        .wallet-button.connected {
+            background: white;
+            color: #FF44AA;
+            border: 2px solid #FF44AA;
+        }
+        .wallet-info {
+            margin-top: 12px;
+            padding: 12px;
+            background: white;
+            border-radius: 12px;
+            font-size: 14px;
+            word-break: break-all;
+            display: none;
+        }
+        .wallet-info.show { display: block; }
+        .form-group { margin-bottom: 20px; }
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #333;
+            font-size: 14px;
+        }
+        input, textarea {
+            width: 100%;
+            padding: 14px;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            font-size: 15px;
+            transition: all 0.2s;
+            background: white;
+        }
+        input:focus, textarea:focus {
+            border-color: #FF44AA;
+            outline: none;
+            box-shadow: 0 0 0 4px rgba(255, 68, 170, 0.1);
+        }
+        .image-upload {
+            border: 2px dashed #e0e0e0;
+            border-radius: 16px;
+            padding: 32px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s;
+            background: #fafafa;
+        }
+        .image-upload:hover {
+            border-color: #FF44AA;
+            background: #fff5f9;
+        }
+        .image-upload input { display: none; }
+        .image-preview {
+            max-width: 100%;
+            max-height: 200px;
+            margin-top: 16px;
+            border-radius: 12px;
+            display: none;
+        }
+        .image-preview.show { display: block; }
+        .price-section {
+            background: linear-gradient(135deg, #fff0f7 0%, #ffe6f0 100%);
+            border-radius: 16px;
+            padding: 20px;
+            margin: 24px 0;
+        }
+        .price {
+            font-size: 32px;
+            font-weight: 700;
+            color: #FF44AA;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            justify-content: center;
+        }
+        .pay-button {
+            background: #FF44AA;
+            color: white;
+            border: none;
+            padding: 18px;
+            border-radius: 40px;
+            font-size: 18px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s;
+            width: 100%;
+            margin-top: 16px;
+            border: 2px solid transparent;
+        }
+        .pay-button:hover:not(:disabled) {
+            background: #ff6bb9;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(255, 68, 170, 0.3);
+        }
+        .pay-button:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            opacity: 0.7;
+        }
+        .back-link {
+            display: inline-block;
+            margin-top: 24px;
+            color: #666;
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.2s;
+        }
+        .back-link:hover { color: #FF44AA; }
+        .status {
+            margin-top: 16px;
+            padding: 12px;
+            border-radius: 12px;
+            display: none;
+        }
+        .status.show { display: block; }
+        .status.success {
+            background: #e6ffe6;
+            color: #008000;
+            border: 1px solid #90EE90;
+        }
+        .status.error {
+            background: #ffe6e6;
+            color: #cc0000;
+            border: 1px solid #ff9999;
+        }
+        .status.info {
+            background: #e6f3ff;
+            color: #0066cc;
+            border: 1px solid #99ccff;
+        }
+        .social-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            margin-top: 5px;
+        }
+        .badge {
+            display: inline-block;
+            background: #00aa88;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 40px;
+            font-size: 12px;
+            margin-left: 8px;
+        }
+        .badge-pink {
+            background: #FF44AA;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1><span>🧱</span> Buy a Brick</h1>
+        <div class="subtitle">
+            Original Canvas · 0.1 SOL
+            <span class="badge">MODERATED</span>
+            <span class="badge badge-pink">REJECTED = REFUND</span>
+        </div>
+
+        <!-- Cell from URL -->
+        <input type="hidden" id="cell-field" value="">
+
+        <div class="wallet-section">
+            <button id="wallet-btn" class="wallet-button">🔌 Connect Phantom</button>
+            <div id="wallet-info" class="wallet-info">
+                <strong>Wallet connected:</strong><br>
+                <span id="wallet-address"></span>
+            </div>
+        </div>
+
+        <form id="purchase-form">
+            <div class="form-group">
+                <label>📝 Your message (max 200)</label>
+                <textarea id="message" maxlength="200" rows="3" placeholder="I was here at the beginning. #Brick"></textarea>
+                <div style="text-align:right; font-size:12px; color:#666; margin-top:4px">
+                    <span id="char-count">0</span>/200
+                </div>
+            </div>
+
+            <!-- SOCIAL LINKS -->
+            <div class="form-group">
+                <label>🌐 Your links (optional)</label>
+                <div class="social-grid">
+                    <input type="url" id="twitter" placeholder="🐦 Twitter / X">
+                    <input type="url" id="telegram" placeholder="✈️ Telegram">
+                    <input type="url" id="discord" placeholder="💬 Discord">
+                    <input type="url" id="instagram" placeholder="📷 Instagram">
+                    <input type="url" id="tiktok" placeholder="🎵 TikTok">
+                    <input type="email" id="email" placeholder="📧 Email">
+                    <input type="url" id="website" placeholder="🌍 Website" value="https://tokenforge.live">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>🖼️ Image</label>
+                <div id="image-upload" class="image-upload">
+                    <span style="font-size: 40px; display: block; margin-bottom: 8px;">📸</span>
+                    <strong>Click to upload an image</strong>
+                    <p style="color: #666; margin-top: 8px; font-size: 14px;">PNG, JPG • Max 5MB</p>
+                    <input type="file" id="image" accept="image/*">
+                    <img id="image-preview" class="image-preview">
+                </div>
+            </div>
+
+            <div class="price-section">
+                <div class="price">
+                    0.1 SOL
+                </div>
+                <div style="text-align:center; margin-top:8px; color:#00aa88; font-weight:600;">
+                    ⚡ MODERATION APPLIES · REJECTED = FULL REFUND ⚡
+                </div>
+            </div>
+
+            <button type="submit" id="pay-btn" class="pay-button" disabled>
+                💎 PAY 0.1 SOL
+            </button>
+        </form>
+
+        <div id="status" class="status"></div>
+        <a href="canvas.html" class="back-link">← Back to Canvas</a>
+    </div>
+
+    <!-- POPUP DE SUCCÈS -->
+    <div id="success-popup" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); backdrop-filter: blur(5px); z-index: 1000; align-items: center; justify-content: center;">
+        <div style="background: white; max-width: 400px; padding: 40px; border-radius: 32px; text-align: center; box-shadow: 0 20px 60px rgba(255,68,170,0.3); border: 2px solid #FF44AA;">
+            <div style="font-size: 80px; margin-bottom: 20px;">🧱✨</div>
+            <h2 style="color: #FF44AA; margin-bottom: 16px;">BRICK SAVED!</h2>
+            <p style="color: #333; margin-bottom: 24px;">Pending moderation</p>
+            <div style="background: #f0f0f0; padding: 12px; border-radius: 12px; margin-bottom: 24px; word-break: break-all; font-size: 12px; color: #666;">
+                Transaction: <span id="popup-tx" style="font-family: monospace;"></span>
+            </div>
+            <a href="canvas.html" style="display: block; background: #FF44AA; color: white; padding: 18px; border-radius: 40px; text-decoration: none; font-weight: 700;">
+                🧱 SEE ON CANVAS
+            </a>
+        </div>
+    </div>
+
+    <script>
+        // === CONFIGURATION ===
+        const CONFIG = {
+            TO_WALLET: '6ieEMVMJMjjFUW35KrjTdG6cEqy6mxRGZHLdKsXwp6r3'
+        };
+
+        // === DOM ELEMENTS ===
+        const walletBtn = document.getElementById('wallet-btn');
+        const walletInfo = document.getElementById('wallet-info');
+        const walletAddress = document.getElementById('wallet-address');
+        const payBtn = document.getElementById('pay-btn');
+        const statusDiv = document.getElementById('status');
+        const imageUpload = document.getElementById('image-upload');
+        const imageInput = document.getElementById('image');
+        const imagePreview = document.getElementById('image-preview');
+        const messageInput = document.getElementById('message');
+        const charCount = document.getElementById('char-count');
+        const cellField = document.getElementById('cell-field');
+        
+        // Social inputs
+        const twitter = document.getElementById('twitter');
+        const telegram = document.getElementById('telegram');
+        const discord = document.getElementById('discord');
+        const instagram = document.getElementById('instagram');
+        const tiktok = document.getElementById('tiktok');
+        const email = document.getElementById('email');
+        const website = document.getElementById('website');
+
+        // === STATE ===
+        let wallet = null;
+        let publicKey = null;
+        let compressedImage = null;
+
+        // === GET CELL FROM URL ===
+        const urlParams = new URLSearchParams(window.location.search);
+        const cellFromUrl = urlParams.get('cell');
+        let selectedCell = cellFromUrl ? cellFromUrl.toUpperCase() : '';
+        if (selectedCell) {
+            cellField.value = selectedCell;
+        }
+
+        // === CHAR COUNT ===
+        messageInput.addEventListener('input', function() {
+            charCount.textContent = this.value.length;
+        });
+
+        // === CONNECT WALLET ===
+        async function connectWallet() {
+            try {
+                if (!window.solana || !window.solana.isPhantom) {
+                    alert('Please install Phantom wallet');
+                    window.open('https://phantom.app', '_blank');
+                    return;
+                }
+
+                const response = await window.solana.connect();
+                publicKey = response.publicKey.toString();
+                wallet = window.solana;
+                
+                walletBtn.textContent = `✅ ${publicKey.slice(0,4)}...${publicKey.slice(-4)}`;
+                walletBtn.classList.add('connected');
+                walletAddress.textContent = publicKey;
+                walletInfo.classList.add('show');
+                payBtn.disabled = false;
+                
+                showStatus('✅ Wallet connected', 'success');
+                
+            } catch (error) {
+                showStatus('❌ Connection failed', 'error');
+            }
+        }
+
+        walletBtn.addEventListener('click', connectWallet);
+
+        // Auto-connect
+        window.addEventListener('load', async () => {
+            if (window.solana?.isPhantom) {
+                try {
+                    const response = await window.solana.connect({ onlyIfTrusted: true });
+                    publicKey = response.publicKey.toString();
+                    wallet = window.solana;
+                    walletBtn.textContent = `✅ ${publicKey.slice(0,4)}...${publicKey.slice(-4)}`;
+                    walletBtn.classList.add('connected');
+                    walletAddress.textContent = publicKey;
+                    walletInfo.classList.add('show');
+                    payBtn.disabled = false;
+                } catch (error) {}
+            }
+        });
+
+        // === IMAGE UPLOAD ===
+        imageUpload.addEventListener('click', () => imageInput.click());
+        
+        imageInput.addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+
+            if (file.size > 5 * 1024 * 1024) {
+                showStatus('❌ Image too large (max 5MB)', 'error');
+                return;
+            }
+
+            const reader = new FileReader();
+            reader.onload = function(ev) {
+                const img = new Image();
+                img.onload = function() {
+                    // Resize to max 200px
+                    const canvas = document.createElement('canvas');
+                    let w = img.width, h = img.height;
+                    
+                    if (w > h) {
+                        if (w > 200) { h *= 200 / w; w = 200; }
+                    } else {
+                        if (h > 200) { w *= 200 / h; h = 200; }
+                    }
+                    
+                    canvas.width = Math.round(w);
+                    canvas.height = Math.round(h);
+                    canvas.getContext('2d').drawImage(img, 0, 0, canvas.width, canvas.height);
+                    
+                    compressedImage = canvas.toDataURL('image/jpeg', 0.7);
+                    
+                    imagePreview.src = compressedImage;
+                    imagePreview.classList.add('show');
+                    imageUpload.style.borderStyle = 'solid';
+                    imageUpload.style.background = '#fff5f9';
+                };
+                img.src = ev.target.result;
+            };
+            reader.readAsDataURL(file);
+        });
+
+        // === PAYMENT ===
+        async function payWithSOL(amount) {
+            if (!wallet) throw new Error('Wallet not connected');
+            
+            const connection = new solanaWeb3.Connection('https://solana.publicnode.com');
+            const { blockhash } = await connection.getLatestBlockhash();
+            
+            const transaction = new solanaWeb3.Transaction({
+                recentBlockhash: blockhash,
+                feePayer: wallet.publicKey
+            }).add(
+                solanaWeb3.SystemProgram.transfer({
+                    fromPubkey: wallet.publicKey,
+                    toPubkey: new solanaWeb3.PublicKey(CONFIG.TO_WALLET),
+                    lamports: amount * solanaWeb3.LAMPORTS_PER_SOL
+                })
+            );
+
+            const signature = await wallet.signAndSendTransaction(transaction);
+            return signature;
+        }
+
+        // === FORM SUBMIT ===
+        async function handleSubmit(e) {
+            e.preventDefault();
+            
+            if (!publicKey) {
+                showStatus('❌ Connect wallet first', 'error');
+                return;
+            }
+
+            const cell = selectedCell;
+            const message = messageInput.value.trim();
+            
+            if (!cell) {
+                showStatus('❌ No cell selected. Please go back to canvas and select a cell.', 'error');
+                return;
+            }
+
+            if (!message) {
+                showStatus('❌ Message required', 'error');
+                return;
+            }
+
+            if (!compressedImage) {
+                showStatus('❌ Image required', 'error');
+                return;
+            }
+
+            try {
+                showStatus('💸 Sending payment...', 'info');
+                payBtn.disabled = true;
+                
+                const signature = await payWithSOL(0.1);
+                
+                // Collect social links
+                const socialLinks = {
+                    twitter: twitter.value,
+                    telegram: telegram.value,
+                    discord: discord.value,
+                    instagram: instagram.value,
+                    tiktok: tiktok.value,
+                    email: email.value,
+                    website: website.value || 'https://tokenforge.live'
+                };
+                
+                // Create brick data
+                const brickData = {
+                    wallet: publicKey,
+                    message: message,
+                    socials: socialLinks,
+                    image: compressedImage,
+                    timestamp: Date.now(),
+                    signature: typeof signature === 'string' ? signature : signature.signature || signature.toString(),
+                    cell: cell
+                };
+                
+                // Stockage avec la cellule comme clé
+                localStorage.setItem('brick_' + cell, JSON.stringify(brickData));
+                
+                console.log('✅ Brick saved:', brickData);
+                
+                // Show success popup
+                const sigString = typeof signature === 'string' ? signature : signature.signature || signature.toString();
+                document.getElementById('popup-tx').textContent = sigString.slice(0, 8) + '...' + sigString.slice(-8);
+                document.getElementById('success-popup').style.display = 'flex';
+                
+                // Reset form
+                messageInput.value = '';
+                imagePreview.src = '';
+                imagePreview.classList.remove('show');
+                compressedImage = null;
+                twitter.value = '';
+                telegram.value = '';
+                discord.value = '';
+                instagram.value = '';
+                tiktok.value = '';
+                email.value = '';
+                
+            } catch (error) {
+                console.error(error);
+                showStatus('❌ Error: ' + error.message, 'error');
+                payBtn.disabled = false;
+            }
+        }
+
+        document.getElementById('purchase-form').addEventListener('submit', handleSubmit);
+
+        function showStatus(message, type) {
+            statusDiv.textContent = message;
+            statusDiv.className = 'status show ' + type;
+        }
+    </script>
+</body>
+</html>
