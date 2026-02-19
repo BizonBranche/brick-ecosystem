@@ -298,7 +298,7 @@
             background: linear-gradient(145deg, #FF66AA, #FF44AA);
         }
 
-        /* Popup styles (inchangés) */
+        /* Popup styles */
         .brick-popup {
             display: none;
             position: fixed;
@@ -555,7 +555,7 @@
     </div>
 </footer>
 
-<!-- Script unifié avec tracking Supabase -->
+<!-- Script unifié avec tracking des conversions (version PROD sans bouton test) -->
 <script>
     // ===== CONFIGURATION SUPABASE (TES IDENTIFIANTS) =====
     const SUPABASE_URL = "https://bmfuvkylkhjcfsiauzvb.supabase.co";
@@ -571,13 +571,13 @@
     let currentBrickCell = null;
     let publicKey = null;
 
-    // ===== FONCTION DE TRACKING DES CONVERSIONS =====
+    // ===== FONCTION DE TRACKING DES CONVERSIONS (À APPELER LORS D'UN ACHAT RÉEL) =====
     async function enregistrerConversion(refereeWallet, montantUSDC, typeAchat) {
         const referrerWallet = localStorage.getItem('brick_referrer');
         
         if (referrerWallet) {
             try {
-                console.log('📝 Tentative d\'enregistrement:', {
+                console.log('📝 Enregistrement conversion:', {
                     referrer: referrerWallet,
                     referee: refereeWallet,
                     montant: montantUSDC,
@@ -598,27 +598,27 @@
                 if (error) {
                     console.error('❌ Erreur Supabase:', error);
                 } else {
-                    console.log('✅ Conversion enregistrée avec succès!', data);
+                    console.log('✅ Conversion enregistrée!', data);
                     
-                    // Message de confirmation
+                    // Message discret pour l'acheteur
                     const msg = document.createElement('div');
-                    msg.style.cssText = 'position:fixed; bottom:20px; left:20px; background:#00aa88; color:white; padding:10px 20px; border-radius:40px; font-size:14px; z-index:9999;';
-                    msg.textContent = '🎁 Commission attribuée au parrain !';
+                    msg.style.cssText = 'position:fixed; bottom:20px; left:20px; background:#00aa88; color:white; padding:8px 16px; border-radius:40px; font-size:13px; z-index:9999;';
+                    msg.textContent = '🎁 Merci d\'avoir utilisé un lien de parrainage !';
                     document.body.appendChild(msg);
-                    setTimeout(() => msg.remove(), 5000);
+                    setTimeout(() => msg.remove(), 4000);
                 }
             } catch (e) {
                 console.error('Exception:', e);
             }
         } else {
-            console.log('ℹ️ Achat sans référant (pas de commission)');
+            console.log('ℹ️ Achat sans référant');
         }
     }
 
-    // ===== SIMULATION D'ACHAT POUR TEST =====
-    function onPurchaseSuccess(walletAcheteur, montantEnUSDC) {
-        console.log('💰 Achat réussi pour:', walletAcheteur);
-        enregistrerConversion(walletAcheteur, montantEnUSDC, 'canvas');
+    // ===== FONCTION À APPELER QUAND LE PAIEMENT EST CONFIRMÉ =====
+    function onPurchaseSuccess(walletAcheteur, montantEnUSDC, typeAchat = 'canvas') {
+        console.log('💰 Achat confirmé pour:', walletAcheteur);
+        enregistrerConversion(walletAcheteur, montantEnUSDC, typeAchat);
     }
 
     // ===== WALLET FUNCTIONS =====
@@ -784,21 +784,6 @@
         window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(url)}`, '_blank');
     }
 
-    // ===== BOUTON DE TEST =====
-    function addTestButton() {
-        const testBtn = document.createElement('button');
-        testBtn.textContent = '🧪 Simuler achat (test)';
-        testBtn.style.cssText = 'position:fixed; bottom:20px; right:20px; background:#FF44AA; color:white; border:none; padding:10px 20px; border-radius:40px; font-size:14px; cursor:pointer; z-index:9999;';
-        testBtn.onclick = () => {
-            if (!publicKey) {
-                alert('Connecte d\'abord un wallet pour tester!');
-                return;
-            }
-            onPurchaseSuccess(publicKey, 10);
-        };
-        document.body.appendChild(testBtn);
-    }
-
     // ===== INIT =====
     window.addEventListener('load', async () => {
         // Vérifier si wallet déjà connecté
@@ -813,9 +798,9 @@
         renderGrid();
         setInterval(renderGrid, CONFIG.REFRESH_INTERVAL);
         
-        // Ajouter bouton de test
-        addTestButton();
+        console.log('✅ Canvas prêt - Tracking des conversions actif');
     });
 </script>
+
 </body>
 </html>
