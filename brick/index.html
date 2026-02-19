@@ -709,6 +709,17 @@
         }
     });
 </script>
-
+<script>
+    // ===== CAPTURE DU PARAMÈTRE REF =====
+    (function() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const referrerWallet = urlParams.get('ref');
+        
+        if (referrerWallet) {
+            localStorage.setItem('brick_referrer', referrerWallet);
+            console.log('✅ Référent détecté:', referrerWallet);
+        }
+    })();
+</script>
 </body>
 </html>
