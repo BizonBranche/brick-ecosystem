@@ -14,6 +14,9 @@
     <!-- Solana Web3 -->
     <script src="https://unpkg.com/@solana/web3.js@latest/lib/index.iife.js"></script>
     
+    <!-- Supabase -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         
@@ -531,8 +534,34 @@
     </div>
 </div>
 
-<!-- Script unifié -->
+<!-- Footer -->
+<footer style="margin-top: 60px; padding-top: 30px; border-top: 2px solid #FF44AA20;">
+    <div style="display: flex; justify-content: center; gap: 2rem; flex-wrap: wrap; max-width: 1200px; margin: 0 auto; padding: 0 20px;">
+        <a href="index.html" style="color: #666; text-decoration: none; font-weight: 500;" onmouseover="this.style.color='#FF44AA'" onmouseout="this.style.color='#666'">🧱 Home</a>
+        <a href="canvas.html" style="color: #666; text-decoration: none; font-weight: 500;" onmouseover="this.style.color='#FF44AA'" onmouseout="this.style.color='#666'">🎨 Canvas</a>
+        <a href="plaza.html" style="color: #666; text-decoration: none; font-weight: 500;" onmouseover="this.style.color='#FF44AA'" onmouseout="this.style.color='#666'">🪙 Plaza</a>
+        <a href="eternal-moments.html" style="color: #FF44AA; text-decoration: none; font-weight: 500;">✨ Eternal</a>
+        <a href="how-it-works.html" style="color: #666; text-decoration: none; font-weight: 500;" onmouseover="this.style.color='#FF44AA'" onmouseout="this.style.color='#666'">📚 How it works</a>
+        <a href="tokenomics.html" style="color: #666; text-decoration: none; font-weight: 500;" onmouseover="this.style.color='#FF44AA'" onmouseout="this.style.color='#666'">📊 Tokenomics</a>
+        <a href="referrals.html" style="color: #666; text-decoration: none; font-weight: 500;" onmouseover="this.style.color='#FF44AA'" onmouseout="this.style.color='#666'">🤝 Referrals</a>
+        <a href="daily.html" style="color: #666; text-decoration: none; font-weight: 500;" onmouseover="this.style.color='#FF44AA'" onmouseout="this.style.color='#666'">📅 Daily</a>
+        <a href="https://x.com/TokenForgeApp" target="_blank" style="color: #666; text-decoration: none; font-weight: 500;" onmouseover="this.style.color='#FF44AA'" onmouseout="this.style.color='#666'">🐦 Twitter</a>
+        <a href="https://t.me/brick_fusion_news" target="_blank" style="color: #666; text-decoration: none; font-weight: 500;" onmouseover="this.style.color='#FF44AA'" onmouseout="this.style.color='#666'">📢 Telegram News</a>
+        <a href="https://t.me/brick_community" target="_blank" style="color: #666; text-decoration: none; font-weight: 500;" onmouseover="this.style.color='#FF44AA'" onmouseout="this.style.color='#666'">💬 Telegram Group</a>
+        <a href="mailto:foundrix@protonmail.com" style="color: #666; text-decoration: none; font-weight: 500;" onmouseover="this.style.color='#FF44AA'" onmouseout="this.style.color='#666'">📧 Email</a>
+    </div>
+    <div style="text-align: center; margin: 30px 0 20px; color: #aaa; font-size: 14px;">
+        🧱 BRICK · The immortal meme coin · Built on Solana · 2026
+    </div>
+</footer>
+
+<!-- Script unifié avec tracking Supabase -->
 <script>
+    // ===== CONFIGURATION SUPABASE (TES IDENTIFIANTS) =====
+    const SUPABASE_URL = "https://bmfuvkylkhjcfsiauzvb.supabase.co";
+    const SUPABASE_ANON = "sb_publishable_VuzUNoj1NnJk1BWSbVzJjQ_WABRhxDh";
+    const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON);
+
     const CONFIG = {
         GRID_SIZE: 20,
         REFRESH_INTERVAL: 3000
@@ -541,6 +570,56 @@
     const TOTAL_CELLS = CONFIG.GRID_SIZE * CONFIG.GRID_SIZE;
     let currentBrickCell = null;
     let publicKey = null;
+
+    // ===== FONCTION DE TRACKING DES CONVERSIONS =====
+    async function enregistrerConversion(refereeWallet, montantUSDC, typeAchat) {
+        const referrerWallet = localStorage.getItem('brick_referrer');
+        
+        if (referrerWallet) {
+            try {
+                console.log('📝 Tentative d\'enregistrement:', {
+                    referrer: referrerWallet,
+                    referee: refereeWallet,
+                    montant: montantUSDC,
+                    type: typeAchat
+                });
+
+                const { data, error } = await supabaseClient
+                    .from('referral_conversions')
+                    .insert([
+                        {
+                            referrer_wallet: referrerWallet,
+                            referee_wallet: refereeWallet,
+                            amount_usdc: montantUSDC,
+                            kind: typeAchat
+                        }
+                    ]);
+                
+                if (error) {
+                    console.error('❌ Erreur Supabase:', error);
+                } else {
+                    console.log('✅ Conversion enregistrée avec succès!', data);
+                    
+                    // Message de confirmation
+                    const msg = document.createElement('div');
+                    msg.style.cssText = 'position:fixed; bottom:20px; left:20px; background:#00aa88; color:white; padding:10px 20px; border-radius:40px; font-size:14px; z-index:9999;';
+                    msg.textContent = '🎁 Commission attribuée au parrain !';
+                    document.body.appendChild(msg);
+                    setTimeout(() => msg.remove(), 5000);
+                }
+            } catch (e) {
+                console.error('Exception:', e);
+            }
+        } else {
+            console.log('ℹ️ Achat sans référant (pas de commission)');
+        }
+    }
+
+    // ===== SIMULATION D'ACHAT POUR TEST =====
+    function onPurchaseSuccess(walletAcheteur, montantEnUSDC) {
+        console.log('💰 Achat réussi pour:', walletAcheteur);
+        enregistrerConversion(walletAcheteur, montantEnUSDC, 'canvas');
+    }
 
     // ===== WALLET FUNCTIONS =====
     window.connectWallet = async function() {
@@ -705,9 +784,24 @@
         window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(url)}`, '_blank');
     }
 
+    // ===== BOUTON DE TEST =====
+    function addTestButton() {
+        const testBtn = document.createElement('button');
+        testBtn.textContent = '🧪 Simuler achat (test)';
+        testBtn.style.cssText = 'position:fixed; bottom:20px; right:20px; background:#FF44AA; color:white; border:none; padding:10px 20px; border-radius:40px; font-size:14px; cursor:pointer; z-index:9999;';
+        testBtn.onclick = () => {
+            if (!publicKey) {
+                alert('Connecte d\'abord un wallet pour tester!');
+                return;
+            }
+            onPurchaseSuccess(publicKey, 10);
+        };
+        document.body.appendChild(testBtn);
+    }
+
     // ===== INIT =====
     window.addEventListener('load', async () => {
-        // Check if wallet already connected
+        // Vérifier si wallet déjà connecté
         if (window.solana?.isPhantom) {
             try {
                 const response = await window.solana.connect({ onlyIfTrusted: true });
@@ -715,31 +809,13 @@
                 updateWalletDisplay();
             } catch (error) {}
         }
+        
         renderGrid();
         setInterval(renderGrid, CONFIG.REFRESH_INTERVAL);
+        
+        // Ajouter bouton de test
+        addTestButton();
     });
 </script>
-
-<!-- Footer -->
-<footer style="margin-top: 60px; padding-top: 30px; border-top: 2px solid #FF44AA20;">
-    <div style="display: flex; justify-content: center; gap: 2rem; flex-wrap: wrap; max-width: 1200px; margin: 0 auto; padding: 0 20px;">
-        <a href="index.html" style="color: #666; text-decoration: none; font-weight: 500;" onmouseover="this.style.color='#FF44AA'" onmouseout="this.style.color='#666'">🧱 Home</a>
-        <a href="canvas.html" style="color: #666; text-decoration: none; font-weight: 500;" onmouseover="this.style.color='#FF44AA'" onmouseout="this.style.color='#666'">🎨 Canvas</a>
-        <a href="plaza.html" style="color: #666; text-decoration: none; font-weight: 500;" onmouseover="this.style.color='#FF44AA'" onmouseout="this.style.color='#666'">🪙 Plaza</a>
-        <a href="eternal-moments.html" style="color: #FF44AA; text-decoration: none; font-weight: 500;">✨ Eternal</a>
-        <a href="how-it-works.html" style="color: #666; text-decoration: none; font-weight: 500;" onmouseover="this.style.color='#FF44AA'" onmouseout="this.style.color='#666'">📚 How it works</a>
-        <a href="tokenomics.html" style="color: #666; text-decoration: none; font-weight: 500;" onmouseover="this.style.color='#FF44AA'" onmouseout="this.style.color='#666'">📊 Tokenomics</a>
-        <a href="referrals.html" style="color: #666; text-decoration: none; font-weight: 500;" onmouseover="this.style.color='#FF44AA'" onmouseout="this.style.color='#666'">🤝 Referrals</a>
-        <a href="daily.html" style="color: #666; text-decoration: none; font-weight: 500;" onmouseover="this.style.color='#FF44AA'" onmouseout="this.style.color='#666'">📅 Daily</a>
-        <a href="https://x.com/TokenForgeApp" target="_blank" style="color: #666; text-decoration: none; font-weight: 500;" onmouseover="this.style.color='#FF44AA'" onmouseout="this.style.color='#666'">🐦 Twitter</a>
-        <a href="https://t.me/brick_fusion_news" target="_blank" style="color: #666; text-decoration: none; font-weight: 500;" onmouseover="this.style.color='#FF44AA'" onmouseout="this.style.color='#666'">📢 Telegram News</a>
-        <a href="https://t.me/brick_community" target="_blank" style="color: #666; text-decoration: none; font-weight: 500;" onmouseover="this.style.color='#FF44AA'" onmouseout="this.style.color='#666'">💬 Telegram Group</a>
-        <a href="mailto:foundrix@protonmail.com" style="color: #666; text-decoration: none; font-weight: 500;" onmouseover="this.style.color='#FF44AA'" onmouseout="this.style.color='#666'">📧 Email</a>
-    </div>
-    <div style="text-align: center; margin: 30px 0 20px; color: #aaa; font-size: 14px;">
-        🧱 BRICK · The immortal meme coin · Built on Solana · 2026
-    </div>
-</footer>
-
 </body>
 </html>
