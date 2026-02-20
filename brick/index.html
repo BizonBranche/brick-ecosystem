@@ -137,29 +137,82 @@
             flex-wrap: wrap;
         }
 
-        .header-logo-video {
+        /* ===== NOUVEAU LOGO JUICY POUR LE HEADER ===== */
+        .header-juicy-cube {
             width: 90px;
             height: 90px;
-            border-radius: 30px;
-            object-fit: cover;
-            box-shadow: 0 15px 30px rgba(255,68,170,0.4);
-            border: 3px solid #FF44AA;
-            animation: floatGlow 3s infinite ease-in-out;
+            position: relative;
+            transform-style: preserve-3d;
+            animation: spinHeader 12s infinite linear;
+            filter: drop-shadow(0 0 30px rgba(255,68,170,0.8));
         }
 
-        @keyframes floatGlow {
-            0% { 
-                transform: translateY(0) scale(1);
-                filter: drop-shadow(0 0 20px #FF44AA);
-            }
-            50% { 
-                transform: translateY(-8px) scale(1.1);
-                filter: drop-shadow(0 0 40px #FF44AA) drop-shadow(0 0 60px #B87CFF);
-            }
-            100% { 
-                transform: translateY(0) scale(1);
-                filter: drop-shadow(0 0 20px #FF44AA);
-            }
+        .header-cube-face {
+            position: absolute;
+            width: 30px;
+            height: 30px;
+            border: 3px solid rgba(255,255,255,0.9);
+            border-radius: 8px;
+            box-shadow: 0 0 25px currentColor, inset 0 0 15px rgba(255,255,255,0.8);
+            background: linear-gradient(145deg, #ff44aa, #ff69b4);
+        }
+
+        .header-cube-face:nth-child(1) {
+            background: #ff44aa;
+            transform: rotateY(0deg) translateZ(45px);
+            box-shadow: 0 0 30px #ff44aa;
+        }
+        .header-cube-face:nth-child(2) {
+            background: #b87cff;
+            transform: rotateY(90deg) translateZ(45px);
+            box-shadow: 0 0 30px #b87cff;
+        }
+        .header-cube-face:nth-child(3) {
+            background: #8b5cf6;
+            transform: rotateY(180deg) translateZ(45px);
+            box-shadow: 0 0 30px #8b5cf6;
+        }
+        .header-cube-face:nth-child(4) {
+            background: #00ffff;
+            transform: rotateY(-90deg) translateZ(45px);
+            box-shadow: 0 0 30px #00ffff;
+        }
+        .header-cube-face:nth-child(5) {
+            background: #ff1493;
+            transform: rotateX(90deg) translateZ(45px);
+            box-shadow: 0 0 30px #ff1493;
+        }
+        .header-cube-face:nth-child(6) {
+            background: #ff8844;
+            transform: rotateX(-90deg) translateZ(45px);
+            box-shadow: 0 0 30px #ff8844;
+        }
+
+        /* Mini-cubes supplémentaires pour plus de juicy */
+        .header-cubelet {
+            position: absolute;
+            width: 25px;
+            height: 25px;
+            background: linear-gradient(135deg, #ff44aa, #b87cff, #00ffff);
+            border: 2px solid white;
+            border-radius: 6px;
+            box-shadow: 0 0 20px currentColor;
+            animation: cubeletFloat 3s infinite alternate;
+        }
+
+        .header-cubelet:nth-child(7) { transform: translate3d(30px, 15px, 30px); }
+        .header-cubelet:nth-child(8) { transform: translate3d(45px, 45px, 15px); }
+        .header-cubelet:nth-child(9) { transform: translate3d(15px, 60px, 45px); }
+        .header-cubelet:nth-child(10) { transform: translate3d(60px, 30px, 30px); }
+
+        @keyframes spinHeader {
+            0% { transform: rotateX(0deg) rotateY(0deg); }
+            100% { transform: rotateX(360deg) rotateY(360deg); }
+        }
+
+        @keyframes cubeletFloat {
+            0% { transform: translate3d(30px, 15px, 30px) scale(1); opacity: 0.8; }
+            100% { transform: translate3d(35px, 20px, 35px) scale(1.2); opacity: 1; }
         }
 
         .gradient-title {
@@ -171,6 +224,7 @@
             letter-spacing: -1px;
             margin: 0;
             animation: titlePulse 3s infinite ease-in-out;
+            filter: drop-shadow(0 0 20px #ff44aa);
         }
 
         @keyframes titlePulse {
@@ -501,20 +555,79 @@
                 font-size: 48px;
             }
         }
+
+        /* ===== LOGO DU MENU (INCHANGÉ) ===== */
+        .juicy-cube-mini {
+            width: 45px;
+            height: 45px;
+            position: relative;
+            transform-style: preserve-3d;
+            animation: spinSlow 10s infinite linear;
+            margin-right: 8px;
+        }
+
+        .cube-face-mini {
+            position: absolute;
+            width: 15px;
+            height: 15px;
+            border: 2px solid white;
+            border-radius: 4px;
+            box-shadow: 0 0 15px currentColor;
+        }
+
+        .cube-face-mini:nth-child(1) {
+            background: #ff44aa;
+            transform: rotateY(0deg) translateZ(22px);
+            box-shadow: 0 0 15px #ff44aa;
+        }
+        .cube-face-mini:nth-child(2) {
+            background: #b87cff;
+            transform: rotateY(90deg) translateZ(22px);
+            box-shadow: 0 0 15px #b87cff;
+        }
+        .cube-face-mini:nth-child(3) {
+            background: #8b5cf6;
+            transform: rotateX(90deg) translateZ(22px);
+            box-shadow: 0 0 15px #8b5cf6;
+        }
+
+        .brand-text {
+            font-weight: 900;
+            font-size: 28px;
+            background: linear-gradient(135deg, #ff44aa, #b87cff, #8b5cf6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            filter: drop-shadow(0 0 10px #ff44aa) drop-shadow(0 0 20px #b87cff);
+            animation: haloSoft 3s infinite ease-in-out;
+            letter-spacing: -0.5px;
+        }
+
+        @keyframes spinSlow {
+            0% { transform: rotateX(0deg) rotateY(0deg); }
+            100% { transform: rotateX(360deg) rotateY(360deg); }
+        }
+
+        @keyframes haloSoft {
+            0% { filter: drop-shadow(0 0 10px #ff44aa) drop-shadow(0 0 20px #b87cff); }
+            50% { filter: drop-shadow(0 0 20px #ff44aa) drop-shadow(0 0 40px #b87cff) drop-shadow(0 0 60px #8b5cf6); }
+            100% { filter: drop-shadow(0 0 10px #ff44aa) drop-shadow(0 0 20px #b87cff); }
+        }
     </style>
 </head>
 <body>
 
-<!-- ===== STICKY MENU AVEC LOGO + $BRICK ===== -->
+<!-- ===== STICKY MENU (INCHANGÉ) ===== -->
 <div class="nav">
     <div class="nav-inner">
         <div class="brand">
-            <a href="index.html" style="display: flex; align-items: center; text-decoration: none;">
-                <img src="/brick/images/logo/brick_token.png" 
-                      
-                     height="36" 
-                     style="margin-right: 8px; border-radius: 8px;">
-                <span style="font-weight: 800; font-size: 22px; background: linear-gradient(135deg, #FF44AA, #B87CFF); -webkit-background-clip: text; -webkit-text-fill-color: transparent; letter-spacing: -0.5px;">$BRICK</span>
+            <a href="index.html" style="display: flex; align-items: center; text-decoration: none; gap: 8px;">
+                <div class="juicy-cube-mini">
+                    <div class="cube-face-mini"></div>
+                    <div class="cube-face-mini"></div>
+                    <div class="cube-face-mini"></div>
+                </div>
+                <span class="brand-text">$BRICK</span>
             </a>
         </div>
         
@@ -543,17 +656,22 @@
 </div>
 
 <div class="container">
-    <!-- Header avec vidéo -->
+    <!-- Header avec NOUVEAU LOGO JUICY à côté du titre -->
     <div class="header">
         <div class="logo-title-container">
-            <video 
-                src="/brick/images/eternal/jucybrick.webm"
-                class="header-logo-video"
-                autoplay
-                loop
-                muted
-                playsinline
-            ></video>
+            <!-- NOUVEAU LOGO (remplace ta vidéo) -->
+            <div class="header-juicy-cube">
+                <div class="header-cube-face"></div>
+                <div class="header-cube-face"></div>
+                <div class="header-cube-face"></div>
+                <div class="header-cube-face"></div>
+                <div class="header-cube-face"></div>
+                <div class="header-cube-face"></div>
+                <div class="header-cubelet"></div>
+                <div class="header-cubelet"></div>
+                <div class="header-cubelet"></div>
+                <div class="header-cubelet"></div>
+            </div>
             <h1 class="gradient-title">BRICK</h1>
         </div>
         
@@ -579,7 +697,7 @@
         </div>
     </div>
 
-    <!-- Main Cards -->
+    <!-- Main Cards (inchangé) -->
     <div class="cards-grid">
         <!-- ORIGINAL CANVAS Card -->
         <a href="canvas.html" class="card canvas">
@@ -614,7 +732,7 @@
         </a>
     </div>
 
-    <!-- Promo Banner -->
+    <!-- Promo Banner (inchangé) -->
     <div class="promo-banner" style="text-align: center; padding: 20px; line-height: 1.8;">
         <div>🎉 COMPLETE CANVASES BECOME NFT COLLECTIONS</div>
         <div style="margin-top: 8px; display: flex; align-items: center; justify-content: center; flex-wrap: wrap;">
@@ -624,7 +742,7 @@
         </div>
     </div>
 
-    <!-- Info Sections -->
+    <!-- Info Sections (inchangé) -->
     <div class="info-section">
         <div class="info-title">
             📊 ECOSYSTEM
@@ -645,7 +763,7 @@
         </div>
     </div>
 
-    <!-- SCRIPT COMPTEUR -->
+    <!-- SCRIPT COMPTEUR (inchangé) -->
     <script>
         function updateBrickCount() {
             const brickCount = 1;
@@ -656,7 +774,7 @@
         setInterval(updateBrickCount, 3000);
     </script>
 
-    <!-- FOOTER -->
+    <!-- FOOTER (inchangé) -->
     <footer style="margin-top: 60px; padding-top: 30px; border-top: 2px solid #FF44AA20;">
         <div style="display: flex; justify-content: center; gap: 1.5rem; flex-wrap: wrap; max-width: 1300px; margin: 0 auto; padding: 0 20px;">
             <a href="index.html" style="color: #666; text-decoration: none; font-weight: 500; font-size: 0.95rem;" onmouseover="this.style.color='#FF44AA'" onmouseout="this.style.color='#666'">🧱 Home</a>
