@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🪙 $BRICK PLAZA - Token Showcase</title>
+    <title>🪙 BRICK PLAZA - 400 unique bricks</title>
     
     <!-- Favicon -->
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧱</text></svg>">
@@ -11,28 +11,34 @@
     <!-- Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     
+    <!-- Solana Web3 -->
+    <script src="https://unpkg.com/@solana/web3.js@latest/lib/index.iife.js"></script>
+    
+    <!-- Supabase -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         
         body {
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: linear-gradient(145deg, #fff9fb, white);
+            background: linear-gradient(135deg, #f0fff5, white);
             min-height: 100vh;
             padding: 30px 20px;
+            position: relative;
         }
 
         /* ===== STICKY MENU ===== */
         .nav {
             background: white;
             backdrop-filter: blur(10px);
-            border-bottom: 2px solid #FF44AA20;
+            border-bottom: 2px solid #00aa8820;
             padding: 12px 24px;
             position: sticky;
             top: 0;
             z-index: 1000;
-            box-shadow: 0 4px 20px rgba(255,68,170,0.1);
-            margin-bottom: 30px;
-            border-radius: 60px;
+            box-shadow: 0 4px 20px rgba(0,170,136,0.1);
+            margin-bottom: 20px;
         }
 
         .nav-inner {
@@ -66,14 +72,14 @@
         }
 
         .nav-links a:hover {
-            color: #FF44AA;
-            background: #fff0f5;
+            color: #00aa88;
+            background: #e0fff5;
         }
 
         .nav-links a.active {
-            color: #FF44AA;
-            background: #fff0f5;
-            border: 1px solid #FF44AA20;
+            color: #00aa88;
+            background: #e0fff5;
+            border: 1px solid #00aa8820;
         }
 
         .spacer {
@@ -81,13 +87,13 @@
         }
 
         .wallet-badge {
-            background: #fff0f5;
-            border: 1px solid #FF44AA;
+            background: #e0fff5;
+            border: 1px solid #00aa88;
             padding: 6px 16px;
             border-radius: 40px;
             font-size: 13px;
             font-weight: 600;
-            color: #FF44AA;
+            color: #00aa88;
             display: flex;
             align-items: center;
             gap: 8px;
@@ -99,7 +105,7 @@
         }
 
         .btn-connect {
-            background: #FF44AA;
+            background: #00aa88;
             border: none;
             padding: 8px 20px;
             border-radius: 40px;
@@ -109,18 +115,19 @@
             cursor: pointer;
             transition: all 0.2s;
             font-family: 'Inter', sans-serif;
-            box-shadow: 0 4px 10px rgba(255,68,170,0.3);
+            box-shadow: 0 4px 10px rgba(0,170,136,0.3);
         }
 
         .btn-connect:hover {
             transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(255,68,170,0.4);
+            box-shadow: 0 8px 20px rgba(0,170,136,0.4);
         }
 
         .container {
             max-width: 900px;
             margin: 0 auto;
             text-align: center;
+            position: relative;
         }
 
         h1 {
@@ -162,6 +169,8 @@
             padding: 24px;
             box-shadow: 0 20px 40px -10px #00aa8820;
             border: 1px solid #00aa88;
+            position: relative;
+            transition: all 0.3s ease;
             margin-bottom: 20px;
         }
 
@@ -179,10 +188,10 @@
         .cell {
             aspect-ratio: 1;
             background: #fafafa;
-            border: 1px solid #aaffdd;
+            border: 1px solid #88ddcc;
             border-radius: 8px;
             cursor: pointer;
-            transition: all 0.25s;
+            transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -192,33 +201,44 @@
         }
 
         .cell:not(.filled)::after {
-            content: "🪙";
+            content: "🧱";
             opacity: 0.2;
+            transition: all 0.2s;
             font-size: 20px;
         }
 
         .cell:not(.filled):hover::after {
             opacity: 0.6;
+            transform: scale(1.2);
             color: #00aa88;
         }
 
         .cell:hover {
             border-color: #00aa88;
             transform: scale(0.94);
-            box-shadow: 0 0 15px #00aa8860;
+            box-shadow: 0 0 15px #00aa8860, 0 0 30px #00aa8840;
             z-index: 30;
         }
 
         .cell.filled {
-            background: linear-gradient(145deg, #e8fff5, #d0ffe8);
+            background: linear-gradient(145deg, #e0fff5, #ccffec);
             border: 2px solid #00aa88;
             box-shadow: 0 4px 12px #00aa8840;
+        }
+
+        .cell.filled::after {
+            display: none;
         }
 
         .cell-image {
             width: 100%;
             height: 100%;
             object-fit: cover;
+            transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .cell:hover .cell-image {
+            transform: scale(1.25);
         }
 
         .stats {
@@ -227,7 +247,7 @@
             align-items: center;
             margin-top: 24px;
             padding: 20px 32px;
-            background: linear-gradient(145deg, white, #e8fff5);
+            background: linear-gradient(145deg, white, #e0fff5);
             border-radius: 48px;
             border: 1px solid #00aa88;
             box-shadow: 0 8px 20px #00aa8820;
@@ -242,16 +262,20 @@
             font-size: 32px;
             font-weight: 800;
             color: #00aa88;
+            letter-spacing: -0.5px;
         }
 
         .stat-label {
             color: #666;
             font-size: 14px;
             margin-top: 6px;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 1px;
         }
 
         .buy-button {
-            background: linear-gradient(145deg, #00aa88, #00cc99);
+            background: linear-gradient(145deg, #00aa88, #2b8f5f);
             color: white;
             border: none;
             padding: 18px 42px;
@@ -259,40 +283,22 @@
             font-size: 20px;
             font-weight: 700;
             cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
             text-decoration: none;
             display: inline-block;
             margin-top: 28px;
             box-shadow: 0 10px 25px #00aa8860;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            letter-spacing: 1px;
         }
 
-        .footer-links {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 12px;
-            margin-top: 40px;
-            padding: 15px 10px;
-            border-top: 1px solid #00aa8840;
-            flex-wrap: wrap;
+        .buy-button:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 35px #00aa8890;
+            background: linear-gradient(145deg, #2b8f5f, #00aa88);
         }
 
-        .footer-links a {
-            color: #666;
-            text-decoration: none;
-            font-weight: 600;
-            transition: all 0.2s;
-            padding: 6px 10px;
-            border-radius: 30px;
-            font-size: 13px;
-            background: rgba(0,170,136,0.05);
-            white-space: nowrap;
-        }
-
-        .footer-links a:hover {
-            color: #00aa88;
-            background: rgba(0,170,136,0.1);
-        }
-
+        /* ===== POPUP AMÉLIORÉ (version verte) ===== */
         .brick-popup {
             display: none;
             position: fixed;
@@ -309,13 +315,21 @@
 
         .brick-popup-content {
             background: white;
-            max-width: 480px;
+            max-width: 500px;
             width: 90%;
+            max-height: 85vh;
+            overflow-y: auto;
             padding: 30px 20px;
             border-radius: 40px;
             text-align: center;
             box-shadow: 0 30px 80px #00aa8860;
             border: 2px solid #00aa88;
+            animation: popIn 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        @keyframes popIn {
+            0% { transform: scale(0.8); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
         }
 
         .brick-popup-image {
@@ -325,6 +339,7 @@
             object-fit: cover;
             margin-bottom: 20px;
             border: 3px solid #00aa88;
+            box-shadow: 0 10px 30px #00aa8860;
         }
 
         .like-section {
@@ -334,7 +349,7 @@
             gap: 15px;
             margin: 15px 0;
             padding: 8px;
-            background: #e8fff5;
+            background: #e0fff5;
             border-radius: 40px;
         }
 
@@ -346,6 +361,7 @@
             padding: 6px 20px;
             border-radius: 40px;
             cursor: pointer;
+            transition: all 0.2s;
         }
 
         .like-button:hover {
@@ -356,6 +372,7 @@
         .like-button.liked {
             background: #00aa88;
             color: white;
+            border-color: #00aa88;
         }
 
         .like-count {
@@ -364,21 +381,27 @@
             color: #00aa88;
         }
 
+        .like-count span {
+            font-size: 18px;
+            margin-right: 5px;
+        }
+
         .share-buttons {
             display: flex;
-            gap: 8px;
+            gap: 12px;
             justify-content: center;
-            margin: 15px 0;
+            margin: 20px 0;
             flex-wrap: wrap;
         }
 
         .share-btn {
             border: none;
-            padding: 10px 18px;
+            padding: 12px 24px;
             border-radius: 40px;
             cursor: pointer;
-            font-size: 13px;
+            font-size: 15px;
             font-weight: 600;
+            transition: all 0.2s;
         }
 
         .share-btn.copy {
@@ -391,10 +414,16 @@
             color: white;
         }
 
+        .share-btn.copy:hover, .share-btn.twitter:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
         .last-update {
             color: #999;
             font-size: 13px;
             margin-top: 16px;
+            font-style: italic;
         }
 
         @media (max-width: 800px) {
@@ -412,7 +441,7 @@
 </head>
 <body>
 
-<!-- ===== STICKY MENU AVEC LOGO + $BRICK ===== -->
+<!-- ===== STICKY MENU ===== -->
 <div class="nav">
     <div class="nav-inner">
         <div class="brand">
@@ -421,14 +450,14 @@
                      alt="BRICK" 
                      height="36" 
                      style="margin-right: 8px; border-radius: 8px;">
-                <span style="font-weight: 800; font-size: 22px; background: linear-gradient(135deg, #FF44AA, #B87CFF); -webkit-background-clip: text; -webkit-text-fill-color: transparent; letter-spacing: -0.5px;">$BRICK</span>
+                <span style="font-weight: 800; font-size: 22px; background: linear-gradient(135deg, #00aa88, #2b8f5f); -webkit-background-clip: text; -webkit-text-fill-color: transparent; letter-spacing: -0.5px;">$BRICK</span>
             </a>
         </div>
         
         <div class="nav-links">
             <a href="index.html">Home</a>
             <a href="canvas.html">Canvas</a>
-            <a href="plaza.html" class="active">Plaza</a>
+            <a href="plaza.html">Plaza</a>
             <a href="eternal-moments.html">Eternal</a>
             <a href="how-it-works.html">How it works</a>
             <a href="referrals.html">Referrals</a>
@@ -450,10 +479,10 @@
 
 <div class="container">
     <h1>
-        <span>🪙</span> $BRICK PLAZA
+        <span>🪙</span> BRICK PLAZA
     </h1>
     <div class="subtitle">
-        20x20 = 400 spots · Memecoin showcase
+        20x20 = 400 unique bricks · 0.5 SOL
     </div>
 
     <div class="grid-container">
@@ -474,8 +503,8 @@
             </div>
         </div>
 
-        <a href="plaza-index.html" class="buy-button">
-            🪙 LIST YOUR TOKEN
+        <a href="buy-plaza.html" class="buy-button">
+            🪙 BUY A BRICK
         </a>
         
         <div class="last-update" id="last-update">
@@ -483,61 +512,62 @@
         </div>
     </div>
 
-    <!-- FOOTER COMPLET -->
-    <footer style="margin-top: 60px; padding-top: 30px; border-top: 2px solid #FF44AA20;">
-        <div style="display: flex; justify-content: center; gap: 1.5rem; flex-wrap: wrap; max-width: 1300px; margin: 0 auto; padding: 0 20px;">
-            <a href="index.html" style="color: #666; text-decoration: none; font-weight: 500; font-size: 0.95rem;" onmouseover="this.style.color='#FF44AA'" onmouseout="this.style.color='#666'">🧱 Home</a>
-            <a href="canvas.html" style="color: #666; text-decoration: none; font-weight: 500; font-size: 0.95rem;" onmouseover="this.style.color='#FF44AA'" onmouseout="this.style.color='#666'">🎨 Canvas</a>
-            <a href="plaza.html" style="color: #666; text-decoration: none; font-weight: 500; font-size: 0.95rem;" onmouseover="this.style.color='#FF44AA'" onmouseout="this.style.color='#666'">🪙 Plaza</a>
-            <a href="eternal-moments.html" style="color: #666; text-decoration: none; font-weight: 500; font-size: 0.95rem;" onmouseover="this.style.color='#FF44AA'" onmouseout="this.style.color='#666'">✨ Eternal</a>
-            <a href="how-it-works.html" style="color: #666; text-decoration: none; font-weight: 500; font-size: 0.95rem;" onmouseover="this.style.color='#FF44AA'" onmouseout="this.style.color='#666'">📚 How it works</a>
-            <a href="tokenomics.html" style="color: #666; text-decoration: none; font-weight: 500; font-size: 0.95rem;" onmouseover="this.style.color='#FF44AA'" onmouseout="this.style.color='#666'">📊 Tokenomics</a>
-            <a href="whitepaper.html" style="color: #666; text-decoration: none; font-weight: 500; font-size: 0.95rem;" onmouseover="this.style.color='#FF44AA'" onmouseout="this.style.color='#666'">📄 Whitepaper</a>
-            <a href="rules.html" style="color: #666; text-decoration: none; font-weight: 500; font-size: 0.95rem;" onmouseover="this.style.color='#FF44AA'" onmouseout="this.style.color='#666'">⚖️ Rules</a>
-            <a href="daily.html" style="color: #666; text-decoration: none; font-weight: 500; font-size: 0.95rem;" onmouseover="this.style.color='#FF44AA'" onmouseout="this.style.color='#666'">📅 Daily</a>
-            <a href="referrals.html" style="color: #666; text-decoration: none; font-weight: 500; font-size: 0.95rem;" onmouseover="this.style.color='#FF44AA'" onmouseout="this.style.color='#666'">🤝 Referrals</a>
-            <a href="https://x.com/TokenForgeApp" target="_blank" style="color: #666; text-decoration: none; font-weight: 500; font-size: 0.95rem;" onmouseover="this.style.color='#FF44AA'" onmouseout="this.style.color='#666'">🐦 Twitter</a>
-            <a href="https://t.me/brick_fusion_news" target="_blank" style="color: #666; text-decoration: none; font-weight: 500; font-size: 0.95rem;" onmouseover="this.style.color='#FF44AA'" onmouseout="this.style.color='#666'">📢 News</a>
-            <a href="https://t.me/brick_community" target="_blank" style="color: #666; text-decoration: none; font-weight: 500; font-size: 0.95rem;" onmouseover="this.style.color='#FF44AA'" onmouseout="this.style.color='#666'">💬 Chat</a>
-            <a href="mailto:foundrix@protonmail.com" style="color: #666; text-decoration: none; font-weight: 500; font-size: 0.95rem;" onmouseover="this.style.color='#FF44AA'" onmouseout="this.style.color='#666'">📧 Email</a>
-        </div>
-        <div style="text-align: center; margin: 30px 0 20px; color: #aaa; font-size: 14px;">
-            🧱 BRICK · The immortal meme coin · Built on Solana · 2026
-        </div>
-    </footer>
-</div>
+    <!-- POPUP -->
+    <div id="brick-popup" class="brick-popup">
+        <div class="brick-popup-content">
+            <img id="popup-image" class="brick-popup-image" src="" alt="Brick">
+            <div id="popup-message" style="font-size: 18px; color: #333; margin-bottom: 16px; line-height: 1.6; word-wrap: break-word; max-height: 300px; overflow-y: auto; padding: 0 10px;"></div>
+            <div id="popup-wallet" style="font-family: monospace; color: #666; background: #f5f5f5; padding: 12px; border-radius: 16px; margin-bottom: 20px; font-size: 15px; word-break: break-all;"></div>
+            
+            <div class="like-section" id="like-section"></div>
 
-<div id="brick-popup" class="brick-popup">
-    <div class="brick-popup-content">
-        <img id="popup-image" class="brick-popup-image" src="" alt="Token">
-        <div id="popup-message" style="font-size: 16px; color: #333; margin-bottom: 16px;"></div>
-        <div id="popup-wallet" style="font-family: monospace; color: #666; background: #f5f5f5; padding: 8px; border-radius: 12px; margin-bottom: 15px;"></div>
-        <div id="popup-contract" style="background: #e8fff5; padding: 8px; border-radius: 8px; margin-bottom: 16px; font-size: 12px;"></div>
-        
-        <div class="share-buttons">
-            <button class="share-btn copy" onclick="copyTokenLink()" id="copy-btn">
-                🔗 Copy Link
-            </button>
-            <button class="share-btn twitter" onclick="shareTwitter()" id="twitter-btn">
-                🐦 Share
+            <div class="share-buttons">
+                <button class="share-btn copy" onclick="copyBrickLink()" id="copy-btn">🔗 Copy Link</button>
+                <button class="share-btn twitter" onclick="shareTwitter()" id="twitter-btn">🐦 Share</button>
+            </div>
+
+            <div id="popup-socials" style="display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; margin-bottom: 25px;"></div>
+            
+            <button onclick="document.getElementById('brick-popup').style.display='none'" style="background: #00aa88; color: white; border: none; padding: 14px 32px; border-radius: 60px; font-size: 16px; font-weight: 700; cursor: pointer; transition: all 0.2s; width: 100%;">
+                ✨ CLOSE
             </button>
         </div>
-
-        <div id="popup-socials" style="display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; margin-bottom: 20px;"></div>
-        <button onclick="document.getElementById('brick-popup').style.display='none'" style="background: #00aa88; color: white; border: none; padding: 12px 28px; border-radius: 60px; font-size: 15px; font-weight: 600; cursor: pointer;">
-            ✨ CLOSE
-        </button>
     </div>
 </div>
 
+<!-- Footer -->
+<footer style="margin-top: 60px; padding-top: 30px; border-top: 2px solid #00aa8820;">
+    <div style="display: flex; justify-content: center; gap: 2rem; flex-wrap: wrap; max-width: 1200px; margin: 0 auto; padding: 0 20px;">
+        <a href="index.html" style="color: #666; text-decoration: none; font-weight: 500;" onmouseover="this.style.color='#00aa88'" onmouseout="this.style.color='#666'">🧱 Home</a>
+        <a href="canvas.html" style="color: #666; text-decoration: none; font-weight: 500;" onmouseover="this.style.color='#00aa88'" onmouseout="this.style.color='#666'">🎨 Canvas</a>
+        <a href="plaza.html" style="color: #00aa88; text-decoration: none; font-weight: 500;">🪙 Plaza</a>
+        <a href="eternal-moments.html" style="color: #666; text-decoration: none; font-weight: 500;" onmouseover="this.style.color='#00aa88'" onmouseout="this.style.color='#666'">✨ Eternal</a>
+        <a href="how-it-works.html" style="color: #666; text-decoration: none; font-weight: 500;" onmouseover="this.style.color='#00aa88'" onmouseout="this.style.color='#666'">📚 How it works</a>
+        <a href="tokenomics.html" style="color: #666; text-decoration: none; font-weight: 500;" onmouseover="this.style.color='#00aa88'" onmouseout="this.style.color='#666'">📊 Tokenomics</a>
+        <a href="referrals.html" style="color: #666; text-decoration: none; font-weight: 500;" onmouseover="this.style.color='#00aa88'" onmouseout="this.style.color='#666'">🤝 Referrals</a>
+        <a href="daily.html" style="color: #666; text-decoration: none; font-weight: 500;" onmouseover="this.style.color='#00aa88'" onmouseout="this.style.color='#666'">📅 Daily</a>
+        <a href="https://x.com/TokenForgeApp" target="_blank" style="color: #666; text-decoration: none; font-weight: 500;" onmouseover="this.style.color='#00aa88'" onmouseout="this.style.color='#666'">🐦 Twitter</a>
+        <a href="https://t.me/brick_fusion_news" target="_blank" style="color: #666; text-decoration: none; font-weight: 500;" onmouseover="this.style.color='#00aa88'" onmouseout="this.style.color='#666'">📢 Telegram News</a>
+        <a href="https://t.me/brick_community" target="_blank" style="color: #666; text-decoration: none; font-weight: 500;" onmouseover="this.style.color='#00aa88'" onmouseout="this.style.color='#666'">💬 Telegram Group</a>
+        <a href="mailto:foundrix@protonmail.com" style="color: #666; text-decoration: none; font-weight: 500;" onmouseover="this.style.color='#00aa88'" onmouseout="this.style.color='#666'">📧 Email</a>
+    </div>
+    <div style="text-align: center; margin: 30px 0 20px; color: #aaa; font-size: 14px;">
+        🧱 BRICK · The immortal meme coin · Built on Solana · 2026
+    </div>
+</footer>
+
 <script>
+    // === CONFIGURATION SUPABASE ===
+    const SUPABASE_URL = "https://bmfuvkylkhjcfsiauzvb.supabase.co";
+    const SUPABASE_ANON = "sb_publishable_VuzUNoj1NnJk1BWSbVzJjQ_WABRhxDh";
+    const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON);
+
     const CONFIG = {
-        GRID_SIZE: 20,
-        REFRESH_INTERVAL: 3000
+        GRID_SIZE: 20
     };
 
     const TOTAL_CELLS = CONFIG.GRID_SIZE * CONFIG.GRID_SIZE;
-    let currentTokenCell = null;
+    let currentBrickCell = null;
     let publicKey = null;
 
     // ===== WALLET FUNCTIONS =====
@@ -551,45 +581,79 @@
             }
             const resp = await provider.connect();
             publicKey = provider.publicKey?.toString() || resp.publicKey?.toString();
-            document.getElementById('whoamiNav').textContent = `Connected: ${publicKey.slice(0,4)}...${publicKey.slice(-4)}`;
+            updateWalletDisplay();
         } catch (e) {
             alert('Connection failed: ' + e.message);
         }
     };
 
+    function updateWalletDisplay() {
+        const whoamiNav = document.getElementById('whoamiNav');
+        if (publicKey) {
+            whoamiNav.textContent = `Connected: ${publicKey.slice(0,4)}...${publicKey.slice(-4)}`;
+            whoamiNav.style.color = '#00aa88';
+        } else {
+            whoamiNav.textContent = 'Not connected';
+            whoamiNav.style.color = '';
+        }
+    }
+
+    // ===== PLAZA FUNCTIONS =====
     function getCellIdFromIndex(index) {
         const row = Math.floor(index / 20);
         const col = index % 20;
         return `${String.fromCharCode(65 + row)}${col + 1}`;
     }
 
-    function renderGrid() {
+    // ===== RENDER GRID - UNIQUEMENT BRIQUES PLAZA =====
+    async function renderGrid() {
         const grid = document.getElementById('grid');
         grid.innerHTML = '';
+        
+        // Charger UNIQUEMENT les briques Plaza depuis Supabase
+        let supabaseBricks = [];
+        try {
+            const { data, error } = await supabaseClient
+                .from('bricks')
+                .select('*')
+                .eq('kind', 'plaza');  // ← FILTRE CRUCIAL : uniquement Plaza
+            
+            if (!error && data) {
+                supabaseBricks = data;
+                console.log(`✅ ${data.length} briques Plaza chargées depuis Supabase`);
+            }
+        } catch (e) {
+            console.warn('⚠️ Supabase non disponible');
+        }
+        
+        // Créer un Map pour accès rapide
+        const brickMap = new Map();
+        supabaseBricks.forEach(b => brickMap.set(b.cell, b));
+        
         let sold = 0;
-
+        
         for (let i = 0; i < TOTAL_CELLS; i++) {
             const cellId = getCellIdFromIndex(i);
-            const tokenKey = 'plaza_' + cellId;
-            const tokenData = localStorage.getItem(tokenKey);
-            const token = tokenData ? JSON.parse(tokenData) : null;
+            
+            // UNIQUEMENT Supabase, PAS de fallback localStorage
+            let brick = brickMap.get(cellId);
             
             const cell = document.createElement('div');
             cell.className = 'cell';
             
-            if (token) {
+            if (brick) {
                 sold++;
                 cell.classList.add('filled');
                 
                 const img = document.createElement('img');
-                img.src = token.image || 'https://placehold.co/100x100/00aa88/FFFFFF?text=🪙';
+                img.src = brick.image_url || brick.image || 'https://placehold.co/100x100/00aa88/FFFFFF?text=🧱';
                 img.className = 'cell-image';
-                img.onerror = () => img.src = 'https://placehold.co/100x100/00aa88/FFFFFF?text=🪙';
+                img.onerror = () => img.src = 'https://placehold.co/100x100/00aa88/FFFFFF?text=🧱';
                 cell.appendChild(img);
                 
-                cell.onclick = () => showPopup(token);
+                cell.onclick = () => showPopup(brick);
             } else {
-                cell.onclick = () => window.location.href = 'plaza-index.html?cell=' + cellId;
+                cell.onclick = () => window.location.href = 'buy-plaza.html?cell=' + cellId;
             }
             
             grid.appendChild(cell);
@@ -600,59 +664,77 @@
         document.getElementById('last-update').innerHTML = `✨ Last update: ${new Date().toLocaleTimeString()}`;
     }
 
-    function showPopup(token) {
-        currentTokenCell = token.cell;
+    function showPopup(brick) {
+        currentBrickCell = brick.cell;
         const popup = document.getElementById('brick-popup');
         
-        const likesKey = 'plaza_likes_' + token.cell;
+        const likesKey = 'likes_' + brick.cell;
         let likesData = JSON.parse(localStorage.getItem(likesKey)) || { count: 0, likers: [] };
+        const hasLiked = publicKey && likesData.likers.includes(publicKey);
         
-        document.getElementById('popup-image').src = token.image || 'https://placehold.co/200x200/00aa88/FFFFFF?text=🪙';
-        document.getElementById('popup-message').textContent = token.message || '🪙 Token';
-        document.getElementById('popup-wallet').textContent = `${token.wallet.slice(0,4)}...${token.wallet.slice(-4)}`;
-        
-        if (token.contract) {
-            document.getElementById('popup-contract').textContent = `Contract: ${token.contract.slice(0,8)}...${token.contract.slice(-8)}`;
-            document.getElementById('popup-contract').style.display = 'block';
-        } else {
-            document.getElementById('popup-contract').style.display = 'none';
-        }
+        document.getElementById('popup-image').src = brick.image_url || brick.image || 'https://placehold.co/200x200/00aa88/FFFFFF?text=🧱';
+        document.getElementById('popup-message').textContent = brick.message || '🧱 Brick';
+        document.getElementById('popup-wallet').textContent = `${brick.wallet.slice(0,4)}...${brick.wallet.slice(-4)}`;
         
         const oldLikeSection = document.getElementById('like-section');
-        if (oldLikeSection) oldLikeSection.remove();
+        if (oldLikeSection) {
+            oldLikeSection.innerHTML = `
+                <div class="like-count">
+                    <span>❤️</span> ${likesData.count}
+                </div>
+                <button class="like-button ${hasLiked ? 'liked' : ''}" id="like-btn" ${hasLiked ? 'disabled' : ''}>
+                    ${hasLiked ? '👍 LIKED' : '❤️ LIKE'}
+                </button>
+            `;
+        }
         
-        const likeSection = document.createElement('div');
-        likeSection.className = 'like-section';
-        likeSection.id = 'like-section';
-        likeSection.innerHTML = `
-            <div class="like-count">
-                <span>❤️</span> ${likesData.count}
-            </div>
-            <button class="like-button" id="like-btn">
-                ❤️ LIKE
-            </button>
-        `;
+        const likeBtn = document.getElementById('like-btn');
+        if (likeBtn && !hasLiked) {
+            likeBtn.addEventListener('click', function() {
+                if (!publicKey) {
+                    alert('🔌 Connect your wallet to like!');
+                    return;
+                }
+                
+                likesData.count++;
+                likesData.likers.push(publicKey);
+                localStorage.setItem(likesKey, JSON.stringify(likesData));
+                
+                document.querySelector('.like-count').innerHTML = `<span>❤️</span> ${likesData.count}`;
+                this.textContent = '👍 LIKED';
+                this.classList.add('liked');
+                this.disabled = true;
+            });
+        }
         
-        document.getElementById('popup-wallet').insertAdjacentElement('afterend', likeSection);
+        // === FONCTION COPY VERSION PROD ===
+        document.getElementById('copy-btn').onclick = function() {
+            const url = `https://www.brick-eternal.live/brick/brick.html?cell=${brick.cell}`;
+            navigator.clipboard.writeText(url).then(() => {
+                alert('✅ Lien copié (version prod)');
+            }).catch(() => {
+                prompt('📋 Copie manuelle:', url);
+            });
+        };
         
-        document.getElementById('like-btn').addEventListener('click', function() {
-            likesData.count++;
-            localStorage.setItem(likesKey, JSON.stringify(likesData));
-            document.querySelector('.like-count').innerHTML = `<span>❤️</span> ${likesData.count}`;
-        });
-        
-        document.getElementById('copy-btn').setAttribute('onclick', `copyTokenLink('${token.cell}')`);
-        document.getElementById('twitter-btn').setAttribute('onclick', `shareTokenTwitter('${token.cell}')`);
+        document.getElementById('twitter-btn').onclick = function() {
+            const text = `🪙 Check out my plaza brick ${brick.cell} on $BRICK!`;
+            const url = `https://www.brick-eternal.live/brick/brick.html?cell=${brick.cell}`;
+            window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(url)}`, '_blank');
+        };
         
         const socials = document.getElementById('popup-socials');
         socials.innerHTML = '';
         
-        if (token.socials) {
+        if (brick.socials) {
             const links = [
-                { url: token.socials.twitter, icon: '🐦', name: 'Twitter' },
-                { url: token.socials.telegram, icon: '✈️', name: 'Telegram' },
-                { url: token.socials.discord, icon: '💬', name: 'Discord' },
-                { url: token.socials.website, icon: '🌍', name: 'Website' }
+                { url: brick.socials.twitter, icon: '🐦', name: 'Twitter' },
+                { url: brick.socials.telegram, icon: '✈️', name: 'Telegram' },
+                { url: brick.socials.discord, icon: '💬', name: 'Discord' },
+                { url: brick.socials.instagram, icon: '📷', name: 'Instagram' },
+                { url: brick.socials.tiktok, icon: '🎵', name: 'TikTok' },
+                { url: brick.socials.website, icon: '🌍', name: 'Website' },
+                { url: brick.socials.email ? `mailto:${brick.socials.email}` : null, icon: '📧', name: 'Email' }
             ];
             
             links.forEach(link => {
@@ -660,7 +742,7 @@
                     const a = document.createElement('a');
                     a.href = link.url;
                     a.target = '_blank';
-                    a.style.cssText = 'background: #f0f0f0; padding: 6px 12px; border-radius: 40px; text-decoration: none; color: #333; font-size: 12px; margin:4px; display: inline-block;';
+                    a.style.cssText = 'background: #f0f0f0; padding: 8px 16px; border-radius: 40px; text-decoration: none; color: #333; font-size: 13px; margin:4px; display: inline-block; transition: all 0.2s;';
                     a.onmouseover = () => { a.style.background = '#00aa88'; a.style.color = 'white'; };
                     a.onmouseout = () => { a.style.background = '#f0f0f0'; a.style.color = '#333'; };
                     a.textContent = `${link.icon} ${link.name}`;
@@ -672,33 +754,20 @@
         popup.style.display = 'flex';
     }
 
-    function copyTokenLink(cell) {
-        const url = `${window.location.origin}/brick/token.html?cell=${cell}`;
-        navigator.clipboard.writeText(url).then(() => {
-            alert('✅ Link copied!');
-        }).catch(() => {
-            prompt('📋 Copy:', url);
-        });
-    }
-
-    function shareTokenTwitter(cell) {
-        const text = `🪙 Check out this token on $BRICK Plaza!`;
-        const url = `${window.location.origin}/brick/token.html?cell=${cell}`;
-        window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(url)}`, '_blank');
-    }
-
-    window.onload = () => {
-        renderGrid();
-        setInterval(renderGrid, CONFIG.REFRESH_INTERVAL);
-        
-        // Check if wallet already connected
-        const provider = window.phantom?.solana || window.solflare;
-        if (provider?.isConnected && provider.publicKey) {
-            const pubkey = provider.publicKey.toString();
-            publicKey = pubkey;
-            document.getElementById('whoamiNav').textContent = `Connected: ${pubkey.slice(0,4)}...${pubkey.slice(-4)}`;
+    // ===== INIT =====
+    window.addEventListener('load', async () => {
+        if (window.solana?.isPhantom) {
+            try {
+                const response = await window.solana.connect({ onlyIfTrusted: true });
+                publicKey = response.publicKey.toString();
+                updateWalletDisplay();
+            } catch (error) {}
         }
-    };
+        
+        await renderGrid();
+        
+        console.log('✅ Plaza prêt - Ne montre que les briques Plaza (pas de fallback localStorage)');
+    });
 </script>
 
 </body>
