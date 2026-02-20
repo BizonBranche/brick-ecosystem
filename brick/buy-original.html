@@ -253,8 +253,8 @@
                     <input type="url" id="instagram" placeholder="📷 Instagram">
                     <input type="url" id="tiktok" placeholder="🎵 TikTok">
                     <input type="email" id="email" placeholder="📧 Email">
-                    <!-- LIEN CORRIGÉ : TokenForge → BRICK -->
-                    <input type="url" id="website" placeholder="🌍 Website" value="https://brick-eternal.live">
+                    <!-- ✅ Champ website vide - pour l'utilisateur uniquement -->
+                    <input type="url" id="website" placeholder="🌍 Website (optional)">
                 </div>
             </div>
 
@@ -497,8 +497,8 @@
                     instagram: instagram.value,
                     tiktok: tiktok.value,
                     email: email.value,
-                    // LIEN CORRIGÉ : TokenForge → BRICK
-                    website: website.value || 'https://brick-eternal.live'
+                    // ✅ Website laissé vide si l'utilisateur n'a rien mis
+                    website: website.value || ''
                 };
                 
                 // Create brick data
@@ -533,6 +533,7 @@
                 instagram.value = '';
                 tiktok.value = '';
                 email.value = '';
+                website.value = '';
                 
             } catch (error) {
                 console.error(error);
