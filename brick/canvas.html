@@ -28,7 +28,7 @@
             position: relative;
         }
 
-        /* ===== STICKY MENU PROFESSIONNEL ===== */
+        /* ===== STICKY MENU ===== */
         .nav {
             background: white;
             backdrop-filter: blur(10px);
@@ -565,8 +565,7 @@
     const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON);
 
     const CONFIG = {
-        GRID_SIZE: 20,
-        REFRESH_INTERVAL: 3000
+        GRID_SIZE: 20
     };
 
     const TOTAL_CELLS = CONFIG.GRID_SIZE * CONFIG.GRID_SIZE;
@@ -608,7 +607,7 @@
         return `${String.fromCharCode(65 + row)}${col + 1}`;
     }
 
-    // ===== FONCTION DE CHARGEMENT DES BRIQUES =====
+    // ===== CHARGEMENT DES BRIQUES =====
     async function renderGrid() {
         const grid = document.getElementById('grid');
         grid.innerHTML = '';
@@ -651,7 +650,6 @@
                 cell.classList.add('filled');
                 
                 const img = document.createElement('img');
-                // Utiliser l'URL Supabase si disponible, sinon l'image en base64
                 img.src = brick.image_url || brick.image || 'https://placehold.co/100x100/FF44AA/FFFFFF?text=🧱';
                 img.className = 'cell-image';
                 img.onerror = () => img.src = 'https://placehold.co/100x100/FF44AA/FFFFFF?text=🧱';
@@ -678,16 +676,10 @@
         let likesData = JSON.parse(localStorage.getItem(likesKey)) || { count: 0, likers: [] };
         const hasLiked = publicKey && likesData.likers.includes(publicKey);
         
-        // Image
         document.getElementById('popup-image').src = brick.image_url || brick.image || 'https://placehold.co/200x200/FF44AA/FFFFFF?text=🧱';
-        
-        // Message
         document.getElementById('popup-message').textContent = brick.message || '🧱 Brick';
-        
-        // Wallet
         document.getElementById('popup-wallet').textContent = `${brick.wallet.slice(0,4)}...${brick.wallet.slice(-4)}`;
         
-        // Like section
         const oldLikeSection = document.getElementById('like-section');
         if (oldLikeSection) {
             oldLikeSection.innerHTML = `
@@ -700,7 +692,6 @@
             `;
         }
         
-        // Like button event
         const likeBtn = document.getElementById('like-btn');
         if (likeBtn && !hasLiked) {
             likeBtn.addEventListener('click', function() {
@@ -720,11 +711,22 @@
             });
         }
         
-        // Copy et Twitter links
-        document.getElementById('copy-btn').setAttribute('onclick', `copyBrickLink('${brick.cell}')`);
-        document.getElementById('twitter-btn').setAttribute('onclick', `shareTwitter('${brick.cell}')`);
+        // === FONCTION COPY CORRIGÉE ===
+        document.getElementById('copy-btn').onclick = function() {
+            const url = `https://www.brick-eternal.live/brick/brick.html?cell=${brick.cell}`;
+            navigator.clipboard.writeText(url).then(() => {
+                alert('✅ Lien copié (version prod)');
+            }).catch(() => {
+                prompt('📋 Copie manuelle:', url);
+            });
+        };
         
-        // Social links
+        document.getElementById('twitter-btn').onclick = function() {
+            const text = `🧱 Check out my brick ${brick.cell} on $BRICK Canvas!`;
+            const url = `https://www.brick-eternal.live/brick/brick.html?cell=${brick.cell}`;
+            window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(url)}`, '_blank');
+        };
+        
         const socials = document.getElementById('popup-socials');
         socials.innerHTML = '';
         
@@ -756,25 +758,8 @@
         popup.style.display = 'flex';
     }
 
-   function copyBrickLink(cell) {
-    const url = `https://www.brick-eternal.live/brick/brick.html?cell=${cell}`;
-    
-    navigator.clipboard.writeText(url).then(() => {
-        alert('✅ Lien copié (version prod)');
-    }).catch(() => {
-        prompt('📋 Copie manuelle:', url);
-    });
-}
-
-    function shareTwitter(cell) {
-        const text = `🧱 Check out my brick ${cell} on $BRICK Canvas!`;
-        const url = `${window.location.origin}/brick/brick.html?cell=${cell}`;
-        window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(url)}`, '_blank');
-    }
-
     // ===== INIT =====
     window.addEventListener('load', async () => {
-        // Vérifier si wallet déjà connecté
         if (window.solana?.isPhantom) {
             try {
                 const response = await window.solana.connect({ onlyIfTrusted: true });
@@ -784,7 +769,7 @@
         }
         
         await renderGrid();
-        setInterval(renderGrid, CONFIG.REFRESH_INTERVAL);
+        // PLUS DE setInterval ! Plus de clignotement !
         
         console.log('✅ Canvas prêt - Mode hybride localStorage + Supabase actif');
     });
@@ -792,4 +777,3 @@
 
 </body>
 </html>
--
