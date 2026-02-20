@@ -298,7 +298,7 @@
             background: linear-gradient(145deg, #FF66AA, #FF44AA);
         }
 
-        /* Popup styles */
+        /* ===== POPUP AMÉLIORÉ - S'ADAPTE À LA LONGUEUR DU TEXTE ===== */
         .brick-popup {
             display: none;
             position: fixed;
@@ -315,8 +315,10 @@
 
         .brick-popup-content {
             background: white;
-            max-width: 480px;
+            max-width: 500px;
             width: 90%;
+            max-height: 85vh;
+            overflow-y: auto;
             padding: 30px 20px;
             border-radius: 40px;
             text-align: center;
@@ -386,18 +388,18 @@
 
         .share-buttons {
             display: flex;
-            gap: 8px;
+            gap: 12px;
             justify-content: center;
-            margin: 15px 0;
+            margin: 20px 0;
             flex-wrap: wrap;
         }
 
         .share-btn {
             border: none;
-            padding: 10px 18px;
+            padding: 12px 24px;
             border-radius: 40px;
             cursor: pointer;
-            font-size: 13px;
+            font-size: 15px;
             font-weight: 600;
             transition: all 0.2s;
         }
@@ -414,6 +416,7 @@
 
         .share-btn.copy:hover, .share-btn.twitter:hover {
             transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
         }
 
         .last-update {
@@ -510,24 +513,28 @@
         </div>
     </div>
 
-    <!-- Popup -->
+    <!-- ===== POPUP AMÉLIORÉ - S'ADAPTE À LA LONGUEUR DU TEXTE ===== -->
     <div id="brick-popup" class="brick-popup">
         <div class="brick-popup-content">
             <img id="popup-image" class="brick-popup-image" src="" alt="Brick">
-            <div id="popup-message" style="font-size: 16px; color: #333; margin-bottom: 16px;"></div>
-            <div id="popup-wallet" style="font-family: monospace; color: #666; background: #f5f5f5; padding: 8px; border-radius: 12px; margin-bottom: 15px; font-size: 14px;"></div>
             
-            <div class="share-buttons">
-                <button class="share-btn copy" onclick="copyBrickLink()" id="copy-btn">
-                    🔗 Copy Link
-                </button>
-                <button class="share-btn twitter" onclick="shareTwitter()" id="twitter-btn">
-                    🐦 Share
-                </button>
+            <!-- Le message peut être long, il sera scrollable si besoin -->
+            <div id="popup-message" style="font-size: 18px; color: #333; margin-bottom: 16px; line-height: 1.6; word-wrap: break-word; max-height: 300px; overflow-y: auto; padding: 0 10px;"></div>
+            
+            <div id="popup-wallet" style="font-family: monospace; color: #666; background: #f5f5f5; padding: 12px; border-radius: 16px; margin-bottom: 20px; font-size: 15px; word-break: break-all;"></div>
+            
+            <div class="like-section" id="like-section">
+                <!-- Sera rempli par JavaScript -->
             </div>
 
-            <div id="popup-socials" style="display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; margin-bottom: 20px;"></div>
-            <button onclick="document.getElementById('brick-popup').style.display='none'" style="background: #FF44AA; color: white; border: none; padding: 12px 28px; border-radius: 60px; font-size: 15px; font-weight: 600; cursor: pointer;">
+            <div class="share-buttons">
+                <button class="share-btn copy" onclick="copyBrickLink()" id="copy-btn">🔗 Copy Link</button>
+                <button class="share-btn twitter" onclick="shareTwitter()" id="twitter-btn">🐦 Share</button>
+            </div>
+
+            <div id="popup-socials" style="display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; margin-bottom: 25px;"></div>
+            
+            <button onclick="document.getElementById('brick-popup').style.display='none'" style="background: #FF44AA; color: white; border: none; padding: 14px 32px; border-radius: 60px; font-size: 16px; font-weight: 700; cursor: pointer; transition: all 0.2s; width: 100%;">
                 ✨ CLOSE
             </button>
         </div>
@@ -555,7 +562,7 @@
     </div>
 </footer>
 
-<!-- Script unifié avec tracking des conversions (version PROD sans bouton test) -->
+<!-- Script unifié avec tracking des conversions -->
 <script>
     // ===== CONFIGURATION SUPABASE (TES IDENTIFIANTS) =====
     const SUPABASE_URL = "https://bmfuvkylkhjcfsiauzvb.supabase.co";
@@ -571,7 +578,7 @@
     let currentBrickCell = null;
     let publicKey = null;
 
-    // ===== FONCTION DE TRACKING DES CONVERSIONS (À APPELER LORS D'UN ACHAT RÉEL) =====
+    // ===== FONCTION DE TRACKING DES CONVERSIONS =====
     async function enregistrerConversion(refereeWallet, montantUSDC, typeAchat) {
         const referrerWallet = localStorage.getItem('brick_referrer');
         
@@ -693,6 +700,7 @@
         document.getElementById('last-update').innerHTML = `✨ Last update: ${new Date().toLocaleTimeString()}`;
     }
 
+    // ===== POPUP AMÉLIORÉ - S'ADAPTE À LA LONGUEUR DU TEXTE =====
     function showPopup(brick) {
         currentBrickCell = brick.cell;
         const popup = document.getElementById('brick-popup');
@@ -701,46 +709,53 @@
         let likesData = JSON.parse(localStorage.getItem(likesKey)) || { count: 0, likers: [] };
         const hasLiked = publicKey && likesData.likers.includes(publicKey);
         
+        // Image
         document.getElementById('popup-image').src = brick.image || 'https://placehold.co/200x200/FF44AA/FFFFFF?text=🧱';
+        
+        // Message - peut être long, le CSS gère le scroll
         document.getElementById('popup-message').textContent = brick.message || '🧱 Brick';
+        
+        // Wallet
         document.getElementById('popup-wallet').textContent = `${brick.wallet.slice(0,4)}...${brick.wallet.slice(-4)}`;
         
+        // Like section
         const oldLikeSection = document.getElementById('like-section');
-        if (oldLikeSection) oldLikeSection.remove();
+        if (oldLikeSection) {
+            oldLikeSection.innerHTML = `
+                <div class="like-count">
+                    <span>❤️</span> ${likesData.count}
+                </div>
+                <button class="like-button ${hasLiked ? 'liked' : ''}" id="like-btn" ${hasLiked ? 'disabled' : ''}>
+                    ${hasLiked ? '👍 LIKED' : '❤️ LIKE'}
+                </button>
+            `;
+        }
         
-        const likeSection = document.createElement('div');
-        likeSection.className = 'like-section';
-        likeSection.id = 'like-section';
-        likeSection.innerHTML = `
-            <div class="like-count">
-                <span>❤️</span> ${likesData.count}
-            </div>
-            <button class="like-button ${hasLiked ? 'liked' : ''}" id="like-btn" ${hasLiked ? 'disabled' : ''}>
-                ${hasLiked ? '👍 LIKED' : '❤️ LIKE'}
-            </button>
-        `;
+        // Like button event
+        const likeBtn = document.getElementById('like-btn');
+        if (likeBtn && !hasLiked) {
+            likeBtn.addEventListener('click', function() {
+                if (!publicKey) {
+                    alert('🔌 Connect your wallet to like!');
+                    return;
+                }
+                
+                likesData.count++;
+                likesData.likers.push(publicKey);
+                localStorage.setItem(likesKey, JSON.stringify(likesData));
+                
+                document.querySelector('.like-count').innerHTML = `<span>❤️</span> ${likesData.count}`;
+                this.textContent = '👍 LIKED';
+                this.classList.add('liked');
+                this.disabled = true;
+            });
+        }
         
-        document.getElementById('popup-wallet').insertAdjacentElement('afterend', likeSection);
-        
-        document.getElementById('like-btn').addEventListener('click', function() {
-            if (!publicKey) {
-                alert('🔌 Connect your wallet to like!');
-                return;
-            }
-            
-            likesData.count++;
-            likesData.likers.push(publicKey);
-            localStorage.setItem(likesKey, JSON.stringify(likesData));
-            
-            document.querySelector('.like-count').innerHTML = `<span>❤️</span> ${likesData.count}`;
-            this.textContent = '👍 LIKED';
-            this.classList.add('liked');
-            this.disabled = true;
-        });
-        
+        // Copy et Twitter links
         document.getElementById('copy-btn').setAttribute('onclick', `copyBrickLink('${brick.cell}')`);
         document.getElementById('twitter-btn').setAttribute('onclick', `shareTwitter('${brick.cell}')`);
         
+        // Social links
         const socials = document.getElementById('popup-socials');
         socials.innerHTML = '';
         
@@ -749,7 +764,10 @@
                 { url: brick.socials.twitter, icon: '🐦', name: 'Twitter' },
                 { url: brick.socials.telegram, icon: '✈️', name: 'Telegram' },
                 { url: brick.socials.discord, icon: '💬', name: 'Discord' },
-                { url: brick.socials.website, icon: '🌍', name: 'Website' }
+                { url: brick.socials.instagram, icon: '📷', name: 'Instagram' },
+                { url: brick.socials.tiktok, icon: '🎵', name: 'TikTok' },
+                { url: brick.socials.website, icon: '🌍', name: 'Website' },
+                { url: brick.socials.email ? `mailto:${brick.socials.email}` : null, icon: '📧', name: 'Email' }
             ];
             
             links.forEach(link => {
@@ -757,7 +775,7 @@
                     const a = document.createElement('a');
                     a.href = link.url;
                     a.target = '_blank';
-                    a.style.cssText = 'background: #f0f0f0; padding: 6px 12px; border-radius: 40px; text-decoration: none; color: #333; font-size: 12px; margin:4px; display: inline-block;';
+                    a.style.cssText = 'background: #f0f0f0; padding: 8px 16px; border-radius: 40px; text-decoration: none; color: #333; font-size: 13px; margin:4px; display: inline-block; transition: all 0.2s;';
                     a.onmouseover = () => { a.style.background = '#FF44AA'; a.style.color = 'white'; };
                     a.onmouseout = () => { a.style.background = '#f0f0f0'; a.style.color = '#333'; };
                     a.textContent = `${link.icon} ${link.name}`;
@@ -798,7 +816,7 @@
         renderGrid();
         setInterval(renderGrid, CONFIG.REFRESH_INTERVAL);
         
-        console.log('✅ Canvas prêt - Tracking des conversions actif');
+        console.log('✅ Canvas prêt - Popup amélioré actif');
     });
 </script>
 
