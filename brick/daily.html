@@ -542,34 +542,34 @@
             </div>
         </div>
     </div>
-
-    <!-- ========== VIDEO OF THE DAY ========== -->
-    <div class="daily-card">
-        <div class="daily-icon">🎥</div>
-        <h2>Video of the Day</h2>
-        <video 
-            src="images/eternal/brickpost.mp4"
-            muted
-            loop
-            playsinline
-            controls
-            style="width:100%; max-width:500px; border-radius:16px; margin:20px auto; display:block;"
-        ></video>
-        <p style="font-size:16px; color:#666; margin:10px 0;">"Solana Sunset" · Boub</p>
-        
-        <!-- Like system for video -->
-        <div class="like-system">
-            <div class="like-btn" onclick="this.querySelector('.like-count').textContent = parseInt(this.querySelector('.like-count').textContent)+1">
-                <span>❤️</span>
-                <span class="like-count">42</span>
-            </div>
-            <div class="dislike-btn" onclick="this.querySelector('.dislike-count').textContent = parseInt(this.querySelector('.dislike-count').textContent)+1">
-                <span>👎</span>
-                <span class="dislike-count">2</span>
-            </div>
+<!-- ========== VIDEO OF THE DAY ========== -->
+<div class="daily-card">
+    <div class="daily-icon">🎥</div>
+    <h2>Video of the Day</h2>
+    
+    <div style="width:100%; max-width:500px; margin:20px auto; position:relative; border-radius:16px; overflow:hidden; box-shadow:0 10px 30px rgba(255,68,170,0.2);">
+        <iframe 
+            src="https://www.youtube.com/embed/lRzFqW4Xh2k"
+            style="width:100%; aspect-ratio:16/9; display:block;"
+            frameborder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowfullscreen>
+        </iframe>
+    </div>
+    
+    <p style="font-size:16px; color:#666; margin:10px 0;">"Golden (Harry Styles Cover)" · Cannons</p>
+    
+    <div class="like-system">
+        <div class="like-btn" onclick="this.querySelector('.like-count').textContent = parseInt(this.querySelector('.like-count').textContent)+1">
+            <span>❤️</span>
+            <span class="like-count">42</span>
+        </div>
+        <div class="dislike-btn" onclick="this.querySelector('.dislike-count').textContent = parseInt(this.querySelector('.dislike-count').textContent)+1">
+            <span>👎</span>
+            <span class="dislike-count">2</span>
         </div>
     </div>
-
+</div>
     <!-- ========== PHOTO OF THE DAY ========== -->
     <div class="daily-card">
         <div class="daily-icon">📸</div>
@@ -759,6 +759,5 @@
         });
     });
 </script>
-
 </body>
 </html>
