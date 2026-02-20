@@ -18,10 +18,10 @@
             background: linear-gradient(135deg, #fff5f5 0%, #fff 100%);
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             color: #1e293b;
-            padding: 40px 20px;
+            padding: 20px;
         }
 
-        /* ===== STICKY MENU ===== */
+        /* ===== STICKY MENU (copié de index) ===== */
         .nav {
             background: white;
             backdrop-filter: blur(10px);
@@ -118,52 +118,117 @@
         }
 
         .container {
-            max-width: 800px;
+            max-width: 1000px;
             margin: 0 auto;
         }
 
-        /* Header avec vidéo logo (comme index) */
-        .header-with-logo {
+        /* ===== HEADER AVEC GROS LOGO JUICY (comme index) ===== */
+        .header {
+            text-align: center;
+            padding: 40px 0 20px;
+        }
+
+        .logo-title-container {
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 15px;
+            gap: 20px;
             margin-bottom: 16px;
             flex-wrap: wrap;
         }
 
-        .header-logo-video {
-            width: 80px;
-            height: 80px;
-            border-radius: 30px;
-            object-fit: cover;
-            box-shadow: 0 15px 30px rgba(255,68,170,0.4);
-            border: 3px solid #FF44AA;
-            animation: floatGlow 3s infinite ease-in-out;
+        /* Gros logo juicy (90px) */
+        .header-juicy-cube {
+            width: 90px;
+            height: 90px;
+            position: relative;
+            transform-style: preserve-3d;
+            animation: spinHeader 12s infinite linear;
+            filter: drop-shadow(0 0 30px rgba(255,68,170,0.8));
         }
 
-        @keyframes floatGlow {
-            0% { 
-                transform: translateY(0) scale(1);
-                filter: drop-shadow(0 0 20px #FF44AA);
-            }
-            50% { 
-                transform: translateY(-8px) scale(1.1);
-                filter: drop-shadow(0 0 40px #FF44AA) drop-shadow(0 0 60px #B87CFF);
-            }
-            100% { 
-                transform: translateY(0) scale(1);
-                filter: drop-shadow(0 0 20px #FF44AA);
-            }
+        .header-cube-face {
+            position: absolute;
+            width: 30px;
+            height: 30px;
+            border: 3px solid rgba(255,255,255,0.9);
+            border-radius: 8px;
+            box-shadow: 0 0 25px currentColor, inset 0 0 15px rgba(255,255,255,0.8);
+            background: linear-gradient(145deg, #ff44aa, #ff69b4);
         }
 
-        h1 {
-            font-size: 48px;
-            background: linear-gradient(135deg, #FF44AA, #8b5cf6);
+        .header-cube-face:nth-child(1) {
+            background: #ff44aa;
+            transform: rotateY(0deg) translateZ(45px);
+            box-shadow: 0 0 30px #ff44aa;
+        }
+        .header-cube-face:nth-child(2) {
+            background: #b87cff;
+            transform: rotateY(90deg) translateZ(45px);
+            box-shadow: 0 0 30px #b87cff;
+        }
+        .header-cube-face:nth-child(3) {
+            background: #8b5cf6;
+            transform: rotateY(180deg) translateZ(45px);
+            box-shadow: 0 0 30px #8b5cf6;
+        }
+        .header-cube-face:nth-child(4) {
+            background: #00ffff;
+            transform: rotateY(-90deg) translateZ(45px);
+            box-shadow: 0 0 30px #00ffff;
+        }
+        .header-cube-face:nth-child(5) {
+            background: #ff1493;
+            transform: rotateX(90deg) translateZ(45px);
+            box-shadow: 0 0 30px #ff1493;
+        }
+        .header-cube-face:nth-child(6) {
+            background: #ff8844;
+            transform: rotateX(-90deg) translateZ(45px);
+            box-shadow: 0 0 30px #ff8844;
+        }
+
+        .header-cubelet {
+            position: absolute;
+            width: 25px;
+            height: 25px;
+            background: linear-gradient(135deg, #ff44aa, #b87cff, #00ffff);
+            border: 2px solid white;
+            border-radius: 6px;
+            box-shadow: 0 0 20px currentColor;
+            animation: cubeletFloat 3s infinite alternate;
+        }
+
+        .header-cubelet:nth-child(7) { transform: translate3d(30px, 15px, 30px); }
+        .header-cubelet:nth-child(8) { transform: translate3d(45px, 45px, 15px); }
+        .header-cubelet:nth-child(9) { transform: translate3d(15px, 60px, 45px); }
+        .header-cubelet:nth-child(10) { transform: translate3d(60px, 30px, 30px); }
+
+        @keyframes spinHeader {
+            0% { transform: rotateX(0deg) rotateY(0deg); }
+            100% { transform: rotateX(360deg) rotateY(360deg); }
+        }
+
+        @keyframes cubeletFloat {
+            0% { transform: translate3d(30px, 15px, 30px) scale(1); opacity: 0.8; }
+            100% { transform: translate3d(35px, 20px, 35px) scale(1.2); opacity: 1; }
+        }
+
+        .gradient-title {
+            font-size: 64px;
+            background: linear-gradient(135deg, #FF44AA, #B87CFF, #8b5cf6);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            display: inline-block;
+            font-weight: 800;
+            letter-spacing: -1px;
             margin: 0;
+            animation: titlePulse 3s infinite ease-in-out;
+            filter: drop-shadow(0 0 20px #ff44aa);
+        }
+
+        @keyframes titlePulse {
+            0%, 100% { filter: drop-shadow(0 0 10px #FF44AA); }
+            50% { filter: drop-shadow(0 0 30px #FF44AA) drop-shadow(0 0 60px #B87CFF); }
         }
 
         .subtitle {
@@ -172,6 +237,10 @@
             margin-bottom: 40px;
             border-left: 4px solid #FF44AA;
             padding-left: 20px;
+            text-align: left;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
         }
 
         /* Cards */
@@ -435,6 +504,64 @@
             font-size: 14px;
         }
 
+        /* ===== LOGO DU MENU (mini cube) ===== */
+        .juicy-cube-mini {
+            width: 45px;
+            height: 45px;
+            position: relative;
+            transform-style: preserve-3d;
+            animation: spinSlow 10s infinite linear;
+            margin-right: 8px;
+        }
+
+        .cube-face-mini {
+            position: absolute;
+            width: 15px;
+            height: 15px;
+            border: 2px solid white;
+            border-radius: 4px;
+            box-shadow: 0 0 15px currentColor;
+        }
+
+        .cube-face-mini:nth-child(1) {
+            background: #ff44aa;
+            transform: rotateY(0deg) translateZ(22px);
+            box-shadow: 0 0 15px #ff44aa;
+        }
+        .cube-face-mini:nth-child(2) {
+            background: #b87cff;
+            transform: rotateY(90deg) translateZ(22px);
+            box-shadow: 0 0 15px #b87cff;
+        }
+        .cube-face-mini:nth-child(3) {
+            background: #8b5cf6;
+            transform: rotateX(90deg) translateZ(22px);
+            box-shadow: 0 0 15px #8b5cf6;
+        }
+
+        .brand-text {
+            font-weight: 900;
+            font-size: 28px;
+            background: linear-gradient(135deg, #ff44aa, #b87cff, #8b5cf6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            filter: drop-shadow(0 0 10px #ff44aa) drop-shadow(0 0 20px #b87cff);
+            animation: haloSoft 3s infinite ease-in-out;
+            letter-spacing: -0.5px;
+        }
+
+        @keyframes spinSlow {
+            0% { transform: rotateX(0deg) rotateY(0deg); }
+            100% { transform: rotateX(360deg) rotateY(360deg); }
+        }
+
+        @keyframes haloSoft {
+            0% { filter: drop-shadow(0 0 10px #ff44aa) drop-shadow(0 0 20px #b87cff); }
+            50% { filter: drop-shadow(0 0 20px #ff44aa) drop-shadow(0 0 40px #b87cff) drop-shadow(0 0 60px #8b5cf6); }
+            100% { filter: drop-shadow(0 0 10px #ff44aa) drop-shadow(0 0 20px #b87cff); }
+        }
+
         @media (max-width: 800px) {
             .nav-inner {
                 flex-wrap: wrap;
@@ -454,25 +581,28 @@
             .daily-card video, .daily-card img {
                 max-width: 100%;
             }
-            .header-with-logo {
+            .logo-title-container {
                 flex-direction: column;
-                text-align: center;
+            }
+            .gradient-title {
+                font-size: 48px;
             }
         }
     </style>
 </head>
 <body>
 
-<!-- ===== STICKY MENU AVEC LOGO + $BRICK ===== -->
+<!-- ===== STICKY MENU AVEC LOGO JUICY (comme index) ===== -->
 <div class="nav">
     <div class="nav-inner">
         <div class="brand">
-            <a href="index.html" style="display: flex; align-items: center; text-decoration: none;">
-                <img src="images/logo/brick_token.png" 
-                     alt="BRICK" 
-                     height="36" 
-                     style="margin-right: 8px; border-radius: 8px;">
-                <span style="font-weight: 800; font-size: 22px; background: linear-gradient(135deg, #FF44AA, #B87CFF); -webkit-background-clip: text; -webkit-text-fill-color: transparent; letter-spacing: -0.5px;">$BRICK</span>
+            <a href="index.html" style="display: flex; align-items: center; text-decoration: none; gap: 8px;">
+                <div class="juicy-cube-mini">
+                    <div class="cube-face-mini"></div>
+                    <div class="cube-face-mini"></div>
+                    <div class="cube-face-mini"></div>
+                </div>
+                <span class="brand-text">$BRICK</span>
             </a>
         </div>
         
@@ -484,8 +614,7 @@
             <a href="how-it-works.html">How it works</a>
             <a href="referrals.html">Referrals</a>
             <a href="daily.html" class="active">Daily</a>
-            
-            
+        
         </div>
         
         <div class="spacer"></div>
@@ -502,21 +631,27 @@
 </div>
 
 <div class="container">
-    <!-- Header avec vidéo logo brickpost.mp4 (sans émoji) -->
-    <div class="header-with-logo">
-        <video 
-            src="images/eternal/brickpost.webm"
-            class="header-logo-video"
-            autoplay
-            loop
-            muted
-            playsinline
-        ></video>
-        <h1>BRICK Daily</h1>
-    </div>
-    
-    <div class="subtitle">
-        Poetry, videos, and community picks
+    <!-- Header avec GROS LOGO JUICY (remplace brickpost.webm) -->
+    <div class="header">
+        <div class="logo-title-container">
+            <div class="header-juicy-cube">
+                <div class="header-cube-face"></div>
+                <div class="header-cube-face"></div>
+                <div class="header-cube-face"></div>
+                <div class="header-cube-face"></div>
+                <div class="header-cube-face"></div>
+                <div class="header-cube-face"></div>
+                <div class="header-cubelet"></div>
+                <div class="header-cubelet"></div>
+                <div class="header-cubelet"></div>
+                <div class="header-cubelet"></div>
+            </div>
+            <h1 class="gradient-title">BRICK Daily</h1>
+        </div>
+        
+        <div class="subtitle">
+            Poetry, videos, and community picks
+        </div>
     </div>
 
     <!-- ========== POEM OF THE DAY ========== -->
@@ -543,34 +678,36 @@
             </div>
         </div>
     </div>
-<!-- ========== VIDEO OF THE DAY ========== -->
-<div class="daily-card">
-    <div class="daily-icon">🎥</div>
-    <h2>Video of the Day</h2>
-    
-    <div style="width:100%; max-width:500px; margin:20px auto; position:relative; border-radius:16px; overflow:hidden; box-shadow:0 10px 30px rgba(255,68,170,0.2);">
-        <iframe 
-            src="https://www.youtube.com/embed/lRzFqW4Xh2k"
-            style="width:100%; aspect-ratio:16/9; display:block;"
-            frameborder="0"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-            allowfullscreen>
-        </iframe>
-    </div>
-    
-    <p style="font-size:16px; color:#666; margin:10px 0;">"Jack Parow - Cooler as Ekke"</p>
-    
-    <div class="like-system">
-        <div class="like-btn" onclick="this.querySelector('.like-count').textContent = parseInt(this.querySelector('.like-count').textContent)+1">
-            <span>❤️</span>
-            <span class="like-count">42</span>
+
+    <!-- ========== VIDEO OF THE DAY ========== -->
+    <div class="daily-card">
+        <div class="daily-icon">🎥</div>
+        <h2>Video of the Day</h2>
+        
+        <div style="width:100%; max-width:500px; margin:20px auto; position:relative; border-radius:16px; overflow:hidden; box-shadow:0 10px 30px rgba(255,68,170,0.2);">
+            <iframe 
+                src="https://www.youtube.com/embed/lRzFqW4Xh2k"
+                style="width:100%; aspect-ratio:16/9; display:block;"
+                frameborder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowfullscreen>
+            </iframe>
         </div>
-        <div class="dislike-btn" onclick="this.querySelector('.dislike-count').textContent = parseInt(this.querySelector('.dislike-count').textContent)+1">
-            <span>👎</span>
-            <span class="dislike-count">2</span>
+        
+        <p style="font-size:16px; color:#666; margin:10px 0;">"Jack Parow - Cooler as Ekke"</p>
+        
+        <div class="like-system">
+            <div class="like-btn" onclick="this.querySelector('.like-count').textContent = parseInt(this.querySelector('.like-count').textContent)+1">
+                <span>❤️</span>
+                <span class="like-count">42</span>
+            </div>
+            <div class="dislike-btn" onclick="this.querySelector('.dislike-count').textContent = parseInt(this.querySelector('.dislike-count').textContent)+1">
+                <span>👎</span>
+                <span class="dislike-count">2</span>
+            </div>
         </div>
     </div>
-</div>
+
     <!-- ========== PHOTO OF THE DAY ========== -->
     <div class="daily-card">
         <div class="daily-icon">📸</div>
@@ -578,7 +715,6 @@
         <img src="images\picsofday\$BrickTeam1.webp" alt="Crypto Lady" style="width:100%; max-width:500px; border-radius:16px; margin:20px auto; display:block;">
         <p style="font-size:16px; color:#666; margin:10px 0;">"Fly with us" · $Brick.</p>
         
-        <!-- Like system for photo -->
         <div class="like-system">
             <div class="like-btn" onclick="this.querySelector('.like-count').textContent = parseInt(this.querySelector('.like-count').textContent)+1">
                 <span>❤️</span>
@@ -693,24 +829,24 @@
     </div>
 
     <!-- ========== FOOTER STANDARD ========== -->
-    <footer style="margin-top: 60px; padding-top: 30px; border-top: 2px solid #FF44AA20;">
-        <div style="display: flex; justify-content: center; gap: 1.5rem; flex-wrap: wrap; max-width: 1300px; margin: 0 auto; padding: 0 20px;">
-            <a href="index.html" style="color: #666; text-decoration: none; font-weight: 500; font-size: 0.95rem;" onmouseover="this.style.color='#FF44AA'" onmouseout="this.style.color='#666'">🧱 Home</a>
-            <a href="canvas.html" style="color: #666; text-decoration: none; font-weight: 500; font-size: 0.95rem;" onmouseover="this.style.color='#FF44AA'" onmouseout="this.style.color='#666'">🎨 Canvas</a>
-            <a href="plaza.html" style="color: #666; text-decoration: none; font-weight: 500; font-size: 0.95rem;" onmouseover="this.style.color='#FF44AA'" onmouseout="this.style.color='#666'">🪙 Plaza</a>
-            <a href="eternal-moments.html" style="color: #666; text-decoration: none; font-weight: 500; font-size: 0.95rem;" onmouseover="this.style.color='#FF44AA'" onmouseout="this.style.color='#666'">✨ Eternal</a>
-            <a href="how-it-works.html" style="color: #666; text-decoration: none; font-weight: 500; font-size: 0.95rem;" onmouseover="this.style.color='#FF44AA'" onmouseout="this.style.color='#666'">📚 How it works</a>
-            <a href="tokenomics.html" style="color: #666; text-decoration: none; font-weight: 500; font-size: 0.95rem;" onmouseover="this.style.color='#FF44AA'" onmouseout="this.style.color='#666'">📊 Tokenomics</a>
-            <a href="whitepaper.html" style="color: #666; text-decoration: none; font-weight: 500; font-size: 0.95rem;" onmouseover="this.style.color='#FF44AA'" onmouseout="this.style.color='#666'">📄 Whitepaper</a>
-            <a href="rules.html" style="color: #666; text-decoration: none; font-weight: 500; font-size: 0.95rem;" onmouseover="this.style.color='#FF44AA'" onmouseout="this.style.color='#666'">⚖️ Rules</a>
-            <a href="daily.html" style="color: #666; text-decoration: none; font-weight: 500; font-size: 0.95rem;" onmouseover="this.style.color='#FF44AA'" onmouseout="this.style.color='#666'">📅 Daily</a>
-            <a href="referrals.html" style="color: #666; text-decoration: none; font-weight: 500; font-size: 0.95rem;" onmouseover="this.style.color='#FF44AA'" onmouseout="this.style.color='#666'">🤝 Referrals</a>
-            <a href="https://x.com/TokenForgeApp" target="_blank" style="color: #666; text-decoration: none; font-weight: 500; font-size: 0.95rem;" onmouseover="this.style.color='#FF44AA'" onmouseout="this.style.color='#666'">🐦 Twitter</a>
-            <a href="https://t.me/brick_fusion_news" target="_blank" style="color: #666; text-decoration: none; font-weight: 500; font-size: 0.95rem;" onmouseover="this.style.color='#FF44AA'" onmouseout="this.style.color='#666'">📢 News</a>
-            <a href="https://t.me/brick_community" target="_blank" style="color: #666; text-decoration: none; font-weight: 500; font-size: 0.95rem;" onmouseover="this.style.color='#FF44AA'" onmouseout="this.style.color='#666'">💬 Chat</a>
-            <a href="mailto:foundrix@protonmail.com" style="color: #666; text-decoration: none; font-weight: 500; font-size: 0.95rem;" onmouseover="this.style.color='#FF44AA'" onmouseout="this.style.color='#666'">📧 Email</a>
+    <footer>
+        <div class="footer-links">
+            <a href="index.html">🧱 Home</a>
+            <a href="canvas.html">🎨 Canvas</a>
+            <a href="plaza.html">🪙 Plaza</a>
+            <a href="eternal-moments.html">✨ Eternal</a>
+            <a href="how-it-works.html">📚 How it works</a>
+            <a href="tokenomics.html">📊 Tokenomics</a>
+            <a href="whitepaper.html">📄 Whitepaper</a>
+            <a href="rules.html">⚖️ Rules</a>
+            <a href="daily.html">📅 Daily</a>
+            <a href="referrals.html">🤝 Referrals</a>
+            <a href="https://x.com/TokenForgeApp" target="_blank">🐦 Twitter</a>
+            <a href="https://t.me/brick_fusion_news" target="_blank">📢 News</a>
+            <a href="https://t.me/brick_community" target="_blank">💬 Chat</a>
+            <a href="mailto:foundrix@protonmail.com">📧 Email</a>
         </div>
-        <div style="text-align: center; margin: 30px 0 20px; color: #aaa; font-size: 14px;">
+        <div class="footer-copyright">
             🧱 BRICK · The immortal meme coin · Built on Solana · 2026
         </div>
     </footer>
@@ -743,21 +879,6 @@
             const pubkey = provider.publicKey.toString();
             whoamiNav.textContent = `Connected: ${pubkey.slice(0,4)}...${pubkey.slice(-4)}`;
         }
-    });
-
-    // Simple like/dislike functionality
-    document.querySelectorAll('.like-btn').forEach(btn => {
-        btn.addEventListener('click', function() {
-            let count = this.querySelector('.like-count');
-            count.textContent = parseInt(count.textContent) + 1;
-        });
-    });
-    
-    document.querySelectorAll('.dislike-btn').forEach(btn => {
-        btn.addEventListener('click', function() {
-            let count = this.querySelector('.dislike-count');
-            count.textContent = parseInt(count.textContent) + 1;
-        });
     });
 </script>
 </body>
