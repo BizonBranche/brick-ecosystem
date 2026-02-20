@@ -298,7 +298,7 @@
             background: linear-gradient(145deg, #FF66AA, #FF44AA);
         }
 
-        /* ===== POPUP AMÉLIORÉ - S'ADAPTE À LA LONGUEUR DU TEXTE ===== */
+        /* ===== POPUP AMÉLIORÉ ===== */
         .brick-popup {
             display: none;
             position: fixed;
@@ -426,7 +426,6 @@
             font-style: italic;
         }
 
-        /* Responsive */
         @media (max-width: 800px) {
             .nav-inner {
                 flex-wrap: wrap;
@@ -442,7 +441,7 @@
 </head>
 <body>
 
-<!-- ===== STICKY MENU AVEC LOGO + $BRICK ===== -->
+<!-- ===== STICKY MENU ===== -->
 <div class="nav">
     <div class="nav-inner">
         <div class="brand">
@@ -513,18 +512,15 @@
         </div>
     </div>
 
-    <!-- ===== POPUP AMÉLIORÉ - S'ADAPTE À LA LONGUEUR DU TEXTE ===== -->
+    <!-- POPUP -->
     <div id="brick-popup" class="brick-popup">
         <div class="brick-popup-content">
             <img id="popup-image" class="brick-popup-image" src="" alt="Brick">
-            
-            <!-- Le message peut être long, il sera scrollable si besoin -->
             <div id="popup-message" style="font-size: 18px; color: #333; margin-bottom: 16px; line-height: 1.6; word-wrap: break-word; max-height: 300px; overflow-y: auto; padding: 0 10px;"></div>
-            
             <div id="popup-wallet" style="font-family: monospace; color: #666; background: #f5f5f5; padding: 12px; border-radius: 16px; margin-bottom: 20px; font-size: 15px; word-break: break-all;"></div>
             
             <div class="like-section" id="like-section">
-                <!-- Sera rempli par JavaScript -->
+                <!-- Rempli par JS -->
             </div>
 
             <div class="share-buttons">
@@ -562,12 +558,11 @@
     </div>
 </footer>
 
-<!-- Script unifié avec tracking des conversions -->
 <script>
-    // ===== CONFIGURATION SUPABASE (TES IDENTIFIANTS) =====
+    // === CONFIGURATION SUPABASE ===
     const SUPABASE_URL = "https://bmfuvkylkhjcfsiauzvb.supabase.co";
     const SUPABASE_ANON = "sb_publishable_VuzUNoj1NnJk1BWSbVzJjQ_WABRhxDh";
-    const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON);
+    const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON);
 
     const CONFIG = {
         GRID_SIZE: 20,
@@ -577,56 +572,6 @@
     const TOTAL_CELLS = CONFIG.GRID_SIZE * CONFIG.GRID_SIZE;
     let currentBrickCell = null;
     let publicKey = null;
-
-    // ===== FONCTION DE TRACKING DES CONVERSIONS =====
-    async function enregistrerConversion(refereeWallet, montantUSDC, typeAchat) {
-        const referrerWallet = localStorage.getItem('brick_referrer');
-        
-        if (referrerWallet) {
-            try {
-                console.log('📝 Enregistrement conversion:', {
-                    referrer: referrerWallet,
-                    referee: refereeWallet,
-                    montant: montantUSDC,
-                    type: typeAchat
-                });
-
-                const { data, error } = await supabaseClient
-                    .from('referral_conversions')
-                    .insert([
-                        {
-                            referrer_wallet: referrerWallet,
-                            referee_wallet: refereeWallet,
-                            amount_usdc: montantUSDC,
-                            kind: typeAchat
-                        }
-                    ]);
-                
-                if (error) {
-                    console.error('❌ Erreur Supabase:', error);
-                } else {
-                    console.log('✅ Conversion enregistrée!', data);
-                    
-                    // Message discret pour l'acheteur
-                    const msg = document.createElement('div');
-                    msg.style.cssText = 'position:fixed; bottom:20px; left:20px; background:#00aa88; color:white; padding:8px 16px; border-radius:40px; font-size:13px; z-index:9999;';
-                    msg.textContent = '🎁 Merci d\'avoir utilisé un lien de parrainage !';
-                    document.body.appendChild(msg);
-                    setTimeout(() => msg.remove(), 4000);
-                }
-            } catch (e) {
-                console.error('Exception:', e);
-            }
-        } else {
-            console.log('ℹ️ Achat sans référant');
-        }
-    }
-
-    // ===== FONCTION À APPELER QUAND LE PAIEMENT EST CONFIRMÉ =====
-    function onPurchaseSuccess(walletAcheteur, montantEnUSDC, typeAchat = 'canvas') {
-        console.log('💰 Achat confirmé pour:', walletAcheteur);
-        enregistrerConversion(walletAcheteur, montantEnUSDC, typeAchat);
-    }
 
     // ===== WALLET FUNCTIONS =====
     window.connectWallet = async function() {
@@ -663,16 +608,40 @@
         return `${String.fromCharCode(65 + row)}${col + 1}`;
     }
 
-    function renderGrid() {
+    // ===== FONCTION DE CHARGEMENT DES BRIQUES =====
+    async function renderGrid() {
         const grid = document.getElementById('grid');
         grid.innerHTML = '';
+        
+        // Charger les briques depuis Supabase
+        let supabaseBricks = [];
+        try {
+            const { data, error } = await supabaseClient
+                .from('bricks')
+                .select('*');
+            
+            if (!error && data) {
+                supabaseBricks = data;
+                console.log(`✅ ${data.length} briques chargées depuis Supabase`);
+            }
+        } catch (e) {
+            console.warn('⚠️ Supabase non disponible, utilisation localStorage uniquement');
+        }
+        
         let sold = 0;
-
+        
         for (let i = 0; i < TOTAL_CELLS; i++) {
             const cellId = getCellIdFromIndex(i);
+            
+            // Chercher d'abord dans localStorage (rapide)
             const brickKey = 'brick_' + cellId;
             const brickData = localStorage.getItem(brickKey);
-            const brick = brickData ? JSON.parse(brickData) : null;
+            let brick = brickData ? JSON.parse(brickData) : null;
+            
+            // Si pas dans localStorage, chercher dans Supabase
+            if (!brick) {
+                brick = supabaseBricks.find(b => b.cell === cellId);
+            }
             
             const cell = document.createElement('div');
             cell.className = 'cell';
@@ -682,7 +651,8 @@
                 cell.classList.add('filled');
                 
                 const img = document.createElement('img');
-                img.src = brick.image || 'https://placehold.co/100x100/FF44AA/FFFFFF?text=🧱';
+                // Utiliser l'URL Supabase si disponible, sinon l'image en base64
+                img.src = brick.image_url || brick.image || 'https://placehold.co/100x100/FF44AA/FFFFFF?text=🧱';
                 img.className = 'cell-image';
                 img.onerror = () => img.src = 'https://placehold.co/100x100/FF44AA/FFFFFF?text=🧱';
                 cell.appendChild(img);
@@ -700,7 +670,6 @@
         document.getElementById('last-update').innerHTML = `✨ Last update: ${new Date().toLocaleTimeString()}`;
     }
 
-    // ===== POPUP AMÉLIORÉ - S'ADAPTE À LA LONGUEUR DU TEXTE =====
     function showPopup(brick) {
         currentBrickCell = brick.cell;
         const popup = document.getElementById('brick-popup');
@@ -710,9 +679,9 @@
         const hasLiked = publicKey && likesData.likers.includes(publicKey);
         
         // Image
-        document.getElementById('popup-image').src = brick.image || 'https://placehold.co/200x200/FF44AA/FFFFFF?text=🧱';
+        document.getElementById('popup-image').src = brick.image_url || brick.image || 'https://placehold.co/200x200/FF44AA/FFFFFF?text=🧱';
         
-        // Message - peut être long, le CSS gère le scroll
+        // Message
         document.getElementById('popup-message').textContent = brick.message || '🧱 Brick';
         
         // Wallet
@@ -787,14 +756,15 @@
         popup.style.display = 'flex';
     }
 
-    function copyBrickLink(cell) {
-        const url = `${window.location.origin}/brick/brick.html?cell=${cell}`;
-        navigator.clipboard.writeText(url).then(() => {
-            alert('✅ Link copied!');
-        }).catch(() => {
-            prompt('📋 Copy:', url);
-        });
-    }
+   function copyBrickLink(cell) {
+    const url = `https://www.brick-eternal.live/brick/brick.html?cell=${cell}`;
+    
+    navigator.clipboard.writeText(url).then(() => {
+        alert('✅ Lien copié (version prod)');
+    }).catch(() => {
+        prompt('📋 Copie manuelle:', url);
+    });
+}
 
     function shareTwitter(cell) {
         const text = `🧱 Check out my brick ${cell} on $BRICK Canvas!`;
@@ -813,10 +783,10 @@
             } catch (error) {}
         }
         
-        renderGrid();
+        await renderGrid();
         setInterval(renderGrid, CONFIG.REFRESH_INTERVAL);
         
-        console.log('✅ Canvas prêt - Popup amélioré actif');
+        console.log('✅ Canvas prêt - Mode hybride localStorage + Supabase actif');
     });
 </script>
 
