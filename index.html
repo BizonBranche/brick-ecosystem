@@ -1,7 +1,26 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta http-equiv="refresh" content="0; url=/brick/index.html">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BRICK · Eternal Canvas</title>
+    <script>
+        // Redirection intelligente qui conserve tous les paramètres
+        (function() {
+            // Récupérer l'URL complète avec ses paramètres
+            const currentUrl = new URL(window.location.href);
+            const params = currentUrl.searchParams;
+            
+            // Construire la nouvelle URL en conservant TOUS les paramètres
+            let redirectUrl = '/brick/index.html';
+            if (params.toString()) {
+                redirectUrl += '?' + params.toString();
+            }
+            
+            // Rediriger vers la page d'accueil avec les paramètres
+            window.location.replace(redirectUrl);
+        })();
+    </script>
 </head>
 <body>
     <p>Redirection vers <a href="/brick/index.html">BRICK</a>...</p>
