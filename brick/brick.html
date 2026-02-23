@@ -96,5 +96,23 @@
             }
         }
     </script>
+    <!-- ===== CAPTURE UNIVERSELLE DES RÉFÉRENTS ===== -->
+<script>
+(function() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const referrerWallet = urlParams.get('ref');
+    
+    if (referrerWallet) {
+        localStorage.setItem('brick_referrer', referrerWallet);
+        console.log('✅ Référent détecté:', referrerWallet.slice(0,4) + '...' + referrerWallet.slice(-4));
+        
+        const refMessage = document.createElement('div');
+        refMessage.style.cssText = 'position: fixed; bottom: 20px; right: 20px; background: #FF44AA; color: white; padding: 12px 24px; border-radius: 50px; font-size: 14px; z-index: 9999; box-shadow: 0 4px 20px rgba(255,68,170,0.4);';
+        refMessage.innerHTML = `✨ Referred by ${referrerWallet.slice(0,4)}...${referrerWallet.slice(-4)}`;
+        document.body.appendChild(refMessage);
+        setTimeout(() => refMessage.remove(), 5000);
+    }
+})();
+</script>
 </body>
 </html>
