@@ -509,35 +509,51 @@
             color: #666;
         }
 
-        /* Language selector */
-        .language-selector {
-            display: flex;
-            justify-content: center;
-            gap: 10px;
-            margin: 20px 0 30px;
-            flex-wrap: wrap;
-        }
+        /* Language selector - 9 langues */
+.language-selector {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    margin: 20px 0 30px;
+    flex-wrap: wrap;
+    max-width: 1000px;
+    margin-left: auto;
+    margin-right: auto;
+}
 
-        .lang-btn {
-            background: white;
-            border: 2px solid #FF44AA;
-            color: #FF44AA;
-            padding: 8px 20px;
-            border-radius: 40px;
-            cursor: pointer;
-            font-weight: 600;
-            transition: all 0.2s;
-        }
+.lang-btn {
+    background: white;
+    border: 2px solid #FF44AA;
+    color: #FF44AA;
+    padding: 8px 12px;
+    border-radius: 40px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 13px;
+    transition: all 0.2s;
+    min-width: 85px;
+}
 
-        .lang-btn:hover {
-            background: #FF44AA;
-            color: white;
-        }
+.lang-btn:hover {
+    background: #FF44AA;
+    color: white;
+}
 
-        .lang-btn.active {
-            background: #FF44AA;
-            color: white;
-        }
+.lang-btn.active {
+    background: #FF44AA;
+    color: white;
+}
+
+@media (max-width: 800px) {
+    .language-selector {
+        gap: 5px;
+    }
+    .lang-btn {
+        padding: 5px 8px;
+        font-size: 11px;
+        min-width: 65px;
+    }
+}
 
         /* Photo Modal */
         .photo-modal {
@@ -758,13 +774,18 @@
         </div>
     </div>
 
-    <!-- Language Selector pour le poème -->
-    <div class="language-selector">
-        <button class="lang-btn active" onclick="setPoemLanguage('en')">🇬🇧 English</button>
-        <button class="lang-btn" onclick="setPoemLanguage('fr')">🇫🇷 Français</button>
-        <button class="lang-btn" onclick="setPoemLanguage('es')">🇪🇸 Español</button>
-        <button class="lang-btn" onclick="setPoemLanguage('de')">🇩🇪 Deutsch</button>
-    </div>
+    <!-- Language Selector - 9 langues -->
+<div class="language-selector">
+    <button class="lang-btn" onclick="setPoemLanguage('en')">🇬🇧 English</button>
+    <button class="lang-btn" onclick="setPoemLanguage('fr')">🇫🇷 Français</button>
+    <button class="lang-btn" onclick="setPoemLanguage('es')">🇪🇸 Español</button>
+    <button class="lang-btn" onclick="setPoemLanguage('de')">🇩🇪 Deutsch</button>
+    <button class="lang-btn" onclick="setPoemLanguage('zh')">🇨🇳 中文</button>
+    <button class="lang-btn" onclick="setPoemLanguage('ar')">🇸🇦 العربية</button>
+    <button class="lang-btn" onclick="setPoemLanguage('ja')">🇯🇵 日本語</button>
+    <button class="lang-btn" onclick="setPoemLanguage('nl')">🇳🇱 Nederlands</button>
+    <button class="lang-btn" onclick="setPoemLanguage('ru')">🇷🇺 Русский</button>
+</div>
 
     <!-- ========== POEM OF THE DAY ========== -->
     <div class="daily-card" id="poem-card">
@@ -1124,35 +1145,44 @@
         });
     }
 
-    // ===== MULTI-LANGUES POUR LE POÈME =====
-    const poemTranslations = {
-        en: '"Brick by brick we build,<br>In code we trust,<br>Our words forever sealed,<br>In blockchain dust..." — Boub',
-        fr: '"Brique par brique nous bâtissons,<br>Dans le code nous avons foi,<br>Nos mots scellés à jamais,<br>Dans la poussière de la blockchain..." — Boub',
-        es: '"Ladrillo a ladrillo construimos,<br>En el código confiamos,<br>Nuestras palabras selladas para siempre,<br>En el polvo de blockchain..." — Boub',
-        de: '"Stein für Stein bauen wir,<br>Dem Code vertrauen wir,<br>Unsere Worte für immer versiegelt,<br>Im Blockchain-Staub..." — Boub'
-    };
+   // ===== MULTI-LANGUES POUR LE POÈME (9 LANGUES) =====
+const poemTranslations = {
+    en: '"Brick by brick we build,<br>In code we trust,<br>Our words forever sealed,<br>In blockchain dust..." — Boub',
+    fr: '"Brique par brique nous bâtissons,<br>Dans le code nous avons foi,<br>Nos mots scellés à jamais,<br>Dans la poussière de la blockchain..." — Boub',
+    es: '"Ladrillo a ladrillo construimos,<br>En el código confiamos,<br>Nuestras palabras selladas para siempre,<br>En el polvo de blockchain..." — Boub',
+    de: '"Stein für Stein bauen wir,<br>Dem Code vertrauen wir,<br>Unsere Worte für immer versiegelt,<br>Im Blockchain-Staub..." — Boub',
+    zh: '"一砖一瓦我们建造，<br>代码中我们信任，<br>我们的话语永远封存，<br>在区块链的尘埃中..." — Boub',
+    ar: '"لبنة تلو الأخرى نبني،<br>في الكود نثق،<br>كلماتنا محفورة للأبد،<br>في غبار البلوكتشين..." — بوب',
+    ja: '"レンガを積み上げて構築し、<br>コードを信じ、<br>私たちの言葉は永遠に封印され、<br>ブロックチェーンの塵の中へ..." — ブーブ',
+    nl: '"Steen voor steen bouwen we,<br>In code vertrouwen we,<br>Onze woorden voor altijd verzegeld,<br>In blockchain-stof..." — Boub',
+    ru: '"Кирпич за кирпичом мы строим,<br>Коду мы доверяем,<br>Наши слова навсегда запечатаны,<br>В пыли блокчейна..." — Буб'
+};
 
-    function setPoemLanguage(lang) {
-        const poemElement = document.getElementById('poem-text');
-        if (poemElement && poemTranslations[lang]) {
-            poemElement.innerHTML = poemTranslations[lang];
-            localStorage.setItem('preferredLanguage', lang);
-            highlightActiveLang(lang);
+function setPoemLanguage(lang) {
+    const poemElement = document.getElementById('poem-text');
+    if (poemElement && poemTranslations[lang]) {
+        poemElement.innerHTML = poemTranslations[lang];
+        localStorage.setItem('preferredLanguage', lang);
+        highlightActiveLang(lang);
+    }
+}
+
+function highlightActiveLang(lang) {
+    document.querySelectorAll('.lang-btn').forEach(btn => {
+        btn.classList.remove('active');
+        if ((lang === 'en' && btn.textContent.includes('English')) ||
+            (lang === 'fr' && btn.textContent.includes('Français')) ||
+            (lang === 'es' && btn.textContent.includes('Español')) ||
+            (lang === 'de' && btn.textContent.includes('Deutsch')) ||
+            (lang === 'zh' && btn.textContent.includes('中文')) ||
+            (lang === 'ar' && btn.textContent.includes('العربية')) ||
+            (lang === 'ja' && btn.textContent.includes('日本語')) ||
+            (lang === 'nl' && btn.textContent.includes('Nederlands')) ||
+            (lang === 'ru' && btn.textContent.includes('Русский'))) {
+            btn.classList.add('active');
         }
-    }
-
-    function highlightActiveLang(lang) {
-        document.querySelectorAll('.lang-btn').forEach(btn => {
-            btn.classList.remove('active');
-            if (btn.textContent.includes(lang.toUpperCase()) || 
-                (lang === 'en' && btn.textContent.includes('English')) ||
-                (lang === 'fr' && btn.textContent.includes('Français')) ||
-                (lang === 'es' && btn.textContent.includes('Español')) ||
-                (lang === 'de' && btn.textContent.includes('Deutsch'))) {
-                btn.classList.add('active');
-            }
-        });
-    }
+    });
+}
 
     // Check if already connected
     window.addEventListener('load', () => {
