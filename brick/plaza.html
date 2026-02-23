@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
+    <meta charset="UTF--8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>🪙 BRICK PLAZA - 400 unique bricks</title>
     
@@ -651,7 +651,6 @@
             <a href="how-it-works.html">How it works</a>
             <a href="referrals.html">Referrals</a>
             <a href="daily.html">Daily</a>
-        
         </div>
         
         <div class="spacer"></div>
@@ -741,7 +740,7 @@
     </div>
 </div>
 
-<!-- FOOTER HARMONISÉ -->
+<!-- Footer harmonisé -->
 <footer>
     <div class="footer-links">
         <a href="index.html">🧱 Home</a>
@@ -829,9 +828,11 @@
             if (!error && data) {
                 supabaseBricks = data;
                 console.log(`✅ ${data.length} briques Plaza chargées depuis Supabase`);
+            } else {
+                console.log('❌ Aucune brique Plaza trouvée ou erreur:', error);
             }
         } catch (e) {
-            console.warn('⚠️ Supabase non disponible');
+            console.warn('⚠️ Supabase non disponible:', e);
         }
         
         // Créer un Map pour accès rapide
@@ -854,9 +855,9 @@
                 cell.classList.add('filled');
                 
                 const img = document.createElement('img');
-                img.src = brick.image_url || brick.image || 'https://placehold.co/100x100/00aa88/FFFFFF?text=🧱';
+                img.src = brick.image_url || brick.image || 'https://placehold.co/100x100/00aa88/FFFFFF?text=🪙';
                 img.className = 'cell-image';
-                img.onerror = () => img.src = 'https://placehold.co/100x100/00aa88/FFFFFF?text=🧱';
+                img.onerror = () => img.src = 'https://placehold.co/100x100/00aa88/FFFFFF?text=🪙';
                 cell.appendChild(img);
                 
                 cell.onclick = () => showPopup(brick);
@@ -880,9 +881,9 @@
         let likesData = JSON.parse(localStorage.getItem(likesKey)) || { count: 0, likers: [] };
         const hasLiked = publicKey && likesData.likers.includes(publicKey);
         
-        document.getElementById('popup-image').src = brick.image_url || brick.image || 'https://placehold.co/200x200/00aa88/FFFFFF?text=🧱';
-        document.getElementById('popup-message').textContent = brick.message || '🧱 Brick';
-        document.getElementById('popup-wallet').textContent = `${brick.wallet.slice(0,4)}...${brick.wallet.slice(-4)}`;
+        document.getElementById('popup-image').src = brick.image_url || brick.image || 'https://placehold.co/200x200/00aa88/FFFFFF?text=🪙';
+        document.getElementById('popup-message').textContent = brick.message || '🪙 Plaza Brick';
+        document.getElementById('popup-wallet').textContent = brick.wallet ? `${brick.wallet.slice(0,4)}...${brick.wallet.slice(-4)}` : 'Unknown';
         
         const oldLikeSection = document.getElementById('like-section');
         if (oldLikeSection) {
@@ -939,10 +940,7 @@
                 { url: brick.socials.twitter, icon: '🐦', name: 'Twitter' },
                 { url: brick.socials.telegram, icon: '✈️', name: 'Telegram' },
                 { url: brick.socials.discord, icon: '💬', name: 'Discord' },
-                { url: brick.socials.instagram, icon: '📷', name: 'Instagram' },
-                { url: brick.socials.tiktok, icon: '🎵', name: 'TikTok' },
-                { url: brick.socials.website, icon: '🌍', name: 'Website' },
-                { url: brick.socials.email ? `mailto:${brick.socials.email}` : null, icon: '📧', name: 'Email' }
+                { url: brick.socials.website, icon: '🌍', name: 'Website' }
             ];
             
             links.forEach(link => {
@@ -974,9 +972,10 @@
         
         await renderGrid();
         
-        console.log('✅ Plaza prêt - Ne montre que les briques Plaza (pas de fallback localStorage)');
+        console.log('✅ Plaza prêt - Ne montre que les briques Plaza');
     });
 </script>
+
 <!-- ===== CAPTURE UNIVERSELLE DES RÉFÉRENTS ===== -->
 <script>
 (function() {
@@ -985,15 +984,42 @@
     
     if (referrerWallet) {
         localStorage.setItem('brick_referrer', referrerWallet);
-        console.log('✅ Référent détecté:', referrerWallet.slice(0,4) + '...' + referrerWallet.slice(-4));
+        console.log('✅ Référent détecté et sauvegardé:', referrerWallet.slice(0,4) + '...' + referrerWallet.slice(-4));
         
         const refMessage = document.createElement('div');
-        refMessage.style.cssText = 'position: fixed; bottom: 20px; right: 20px; background: #FF44AA; color: white; padding: 12px 24px; border-radius: 50px; font-size: 14px; z-index: 9999; box-shadow: 0 4px 20px rgba(255,68,170,0.4);';
-        refMessage.innerHTML = `✨ Referred by ${referrerWallet.slice(0,4)}...${referrerWallet.slice(-4)}`;
+        refMessage.style.cssText = `
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #00aa88;
+            color: white;
+            padding: 12px 24px;
+            border-radius: 50px;
+            font-size: 14px;
+            font-weight: 600;
+            z-index: 9999;
+            box-shadow: 0 4px 20px rgba(0,170,136,0.4);
+            border: 1px solid rgba(255,255,255,0.3);
+            backdrop-filter: blur(5px);
+            animation: slideIn 0.3s ease-out;
+        `;
+        refMessage.innerHTML = `
+            <div style="display: flex; align-items: center; gap: 8px;">
+                <span>🪙</span>
+                <span>✨ Referred by <strong>${referrerWallet.slice(0,4)}...${referrerWallet.slice(-4)}</strong></span>
+            </div>
+        `;
+        
         document.body.appendChild(refMessage);
-        setTimeout(() => refMessage.remove(), 5000);
+        
+        setTimeout(() => {
+            refMessage.style.animation = 'slideOut 0.3s ease-out forwards';
+            setTimeout(() => refMessage.remove(), 300);
+        }, 5000);
     }
 })();
 </script>
+<!-- ===== FIN CAPTURE RÉFÉRENTS ===== -->
+
 </body>
 </html>
