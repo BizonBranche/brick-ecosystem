@@ -916,9 +916,9 @@
             });
         }
         
-        // === FONCTION COPY VERSION PROD ===
+                // === FONCTION COPY VERSION PROD ===
         document.getElementById('copy-btn').onclick = function() {
-            const url = `https://www.brick-eternal.live/brick/brick.html?cell=${brick.cell}`;
+            const url = `https://www.brick-eternal.live/brick/plaza-brick.html?cell=${brick.cell}`;
             navigator.clipboard.writeText(url).then(() => {
                 alert('✅ Lien copié (version prod)');
             }).catch(() => {
@@ -928,7 +928,7 @@
         
         document.getElementById('twitter-btn').onclick = function() {
             const text = `🪙 Check out my plaza brick ${brick.cell} on $BRICK!`;
-            const url = `https://www.brick-eternal.live/brick/brick.html?cell=${brick.cell}`;
+            const url = `https://www.brick-eternal.live/brick/plaza-brick.html?cell=${brick.cell}`;
             window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(url)}`, '_blank');
         };
         
