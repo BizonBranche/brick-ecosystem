@@ -813,70 +813,64 @@
         return `${String.fromCharCode(65 + row)}${col + 1}`;
     }
 
-    // ===== RENDER GRID AVEC PRIORITÉ SUPABASE =====
-    async function renderGrid() {
-        const grid = document.getElementById('grid');
-        grid.innerHTML = '';
+    // ===== RENDER GRID - UNIQUEMENT SUPABASE =====
+async function renderGrid() {
+    const grid = document.getElementById('grid');
+    grid.innerHTML = '';
+    
+    // Charger UNIQUEMENT les briques Canvas depuis Supabase
+    let supabaseBricks = [];
+    try {
+        const { data, error } = await supabaseClient
+            .from('bricks')
+            .select('*')
+            .or('kind.is.null,kind.eq.canvas');  // Canvas = kind null ou 'canvas'
         
-        // Charger les briques depuis Supabase en PRIORITÉ
-        let supabaseBricks = [];
-        try {
-            const { data, error } = await supabaseClient
-                .from('bricks')
-                .select('*');
-            
-            if (!error && data) {
-                supabaseBricks = data;
-                console.log(`✅ ${data.length} briques chargées depuis Supabase`);
-            }
-        } catch (e) {
-            console.warn('⚠️ Supabase non disponible');
+        if (!error && data) {
+            supabaseBricks = data;
+            console.log(`✅ ${data.length} briques Canvas chargées depuis Supabase`);
         }
-        
-        // Créer un Map pour accès rapide
-        const brickMap = new Map();
-        supabaseBricks.forEach(b => brickMap.set(b.cell, b));
-        
-        let sold = 0;
-        
-        for (let i = 0; i < TOTAL_CELLS; i++) {
-            const cellId = getCellIdFromIndex(i);
-            
-            // CHERCHER D'ABORD DANS SUPABASE
-            let brick = brickMap.get(cellId);
-            
-            // Si pas dans Supabase, chercher dans localStorage (fallback)
-            if (!brick) {
-                const brickKey = 'brick_' + cellId;
-                const brickData = localStorage.getItem(brickKey);
-                brick = brickData ? JSON.parse(brickData) : null;
-            }
-            
-            const cell = document.createElement('div');
-            cell.className = 'cell';
-            
-            if (brick) {
-                sold++;
-                cell.classList.add('filled');
-                
-                const img = document.createElement('img');
-                img.src = brick.image_url || brick.image || 'https://placehold.co/100x100/FF44AA/FFFFFF?text=🧱';
-                img.className = 'cell-image';
-                img.onerror = () => img.src = 'https://placehold.co/100x100/FF44AA/FFFFFF?text=🧱';
-                cell.appendChild(img);
-                
-                cell.onclick = () => showPopup(brick);
-            } else {
-                cell.onclick = () => window.location.href = 'buy-original.html?cell=' + cellId;
-            }
-            
-            grid.appendChild(cell);
-        }
-        
-        document.getElementById('bricks-sold').textContent = sold;
-        document.getElementById('bricks-remaining').textContent = TOTAL_CELLS - sold;
-        document.getElementById('last-update').innerHTML = `✨ Last update: ${new Date().toLocaleTimeString()}`;
+    } catch (e) {
+        console.warn('⚠️ Supabase non disponible');
     }
+    
+    // Créer un Map pour accès rapide
+    const brickMap = new Map();
+    supabaseBricks.forEach(b => brickMap.set(b.cell, b));
+    
+    let sold = 0;
+    
+    for (let i = 0; i < TOTAL_CELLS; i++) {
+        const cellId = getCellIdFromIndex(i);
+        
+        // UNIQUEMENT Supabase, PAS de localStorage
+        let brick = brickMap.get(cellId);
+        
+        const cell = document.createElement('div');
+        cell.className = 'cell';
+        
+        if (brick) {
+            sold++;
+            cell.classList.add('filled');
+            
+            const img = document.createElement('img');
+            img.src = brick.image_url || brick.image || 'https://placehold.co/100x100/FF44AA/FFFFFF?text=🧱';
+            img.className = 'cell-image';
+            img.onerror = () => img.src = 'https://placehold.co/100x100/FF44AA/FFFFFF?text=🧱';
+            cell.appendChild(img);
+            
+            cell.onclick = () => showPopup(brick);
+        } else {
+            cell.onclick = () => window.location.href = 'buy-original.html?cell=' + cellId;
+        }
+        
+        grid.appendChild(cell);
+    }
+    
+    document.getElementById('bricks-sold').textContent = sold;
+    document.getElementById('bricks-remaining').textContent = TOTAL_CELLS - sold;
+    document.getElementById('last-update').innerHTML = `✨ Last update: ${new Date().toLocaleTimeString()}`;
+}
 
     function showPopup(brick) {
         currentBrickCell = brick.cell;
@@ -986,20 +980,70 @@
 <!-- ===== CAPTURE UNIVERSELLE DES RÉFÉRENTS ===== -->
 <script>
 (function() {
+    // Vérifier si un paramètre ref est présent dans l'URL
     const urlParams = new URLSearchParams(window.location.search);
     const referrerWallet = urlParams.get('ref');
     
     if (referrerWallet) {
+        // Sauvegarder dans localStorage
         localStorage.setItem('brick_referrer', referrerWallet);
-        console.log('✅ Référent détecté:', referrerWallet.slice(0,4) + '...' + referrerWallet.slice(-4));
+        console.log('✅ Référent détecté et sauvegardé:', referrerWallet.slice(0,4) + '...' + referrerWallet.slice(-4));
         
+        // Afficher un message de confirmation discret
         const refMessage = document.createElement('div');
-        refMessage.style.cssText = 'position: fixed; bottom: 20px; right: 20px; background: #FF44AA; color: white; padding: 12px 24px; border-radius: 50px; font-size: 14px; z-index: 9999; box-shadow: 0 4px 20px rgba(255,68,170,0.4);';
-        refMessage.innerHTML = `✨ Referred by ${referrerWallet.slice(0,4)}...${referrerWallet.slice(-4)}`;
+        refMessage.style.cssText = `
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #FF44AA;
+            color: white;
+            padding: 12px 24px;
+            border-radius: 50px;
+            font-size: 14px;
+            font-weight: 600;
+            z-index: 9999;
+            box-shadow: 0 4px 20px rgba(255,68,170,0.4);
+            border: 1px solid rgba(255,255,255,0.3);
+            backdrop-filter: blur(5px);
+            animation: slideIn 0.3s ease-out;
+        `;
+        refMessage.innerHTML = `
+            <div style="display: flex; align-items: center; gap: 8px;">
+                <span>🧱</span>
+                <span>✨ Referred by <strong>${referrerWallet.slice(0,4)}...${referrerWallet.slice(-4)}</strong></span>
+            </div>
+        `;
+        
+        // Ajouter l'animation
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes slideIn {
+                from { transform: translateX(100%); opacity: 0; }
+                to { transform: translateX(0); opacity: 1; }
+            }
+        `;
+        document.head.appendChild(style);
+        
         document.body.appendChild(refMessage);
-        setTimeout(() => refMessage.remove(), 5000);
+        
+        // Faire disparaître après 5 secondes
+        setTimeout(() => {
+            refMessage.style.animation = 'slideOut 0.3s ease-out forwards';
+            setTimeout(() => refMessage.remove(), 300);
+        }, 5000);
+        
+        // Ajouter l'animation de sortie
+        const styleOut = document.createElement('style');
+        styleOut.textContent = `
+            @keyframes slideOut {
+                from { transform: translateX(0); opacity: 1; }
+                to { transform: translateX(100%); opacity: 0; }
+            }
+        `;
+        document.head.appendChild(styleOut);
     }
 })();
 </script>
+<!-- ===== FIN CAPTURE RÉFÉRENTS ===== -->
 </body>
 </html>
