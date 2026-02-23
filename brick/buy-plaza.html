@@ -655,7 +655,8 @@
                     twitter: twitter.value,
                     telegram: telegram.value,
                     discord: discord.value,
-                    website: website.value
+                    website: website.value,
+                    contract: contract
                 };
                 
                 // === RÉCUPÉRER LE RÉFÉRENT ===
@@ -670,14 +671,8 @@
                             wallet: publicKey,
                             message: message,
                             image_url: compressedImage,
-                            socials: {
-                                twitter: twitter.value,
-                                telegram: telegram.value,
-                                discord: discord.value,
-                                website: website.value,
-                                contract: contract
-                            },
-                            kind: 'plaza',
+                            socials: socialLinks,
+                            kind: 'plaza',  // ← LA COLONNE EXISTE MAINTENANT !
                             referred_by: referrerWallet
                         }
                     ]);
