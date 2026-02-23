@@ -639,7 +639,7 @@
             <a href="how-it-works.html">How it works</a>
             <a href="referrals.html">Referrals</a>
             <a href="daily.html">Daily</a>
-            
+            <a href="rules.html">Rules</a>
         </div>
         
         <div class="spacer"></div>
@@ -763,16 +763,32 @@
         </div>
     </div>
 
-    <!-- SCRIPT COMPTEUR (inchangé) -->
-    <script>
-        function updateBrickCount() {
-            const brickCount = 1;
+    <!-- SCRIPT COMPTEUR AVEC SUPABASE -->
+<script>
+    const SUPABASE_URL = "https://bmfuvkylkhjcfsiauzvb.supabase.co";
+    const SUPABASE_ANON = "sb_publishable_VuzUNoj1NnJk1BWSbVzJjQ_WABRhxDh";
+    const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON);
+
+    async function updateBrickCount() {
+        try {
+            const { count, error } = await supabaseClient
+                .from('bricks')
+                .select('*', { count: 'exact', head: true })
+                .or('kind.is.null,kind.eq.canvas');  // Compte seulement les Canvas
+            
+            const brickCount = count || 0;
             document.getElementById('total-bricks').textContent = brickCount;
             document.getElementById('remaining-bricks').textContent = 400 - brickCount;
+        } catch (e) {
+            console.warn('Erreur compteur:', e);
+            document.getElementById('total-bricks').textContent = '?';
+            document.getElementById('remaining-bricks').textContent = '?';
         }
-        updateBrickCount();
-        setInterval(updateBrickCount, 3000);
-    </script>
+    }
+    
+    updateBrickCount();
+    setInterval(updateBrickCount, 30000);
+</script>
 
     <!-- FOOTER HARMONISÉ -->
 <footer>
@@ -839,23 +855,74 @@
         }
     })();
 </script>
-    <!-- ===== CAPTURE UNIVERSELLE DES RÉFÉRENTS ===== -->
+<!-- ===== CAPTURE UNIVERSELLE DES RÉFÉRENTS ===== -->
 <script>
 (function() {
+    // Vérifier si un paramètre ref est présent dans l'URL
     const urlParams = new URLSearchParams(window.location.search);
     const referrerWallet = urlParams.get('ref');
     
     if (referrerWallet) {
+        // Sauvegarder dans localStorage
         localStorage.setItem('brick_referrer', referrerWallet);
-        console.log('✅ Référent détecté:', referrerWallet.slice(0,4) + '...' + referrerWallet.slice(-4));
+        console.log('✅ Référent détecté et sauvegardé:', referrerWallet.slice(0,4) + '...' + referrerWallet.slice(-4));
         
+        // Afficher un message de confirmation discret
         const refMessage = document.createElement('div');
-        refMessage.style.cssText = 'position: fixed; bottom: 20px; right: 20px; background: #FF44AA; color: white; padding: 12px 24px; border-radius: 50px; font-size: 14px; z-index: 9999; box-shadow: 0 4px 20px rgba(255,68,170,0.4);';
-        refMessage.innerHTML = `✨ Referred by ${referrerWallet.slice(0,4)}...${referrerWallet.slice(-4)}`;
+        refMessage.style.cssText = `
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #FF44AA;
+            color: white;
+            padding: 12px 24px;
+            border-radius: 50px;
+            font-size: 14px;
+            font-weight: 600;
+            z-index: 9999;
+            box-shadow: 0 4px 20px rgba(255,68,170,0.4);
+            border: 1px solid rgba(255,255,255,0.3);
+            backdrop-filter: blur(5px);
+            animation: slideIn 0.3s ease-out;
+        `;
+        refMessage.innerHTML = `
+            <div style="display: flex; align-items: center; gap: 8px;">
+                <span>🧱</span>
+                <span>✨ Referred by <strong>${referrerWallet.slice(0,4)}...${referrerWallet.slice(-4)}</strong></span>
+            </div>
+        `;
+        
+        // Ajouter l'animation
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes slideIn {
+                from { transform: translateX(100%); opacity: 0; }
+                to { transform: translateX(0); opacity: 1; }
+            }
+        `;
+        document.head.appendChild(style);
+        
         document.body.appendChild(refMessage);
-        setTimeout(() => refMessage.remove(), 5000);
+        
+        // Faire disparaître après 5 secondes
+        setTimeout(() => {
+            refMessage.style.animation = 'slideOut 0.3s ease-out forwards';
+            setTimeout(() => refMessage.remove(), 300);
+        }, 5000);
+        
+        // Ajouter l'animation de sortie
+        const styleOut = document.createElement('style');
+        styleOut.textContent = `
+            @keyframes slideOut {
+                from { transform: translateX(0); opacity: 1; }
+                to { transform: translateX(100%); opacity: 0; }
+            }
+        `;
+        document.head.appendChild(styleOut);
     }
 })();
 </script>
+<!-- ===== FIN CAPTURE RÉFÉRENTS ===== -->
+
 </body>
 </html>
