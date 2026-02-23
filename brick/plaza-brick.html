@@ -1,1 +1,362 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🪙 Plaza Brick · $BRICK</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧱</text></svg>">
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Supabase -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(135deg, #f0fff5, white);
+            min-height: 100vh;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .container {
+            max-width: 600px;
+            width: 100%;
+            background: white;
+            border-radius: 32px;
+            padding: 40px;
+            box-shadow: 0 20px 60px #00aa8860;
+            border: 2px solid #00aa88;
+            text-align: center;
+        }
+        
+        .back-link {
+            display: inline-block;
+            margin-bottom: 30px;
+            color: #666;
+            text-decoration: none;
+            font-size: 16px;
+        }
+        
+        .back-link:hover {
+            color: #00aa88;
+        }
+        
+        .brick-header {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+        
+        .brick-icon {
+            font-size: 64px;
+        }
+        
+        h1 {
+            color: #00aa88;
+            font-size: 48px;
+            margin: 0;
+        }
+        
+        .cell-display {
+            font-size: 72px;
+            font-weight: 800;
+            color: #00aa88;
+            margin-bottom: 30px;
+            text-shadow: 0 0 20px #00aa8860;
+        }
+        
+        .brick-image {
+            width: 200px;
+            height: 200px;
+            border-radius: 20px;
+            object-fit: cover;
+            margin: 20px auto;
+            border: 3px solid #00aa88;
+            box-shadow: 0 10px 30px #00aa8860;
+        }
+        
+        .message-box {
+            background: #f0fff5;
+            border: 2px solid #00aa88;
+            border-radius: 20px;
+            padding: 25px;
+            margin: 25px 0;
+            font-size: 18px;
+            line-height: 1.6;
+            color: #1e293b;
+            text-align: left;
+        }
+        
+        .wallet-info {
+            background: #f8fafc;
+            border: 1px solid #00aa8820;
+            border-radius: 16px;
+            padding: 15px;
+            margin: 15px 0;
+            font-family: monospace;
+            color: #00aa88;
+        }
+        
+        .socials {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+            margin: 20px 0;
+        }
+        
+        .social-link {
+            display: inline-block;
+            background: #f0fff5;
+            padding: 10px 20px;
+            border-radius: 40px;
+            text-decoration: none;
+            color: #00aa88;
+            border: 2px solid #00aa88;
+            font-weight: 600;
+            transition: all 0.2s;
+        }
+        
+        .social-link:hover {
+            background: #00aa88;
+            color: white;
+        }
+        
+        .like-section {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            margin: 25px 0;
+        }
+        
+        .like-btn {
+            background: white;
+            border: 2px solid #00aa88;
+            color: #00aa88;
+            padding: 12px 30px;
+            border-radius: 40px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .like-btn:hover {
+            background: #00aa88;
+            color: white;
+        }
+        
+        .like-btn.liked {
+            background: #00aa88;
+            color: white;
+        }
+        
+        .like-count {
+            font-size: 20px;
+            color: #00aa88;
+            font-weight: 700;
+        }
+        
+        .error-state {
+            text-align: center;
+        }
+        
+        .error-emoji {
+            font-size: 80px;
+            margin: 30px 0;
+        }
+        
+        .error-message {
+            color: #00aa88;
+            font-size: 24px;
+            font-weight: 700;
+            margin: 20px 0;
+        }
+        
+        .claim-button {
+            display: inline-block;
+            background: #00aa88;
+            color: white;
+            padding: 15px 40px;
+            border-radius: 60px;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 18px;
+            margin: 20px 0;
+        }
+        
+        .claim-button:hover {
+            background: #00cc99;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px #00aa8860;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="plaza.html" class="back-link">← Back to Plaza</a>
+        
+        <div id="brick-content">
+            <!-- Le contenu sera injecté par JavaScript -->
+        </div>
+    </div>
 
+    <script>
+        const SUPABASE_URL = "https://bmfuvkylkhjcfsiauzvb.supabase.co";
+        const SUPABASE_ANON = "sb_publishable_VuzUNoj1NnJk1BWSbVzJjQ_WABRhxDh";
+        const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON);
+
+        const urlParams = new URLSearchParams(window.location.search);
+        const cell = urlParams.get('cell');
+
+        async function loadBrick() {
+            const container = document.getElementById('brick-content');
+            
+            if (!cell) {
+                container.innerHTML = `
+                    <div class="error-state">
+                        <div class="error-emoji">❓</div>
+                        <div class="error-message">No cell specified</div>
+                        <a href="plaza.html" class="claim-button">← Back to Plaza</a>
+                    </div>
+                `;
+                return;
+            }
+
+            try {
+                // Chercher la brique Plaza dans Supabase
+                const { data, error } = await supabaseClient
+                    .from('bricks')
+                    .select('*')
+                    .eq('cell', cell)
+                    .eq('kind', 'plaza')
+                    .single();
+
+                if (error || !data) {
+                    // Brique non trouvée
+                    container.innerHTML = `
+                        <div class="error-state">
+                            <div class="error-emoji">😢</div>
+                            <div class="error-message">Brick ${cell} not found</div>
+                            <p style="color: #666; margin: 20px 0;">This plaza brick hasn't been claimed yet!</p>
+                            <a href="plaza.html?cell=${cell}" class="claim-button">🪙 Claim this brick</a>
+                            <div style="margin-top: 20px;">
+                                <a href="plaza.html" class="back-link">← Back to Plaza</a>
+                            </div>
+                        </div>
+                    `;
+                    return;
+                }
+
+                // Afficher la brique
+                const walletShort = data.wallet ? `${data.wallet.slice(0,4)}...${data.wallet.slice(-4)}` : 'Unknown';
+                
+                // Générer les liens sociaux
+                let socialLinks = '';
+                if (data.socials) {
+                    const socials = data.socials;
+                    if (socials.contract) {
+                        socialLinks += `<a href="https://solscan.io/token/${socials.contract}" target="_blank" class="social-link">📋 Contract</a>`;
+                    }
+                    if (socials.twitter) {
+                        socialLinks += `<a href="${socials.twitter}" target="_blank" class="social-link">🐦 Twitter</a>`;
+                    }
+                    if (socials.telegram) {
+                        socialLinks += `<a href="${socials.telegram}" target="_blank" class="social-link">✈️ Telegram</a>`;
+                    }
+                    if (socials.website) {
+                        socialLinks += `<a href="${socials.website}" target="_blank" class="social-link">🌍 Website</a>`;
+                    }
+                }
+
+                // Système de likes
+                const likesKey = 'likes_' + cell;
+                let likesData = JSON.parse(localStorage.getItem(likesKey)) || { count: 0, likers: [] };
+
+                container.innerHTML = `
+                    <div class="brick-header">
+                        <span class="brick-icon">🪙</span>
+                        <h1>PLAZA BRICK</h1>
+                    </div>
+                    
+                    <div class="cell-display">${cell}</div>
+                    
+                    <img src="${data.image_url || 'https://placehold.co/200x200/00aa88/FFFFFF?text=🪙'}" 
+                         class="brick-image" 
+                         alt="Brick ${cell}"
+                         onerror="this.src='https://placehold.co/200x200/00aa88/FFFFFF?text=🪙'">
+                    
+                    <div class="wallet-info">
+                        Owner: ${walletShort}
+                    </div>
+                    
+                    <div class="message-box">
+                        ${data.message || 'No message'}
+                    </div>
+                    
+                    <div class="socials">
+                        ${socialLinks}
+                    </div>
+                    
+                    <div class="like-section">
+                        <span class="like-count" id="like-count">❤️ ${likesData.count}</span>
+                        <button class="like-btn" id="like-btn">❤️ LIKE</button>
+                    </div>
+                `;
+
+                // Gestionnaire de like
+                const likeBtn = document.getElementById('like-btn');
+                const likeCount = document.getElementById('like-count');
+                
+                likeBtn.addEventListener('click', function() {
+                    likesData.count++;
+                    likesData.likers.push('anonymous'); // Simple pour l'instant
+                    localStorage.setItem(likesKey, JSON.stringify(likesData));
+                    likeCount.innerHTML = `❤️ ${likesData.count}`;
+                    this.classList.add('liked');
+                    this.disabled = true;
+                });
+
+            } catch (e) {
+                console.error('Error:', e);
+                container.innerHTML = `
+                    <div class="error-state">
+                        <div class="error-emoji">⚠️</div>
+                        <div class="error-message">Error loading brick</div>
+                        <a href="plaza.html" class="claim-button">← Back to Plaza</a>
+                    </div>
+                `;
+            }
+        }
+
+        loadBrick();
+    </script>
+    <!-- ===== CAPTURE UNIVERSELLE DES RÉFÉRENTS ===== -->
+    <script>
+    (function() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const referrerWallet = urlParams.get('ref');
+        
+        if (referrerWallet) {
+            localStorage.setItem('brick_referrer', referrerWallet);
+            console.log('✅ Référent détecté:', referrerWallet.slice(0,4) + '...' + referrerWallet.slice(-4));
+            
+            const refMessage = document.createElement('div');
+            refMessage.style.cssText = 'position: fixed; bottom: 20px; right: 20px; background: #00aa88; color: white; padding: 12px 24px; border-radius: 50px; font-size: 14px; z-index: 9999; box-shadow: 0 4px 20px rgba(0,170,136,0.4);';
+            refMessage.innerHTML = `🪙 Referred by ${referrerWallet.slice(0,4)}...${referrerWallet.slice(-4)}`;
+            document.body.appendChild(refMessage);
+            setTimeout(() => refMessage.remove(), 5000);
+        }
+    })();
+    </script>
+</body>
+</html>
