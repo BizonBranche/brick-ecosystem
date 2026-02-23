@@ -21,7 +21,7 @@
             padding: 20px;
         }
 
-        /* ===== STICKY MENU (copié de index) ===== */
+        /* ===== STICKY MENU ===== */
         .nav {
             background: white;
             backdrop-filter: blur(10px);
@@ -122,7 +122,7 @@
             margin: 0 auto;
         }
 
-        /* ===== HEADER AVEC GROS LOGO JUICY (comme index) ===== */
+        /* ===== HEADER ===== */
         .header {
             text-align: center;
             padding: 40px 0 20px;
@@ -137,7 +137,6 @@
             flex-wrap: wrap;
         }
 
-        /* Gros logo juicy (90px) */
         .header-juicy-cube {
             width: 90px;
             height: 90px;
@@ -268,7 +267,7 @@
             margin: 0;
         }
 
-        /* Daily Cards - Vertical */
+        /* Daily Cards */
         .daily-card {
             background: white;
             border-radius: 24px;
@@ -314,6 +313,12 @@
             margin: 20px auto;
             display: block;
             box-shadow: 0 10px 30px rgba(255,68,170,0.2);
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .daily-card img:hover {
+            transform: scale(1.02);
         }
 
         /* Like system */
@@ -342,6 +347,13 @@
         .like-btn:hover, .dislike-btn:hover {
             background: #FF44AA;
             color: white;
+        }
+
+        .like-btn.liked {
+            background: #FF44AA;
+            color: white;
+            opacity: 1;
+            pointer-events: none;
         }
 
         .like-count, .dislike-count {
@@ -421,6 +433,31 @@
             gap: 5px;
             color: #FF44AA;
             font-weight: 600;
+            margin: 10px 0;
+        }
+
+        .nft-like-btn {
+            background: white;
+            border: 2px solid #FF44AA;
+            color: #FF44AA;
+            padding: 8px 15px;
+            border-radius: 40px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 10px;
+            width: 100%;
+            transition: all 0.2s;
+        }
+
+        .nft-like-btn:hover {
+            background: #FF44AA;
+            color: white;
+        }
+
+        .nft-like-btn.liked {
+            background: #FF44AA;
+            color: white;
+            pointer-events: none;
         }
 
         .collections-links {
@@ -472,6 +509,67 @@
             color: #666;
         }
 
+        /* Language selector */
+        .language-selector {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin: 20px 0 30px;
+            flex-wrap: wrap;
+        }
+
+        .lang-btn {
+            background: white;
+            border: 2px solid #FF44AA;
+            color: #FF44AA;
+            padding: 8px 20px;
+            border-radius: 40px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.2s;
+        }
+
+        .lang-btn:hover {
+            background: #FF44AA;
+            color: white;
+        }
+
+        .lang-btn.active {
+            background: #FF44AA;
+            color: white;
+        }
+
+        /* Photo Modal */
+        .photo-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.95);
+            z-index: 3000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .photo-modal img {
+            max-width: 90%;
+            max-height: 90%;
+            border-radius: 20px;
+            border: 3px solid #FF44AA;
+            box-shadow: 0 0 50px #FF44AA;
+        }
+
+        .photo-modal-close {
+            position: absolute;
+            top: 20px;
+            right: 30px;
+            color: white;
+            font-size: 40px;
+            cursor: pointer;
+        }
+
         /* Footer */
         footer {
             margin-top: 60px;
@@ -504,7 +602,7 @@
             font-size: 14px;
         }
 
-        /* ===== LOGO DU MENU (mini cube) ===== */
+        /* Logo du menu */
         .juicy-cube-mini {
             width: 45px;
             height: 45px;
@@ -587,12 +685,19 @@
             .gradient-title {
                 font-size: 48px;
             }
+            .language-selector {
+                flex-direction: column;
+                align-items: center;
+            }
+            .lang-btn {
+                width: 200px;
+            }
         }
     </style>
 </head>
 <body>
 
-<!-- ===== STICKY MENU AVEC LOGO JUICY (comme index) ===== -->
+<!-- ===== STICKY MENU ===== -->
 <div class="nav">
     <div class="nav-inner">
         <div class="brand">
@@ -614,7 +719,6 @@
             <a href="how-it-works.html">How it works</a>
             <a href="referrals.html">Referrals</a>
             <a href="daily.html" class="active">Daily</a>
-        
         </div>
         
         <div class="spacer"></div>
@@ -631,7 +735,7 @@
 </div>
 
 <div class="container">
-    <!-- Header avec GROS LOGO JUICY (remplace brickpost.webm) -->
+    <!-- Header -->
     <div class="header">
         <div class="logo-title-container">
             <div class="header-juicy-cube">
@@ -654,11 +758,19 @@
         </div>
     </div>
 
+    <!-- Language Selector pour le poème -->
+    <div class="language-selector">
+        <button class="lang-btn active" onclick="setPoemLanguage('en')">🇬🇧 English</button>
+        <button class="lang-btn" onclick="setPoemLanguage('fr')">🇫🇷 Français</button>
+        <button class="lang-btn" onclick="setPoemLanguage('es')">🇪🇸 Español</button>
+        <button class="lang-btn" onclick="setPoemLanguage('de')">🇩🇪 Deutsch</button>
+    </div>
+
     <!-- ========== POEM OF THE DAY ========== -->
-    <div class="daily-card">
+    <div class="daily-card" id="poem-card">
         <div class="daily-icon">📝</div>
         <h2>Poem of the Day</h2>
-        <p>
+        <p id="poem-text">
             "Brick by brick we build,<br>
             In code we trust,<br>
             Our words forever sealed,<br>
@@ -666,13 +778,12 @@
         </p>
         <div style="color: #888; margin-bottom: 20px;">— Boub</div>
         
-        <!-- Like system for poem -->
         <div class="like-system">
-            <div class="like-btn" onclick="this.querySelector('.like-count').textContent = parseInt(this.querySelector('.like-count').textContent)+1">
+            <div class="like-btn" id="poem-like">
                 <span>❤️</span>
-                <span class="like-count">24</span>
+                <span class="like-count" id="poem-like-count">24</span>
             </div>
-            <div class="dislike-btn" onclick="this.querySelector('.dislike-count').textContent = parseInt(this.querySelector('.dislike-count').textContent)+1">
+            <div class="dislike-btn">
                 <span>👎</span>
                 <span class="dislike-count">3</span>
             </div>
@@ -697,11 +808,11 @@
         <p style="font-size:16px; color:#666; margin:10px 0;">"Jack Parow - Cooler as Ekke"</p>
         
         <div class="like-system">
-            <div class="like-btn" onclick="this.querySelector('.like-count').textContent = parseInt(this.querySelector('.like-count').textContent)+1">
+            <div class="like-btn" id="video-like">
                 <span>❤️</span>
-                <span class="like-count">42</span>
+                <span class="like-count" id="video-like-count">42</span>
             </div>
-            <div class="dislike-btn" onclick="this.querySelector('.dislike-count').textContent = parseInt(this.querySelector('.dislike-count').textContent)+1">
+            <div class="dislike-btn">
                 <span>👎</span>
                 <span class="dislike-count">2</span>
             </div>
@@ -712,19 +823,25 @@
     <div class="daily-card">
         <div class="daily-icon">📸</div>
         <h2>Photo of the Day</h2>
-        <img src="images\picsofday\$BrickTeam1.webp" alt="Crypto Lady" style="width:100%; max-width:500px; border-radius:16px; margin:20px auto; display:block;">
+        <img src="images\picsofday\$BrickTeam1.webp" alt="Crypto Lady" id="daily-photo" style="cursor: pointer;">
         <p style="font-size:16px; color:#666; margin:10px 0;">"Fly with us" · $Brick.</p>
         
         <div class="like-system">
-            <div class="like-btn" onclick="this.querySelector('.like-count').textContent = parseInt(this.querySelector('.like-count').textContent)+1">
+            <div class="like-btn" id="photo-like">
                 <span>❤️</span>
-                <span class="like-count">18</span>
+                <span class="like-count" id="photo-like-count">18</span>
             </div>
-            <div class="dislike-btn" onclick="this.querySelector('.dislike-count').textContent = parseInt(this.querySelector('.dislike-count').textContent)+1">
+            <div class="dislike-btn">
                 <span>👎</span>
                 <span class="dislike-count">1</span>
             </div>
         </div>
+    </div>
+
+    <!-- Modal pour la photo -->
+    <div id="photoModal" class="photo-modal">
+        <span class="photo-modal-close">&times;</span>
+        <img id="modal-photo-img" src="">
     </div>
 
     <!-- ========== STATS SECTION ========== -->
@@ -745,7 +862,7 @@
             <div class="stat-icon">🔥</div>
             <h3>Community</h3>
             <p>Telegram: @brick_community</p>
-            <p>X: @TokenForgeApp</p>
+            <p>X: @BRICK476222</p>
         </div>
     </div>
 
@@ -757,9 +874,7 @@
         </div>
         <p style="color: #666; margin-bottom: 30px;">Hand-picked NFT gems from the community</p>
 
-        <!-- NFT GRID -->
         <div class="nft-grid">
-            
             <!-- NFT 1 - CLAIRE FLY -->
             <div class="nft-card">
                 <img src="images/nft/clairefly.webp" alt="Claire Fly">
@@ -771,8 +886,9 @@
                     </div>
                     <a href="https://og.rarible.com/token/0xd07dc4262bcdbf85190c01c996b4c06a461d2430:91333" target="_blank" class="nft-btn">💰 Bet on Rarible</a>
                     <div class="nft-likes">
-                        <span>❤️</span> <span>0 likes</span>
+                        <span>❤️</span> <span id="nft1-like">0</span>
                     </div>
+                    <button class="nft-like-btn" data-nft="1">❤️ LIKE</button>
                 </div>
             </div>
 
@@ -787,8 +903,9 @@
                     </div>
                     <a href="https://og.rarible.com/token/0x60f80121c31a0d46b5279700f9df786054aa5ee5:74731" target="_blank" class="nft-btn">💰 Bet on Rarible</a>
                     <div class="nft-likes">
-                        <span>❤️</span> <span>0 likes</span>
+                        <span>❤️</span> <span id="nft2-like">0</span>
                     </div>
+                    <button class="nft-like-btn" data-nft="2">❤️ LIKE</button>
                 </div>
             </div>
 
@@ -803,13 +920,13 @@
                     </div>
                     <a href="https://og.rarible.com/token/0x60f80121c31a0d46b5279700f9df786054aa5ee5:74778" target="_blank" class="nft-btn">💰 Bet on Rarible</a>
                     <div class="nft-likes">
-                        <span>❤️</span> <span>0 likes</span>
+                        <span>❤️</span> <span id="nft3-like">0</span>
                     </div>
+                    <button class="nft-like-btn" data-nft="3">❤️ LIKE</button>
                 </div>
             </div>
         </div>
 
-        <!-- LIENS VERS GALLERIES COMPLÈTES -->
         <div class="collections-links">
             <p>📁 Explore full collections:</p>
             <div>
@@ -828,32 +945,32 @@
         <a href="plaza.html" style="display: inline-block; background: transparent; border: 2px solid #FF44AA; color: #FF44AA; padding: 15px 40px; border-radius: 40px; text-decoration: none; font-weight: 700; font-size: 18px; margin: 0 10px;">🪙 Plaza · 0.5 SOL</a>
     </div>
 
-   <!-- FOOTER HARMONISÉ -->
-<footer>
-    <div class="footer-links">
-        <a href="index.html">🧱 Home</a>
-        <a href="canvas.html">🎨 Canvas</a>
-        <a href="plaza.html">🪙 Plaza</a>
-        <a href="eternal-moments.html">✨ Eternal</a>
-        <a href="how-it-works.html">📚 How it works</a>
-        <a href="tokenomics.html">📊 Tokenomics</a>
-        <a href="whitepaper.html">📄 Whitepaper</a>
-        <a href="rules.html">⚖️ Rules</a>
-        <a href="daily.html">📅 Daily</a>
-        <a href="referrals.html">🤝 Referrals</a>
-        <a href="https://x.com/BRICK476222" target="_blank">🐦 BRICK on X</a>
-        <a href="https://t.me/brick_fusion_news" target="_blank">📢 Telegram News</a>
-        <a href="https://t.me/brick_community" target="_blank">💬 Telegram Chat</a>
-        <a href="mailto:sycomore.crypto+brick@gmail.com">📧 Email BRICK</a>
-    </div>
-    <div class="footer-copyright">
-        🧱 BRICK · The immortal meme coin · Built on Solana · 2026
-    </div>
-</footer>
+    <!-- FOOTER -->
+    <footer>
+        <div class="footer-links">
+            <a href="index.html">🧱 Home</a>
+            <a href="canvas.html">🎨 Canvas</a>
+            <a href="plaza.html">🪙 Plaza</a>
+            <a href="eternal-moments.html">✨ Eternal</a>
+            <a href="how-it-works.html">📚 How it works</a>
+            <a href="tokenomics.html">📊 Tokenomics</a>
+            <a href="whitepaper.html">📄 Whitepaper</a>
+            <a href="rules.html">⚖️ Rules</a>
+            <a href="daily.html">📅 Daily</a>
+            <a href="referrals.html">🤝 Referrals</a>
+            <a href="https://x.com/BRICK476222" target="_blank">🐦 BRICK on X</a>
+            <a href="https://t.me/brick_fusion_news" target="_blank">📢 Telegram News</a>
+            <a href="https://t.me/brick_community" target="_blank">💬 Telegram Chat</a>
+            <a href="mailto:sycomore.crypto+brick@gmail.com">📧 Email BRICK</a>
+        </div>
+        <div class="footer-copyright">
+            🧱 BRICK · The immortal meme coin · Built on Solana · 2026
+        </div>
+    </footer>
 </div>
 
 <script>
-    // Simple wallet connect for demo
+    // Wallet connect
     const whoamiNav = document.getElementById('whoamiNav');
     
     window.connectWallet = async function() {
@@ -872,6 +989,171 @@
         }
     };
 
+    // ===== SYSTÈME DE LIKES COMPLET =====
+    document.addEventListener('DOMContentLoaded', function() {
+        // Initialiser tous les likes
+        initAllLikes();
+        
+        // Configurer les événements
+        setupDailyLikes();
+        setupNFTLikes();
+        setupPhotoZoom();
+        
+        // Charger la langue préférée
+        const savedLang = localStorage.getItem('preferredLanguage') || 'en';
+        setPoemLanguage(savedLang);
+        highlightActiveLang(savedLang);
+    });
+
+    function initAllLikes() {
+        const likeItems = [
+            { id: 'poem', default: 24 },
+            { id: 'video', default: 42 },
+            { id: 'photo', default: 18 },
+            { id: 'nft1', default: 0 },
+            { id: 'nft2', default: 0 },
+            { id: 'nft3', default: 0 }
+        ];
+        
+        likeItems.forEach(item => {
+            const key = `like_${item.id}`;
+            if (!localStorage.getItem(key)) {
+                localStorage.setItem(key, item.default.toString());
+            }
+        });
+        
+        // Mettre à jour les affichages
+        document.getElementById('poem-like-count').textContent = localStorage.getItem('like_poem');
+        document.getElementById('video-like-count').textContent = localStorage.getItem('like_video');
+        document.getElementById('photo-like-count').textContent = localStorage.getItem('like_photo');
+        document.getElementById('nft1-like').textContent = localStorage.getItem('like_nft1');
+        document.getElementById('nft2-like').textContent = localStorage.getItem('like_nft2');
+        document.getElementById('nft3-like').textContent = localStorage.getItem('like_nft3');
+    }
+
+    function setupDailyLikes() {
+        // Like poème
+        document.getElementById('poem-like').addEventListener('click', function(e) {
+            e.preventDefault();
+            if (sessionStorage.getItem('liked_poem')) {
+                alert('You already liked this poem!');
+                return;
+            }
+            let current = parseInt(localStorage.getItem('like_poem'));
+            current++;
+            localStorage.setItem('like_poem', current);
+            document.getElementById('poem-like-count').textContent = current;
+            sessionStorage.setItem('liked_poem', 'true');
+            this.classList.add('liked');
+        });
+
+        // Like vidéo
+        document.getElementById('video-like').addEventListener('click', function(e) {
+            e.preventDefault();
+            if (sessionStorage.getItem('liked_video')) {
+                alert('You already liked this video!');
+                return;
+            }
+            let current = parseInt(localStorage.getItem('like_video'));
+            current++;
+            localStorage.setItem('like_video', current);
+            document.getElementById('video-like-count').textContent = current;
+            sessionStorage.setItem('liked_video', 'true');
+            this.classList.add('liked');
+        });
+
+        // Like photo
+        document.getElementById('photo-like').addEventListener('click', function(e) {
+            e.preventDefault();
+            if (sessionStorage.getItem('liked_photo')) {
+                alert('You already liked this photo!');
+                return;
+            }
+            let current = parseInt(localStorage.getItem('like_photo'));
+            current++;
+            localStorage.setItem('like_photo', current);
+            document.getElementById('photo-like-count').textContent = current;
+            sessionStorage.setItem('liked_photo', 'true');
+            this.classList.add('liked');
+        });
+    }
+
+    function setupNFTLikes() {
+        document.querySelectorAll('.nft-like-btn').forEach(btn => {
+            btn.addEventListener('click', function(e) {
+                e.preventDefault();
+                const nftId = this.getAttribute('data-nft');
+                const sessionKey = `liked_nft${nftId}`;
+                
+                if (sessionStorage.getItem(sessionKey)) {
+                    alert('You already liked this NFT!');
+                    return;
+                }
+                
+                let current = parseInt(localStorage.getItem(`like_nft${nftId}`));
+                current++;
+                localStorage.setItem(`like_nft${nftId}`, current);
+                document.getElementById(`nft${nftId}-like`).textContent = current;
+                sessionStorage.setItem(sessionKey, 'true');
+                
+                this.classList.add('liked');
+                this.textContent = '❤️ LIKED';
+            });
+        });
+    }
+
+    function setupPhotoZoom() {
+        const photo = document.getElementById('daily-photo');
+        const modal = document.getElementById('photoModal');
+        const modalImg = document.getElementById('modal-photo-img');
+        const closeBtn = document.querySelector('.photo-modal-close');
+
+        photo.addEventListener('click', () => {
+            modalImg.src = photo.src;
+            modal.style.display = 'flex';
+        });
+
+        closeBtn.addEventListener('click', () => {
+            modal.style.display = 'none';
+        });
+
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) {
+                modal.style.display = 'none';
+            }
+        });
+    }
+
+    // ===== MULTI-LANGUES POUR LE POÈME =====
+    const poemTranslations = {
+        en: '"Brick by brick we build,<br>In code we trust,<br>Our words forever sealed,<br>In blockchain dust..." — Boub',
+        fr: '"Brique par brique nous bâtissons,<br>Dans le code nous avons foi,<br>Nos mots scellés à jamais,<br>Dans la poussière de la blockchain..." — Boub',
+        es: '"Ladrillo a ladrillo construimos,<br>En el código confiamos,<br>Nuestras palabras selladas para siempre,<br>En el polvo de blockchain..." — Boub',
+        de: '"Stein für Stein bauen wir,<br>Dem Code vertrauen wir,<br>Unsere Worte für immer versiegelt,<br>Im Blockchain-Staub..." — Boub'
+    };
+
+    function setPoemLanguage(lang) {
+        const poemElement = document.getElementById('poem-text');
+        if (poemElement && poemTranslations[lang]) {
+            poemElement.innerHTML = poemTranslations[lang];
+            localStorage.setItem('preferredLanguage', lang);
+            highlightActiveLang(lang);
+        }
+    }
+
+    function highlightActiveLang(lang) {
+        document.querySelectorAll('.lang-btn').forEach(btn => {
+            btn.classList.remove('active');
+            if (btn.textContent.includes(lang.toUpperCase()) || 
+                (lang === 'en' && btn.textContent.includes('English')) ||
+                (lang === 'fr' && btn.textContent.includes('Français')) ||
+                (lang === 'es' && btn.textContent.includes('Español')) ||
+                (lang === 'de' && btn.textContent.includes('Deutsch'))) {
+                btn.classList.add('active');
+            }
+        });
+    }
+
     // Check if already connected
     window.addEventListener('load', () => {
         const provider = window.phantom?.solana || window.solflare;
@@ -879,7 +1161,25 @@
             const pubkey = provider.publicKey.toString();
             whoamiNav.textContent = `Connected: ${pubkey.slice(0,4)}...${pubkey.slice(-4)}`;
         }
+        
+        // Vérifier les likes déjà effectués dans cette session
+        if (sessionStorage.getItem('liked_poem')) {
+            document.getElementById('poem-like').classList.add('liked');
+        }
+        if (sessionStorage.getItem('liked_video')) {
+            document.getElementById('video-like').classList.add('liked');
+        }
+        if (sessionStorage.getItem('liked_photo')) {
+            document.getElementById('photo-like').classList.add('liked');
+        }
+        document.querySelectorAll('.nft-like-btn').forEach((btn, index) => {
+            if (sessionStorage.getItem(`liked_nft${index+1}`)) {
+                btn.classList.add('liked');
+                btn.textContent = '❤️ LIKED';
+            }
+        });
     });
 </script>
+
 </body>
 </html>
