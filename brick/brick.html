@@ -4,6 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>🧱 BRICK - View a Brick</title>
+    
+    <!-- Supabase -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    
     <style>
         body {
             background: #f8fafc;
@@ -60,6 +64,17 @@
             text-decoration: none;
             font-weight: 600;
         }
+        .error-emoji { font-size: 48px; margin: 20px 0; }
+        .error-message { color: #FF44AA; font-size: 24px; margin: 20px 0; }
+        .claim-button {
+            display: inline-block;
+            background: #FF44AA;
+            color: white;
+            padding: 15px 30px;
+            border-radius: 60px;
+            text-decoration: none;
+            margin: 20px 0;
+        }
     </style>
 </head>
 <body>
@@ -71,48 +86,84 @@
     </div>
 
     <script>
+        const SUPABASE_URL = "https://bmfuvkylkhjcfsiauzvb.supabase.co";
+        const SUPABASE_ANON = "sb_publishable_VuzUNoj1NnJk1BWSbVzJjQ_WABRhxDh";
+        const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON);
+
         const urlParams = new URLSearchParams(window.location.search);
         const cell = urlParams.get('cell');
-        
-        if (!cell) {
-            window.location.href = 'canvas.html';
-        } else {
-            const brickData = localStorage.getItem('brick_' + cell);
-            if (!brickData) {
+
+        async function loadBrick() {
+            if (!cell) {
+                window.location.href = 'canvas.html';
+                return;
+            }
+
+            try {
+                // Chercher dans Supabase
+                const { data, error } = await supabaseClient
+                    .from('bricks')
+                    .select('*')
+                    .eq('cell', cell)
+                    .single();
+
+                if (error || !data) {
+                    // Brique non trouvée
+                    document.getElementById('content').innerHTML = `
+                        <div class="error-emoji">😢</div>
+                        <div class="error-message">Brick ${cell} not found</div>
+                        <p>This brick hasn't been claimed yet!</p>
+                        <a href="buy-original.html?cell=${cell}" class="claim-button">🧱 Claim this brick</a>
+                    `;
+                    return;
+                }
+
+                // Si c'est une brique Plaza, rediriger
+                if (data.kind === 'plaza') {
+                    window.location.href = `plaza-brick.html?cell=${cell}`;
+                    return;
+                }
+
+                // Afficher la brique Canvas
+                const walletShort = data.wallet ? `${data.wallet.slice(0,4)}...${data.wallet.slice(-4)}` : 'Unknown';
+                
                 document.getElementById('content').innerHTML = `
-                    <div style="font-size: 48px;">😢</div>
-                    <h2>Brick ${cell} not found</h2>
-                    <p>This brick hasn't been claimed yet!</p>
-                    <a href="buy-original.html?cell=${cell}" style="display: inline-block; background: #FF44AA; color: white; padding: 15px 30px; border-radius: 60px; text-decoration: none; margin: 20px 0;">🧱 Claim this brick</a>
+                    <img class="brick-image" src="${data.image_url || 'https://placehold.co/200x200/FF44AA/FFFFFF?text=🧱'}" 
+                         onerror="this.src='https://placehold.co/200x200/FF44AA/FFFFFF?text=🧱'">
+                    <div class="brick-cell">🧱 ${data.cell}</div>
+                    <div class="brick-message">"${data.message || 'No message'}"</div>
+                    <div class="brick-wallet">${walletShort}</div>
                 `;
-            } else {
-                const brick = JSON.parse(brickData);
+
+            } catch (e) {
+                console.error('Error:', e);
                 document.getElementById('content').innerHTML = `
-                    <img class="brick-image" src="${brick.image}" onerror="this.src='https://placehold.co/200x200/FF44AA/FFFFFF?text=🧱'">
-                    <div class="brick-cell">🧱 ${brick.cell}</div>
-                    <div class="brick-message">"${brick.message}"</div>
-                    <div class="brick-wallet">${brick.wallet.slice(0,4)}...${brick.wallet.slice(-4)}</div>
+                    <div class="error-emoji">⚠️</div>
+                    <div class="error-message">Error loading brick</div>
                 `;
             }
         }
+
+        loadBrick();
     </script>
+
     <!-- ===== CAPTURE UNIVERSELLE DES RÉFÉRENTS ===== -->
-<script>
-(function() {
-    const urlParams = new URLSearchParams(window.location.search);
-    const referrerWallet = urlParams.get('ref');
-    
-    if (referrerWallet) {
-        localStorage.setItem('brick_referrer', referrerWallet);
-        console.log('✅ Référent détecté:', referrerWallet.slice(0,4) + '...' + referrerWallet.slice(-4));
+    <script>
+    (function() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const referrerWallet = urlParams.get('ref');
         
-        const refMessage = document.createElement('div');
-        refMessage.style.cssText = 'position: fixed; bottom: 20px; right: 20px; background: #FF44AA; color: white; padding: 12px 24px; border-radius: 50px; font-size: 14px; z-index: 9999; box-shadow: 0 4px 20px rgba(255,68,170,0.4);';
-        refMessage.innerHTML = `✨ Referred by ${referrerWallet.slice(0,4)}...${referrerWallet.slice(-4)}`;
-        document.body.appendChild(refMessage);
-        setTimeout(() => refMessage.remove(), 5000);
-    }
-})();
-</script>
+        if (referrerWallet) {
+            localStorage.setItem('brick_referrer', referrerWallet);
+            console.log('✅ Référent détecté:', referrerWallet.slice(0,4) + '...' + referrerWallet.slice(-4));
+            
+            const refMessage = document.createElement('div');
+            refMessage.style.cssText = 'position: fixed; bottom: 20px; right: 20px; background: #FF44AA; color: white; padding: 12px 24px; border-radius: 50px; font-size: 14px; z-index: 9999; box-shadow: 0 4px 20px rgba(255,68,170,0.4);';
+            refMessage.innerHTML = `🧱 Referred by ${referrerWallet.slice(0,4)}...${referrerWallet.slice(-4)}`;
+            document.body.appendChild(refMessage);
+            setTimeout(() => refMessage.remove(), 5000);
+        }
+    })();
+    </script>
 </body>
 </html>
