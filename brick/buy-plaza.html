@@ -4,36 +4,52 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>🪙 List Your Token - $BRICK PLAZA</title>
- <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧱</text></svg>">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧱</text></svg>">
 
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Solana Web3 -->
     <script src="https://unpkg.com/@solana/web3.js@latest/lib/index.iife.js"></script>
+    
+    <!-- Supabase -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    
     <style>
-        /* Même style que buy-original.html mais avec couleurs plaza */
         * { margin: 0; padding: 0; box-sizing: border-box; }
+        
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: linear-gradient(135deg, #e8fff5, #fff);
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #f0fff5, #fff);
             min-height: 100vh;
             padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
+        
         .container {
             max-width: 600px;
-            margin: 0 auto;
+            width: 100%;
+            margin: 20px auto;
             background: white;
-            border-radius: 24px;
+            border-radius: 32px;
             padding: 32px;
-            box-shadow: 0 10px 40px #00aa8820;
-            border: 1px solid #00aa88;
+            box-shadow: 0 20px 40px #00aa8820;
+            border: 2px solid #00aa88;
         }
+        
         h1 {
-            font-size: 32px;
+            font-size: 36px;
             margin-bottom: 8px;
             display: flex;
             align-items: center;
             gap: 10px;
             color: #1a1a1a;
+            font-weight: 800;
         }
-        h1 span { font-size: 40px; }
+        h1 span { font-size: 44px; }
+        
         .subtitle {
             color: #666;
             margin-bottom: 32px;
@@ -42,45 +58,58 @@
             padding-left: 16px;
             background: #e8fff5;
             padding: 16px;
-            border-radius: 12px;
+            border-radius: 16px;
+            font-weight: 500;
         }
+        
         .wallet-section {
             background: #f8f9fa;
-            border-radius: 16px;
+            border-radius: 20px;
             padding: 20px;
             margin-bottom: 24px;
+            border: 1px solid #00aa8820;
         }
+        
         .wallet-button {
             background: #00aa88;
             color: white;
             border: none;
-            padding: 14px 28px;
-            border-radius: 40px;
+            padding: 16px 28px;
+            border-radius: 60px;
             font-size: 16px;
             font-weight: 600;
             cursor: pointer;
             width: 100%;
+            transition: all 0.2s;
+            font-family: 'Inter', sans-serif;
         }
+        
         .wallet-button:hover {
             background: #00cc99;
             transform: translateY(-2px);
             box-shadow: 0 10px 20px #00aa8860;
         }
+        
         .wallet-button.connected {
             background: white;
             color: #00aa88;
             border: 2px solid #00aa88;
         }
+        
         .wallet-info {
-            margin-top: 12px;
-            padding: 12px;
+            margin-top: 16px;
+            padding: 16px;
             background: white;
-            border-radius: 12px;
+            border-radius: 16px;
             font-size: 14px;
             display: none;
+            border: 1px solid #00aa8820;
         }
+        
         .wallet-info.show { display: block; }
-        .form-group { margin-bottom: 20px; }
+        
+        .form-group { margin-bottom: 24px; }
+        
         label {
             display: block;
             margin-bottom: 8px;
@@ -88,107 +117,246 @@
             color: #333;
             font-size: 14px;
         }
+        
         input, textarea {
             width: 100%;
-            padding: 14px;
+            padding: 16px;
             border: 2px solid #aaffdd;
-            border-radius: 12px;
+            border-radius: 16px;
             font-size: 15px;
             background: white;
+            font-family: 'Inter', sans-serif;
+            transition: all 0.2s;
         }
+        
         input:focus, textarea:focus {
             border-color: #00aa88;
             outline: none;
             box-shadow: 0 0 0 4px #00aa8820;
         }
+        
         .image-upload {
             border: 2px dashed #00aa88;
-            border-radius: 16px;
+            border-radius: 20px;
             padding: 32px;
             text-align: center;
             cursor: pointer;
             background: #fafafa;
+            transition: all 0.2s;
         }
+        
         .image-upload:hover {
             background: #e8fff5;
         }
+        
         .image-upload input { display: none; }
+        
         .image-preview {
             max-width: 100%;
             max-height: 200px;
             margin-top: 16px;
-            border-radius: 12px;
+            border-radius: 16px;
             display: none;
+            border: 2px solid #00aa88;
         }
-        .image-preview.show { display: block; }
+        
+        .image-preview.show { display: block; margin: 16px auto 0; }
+        
         .price-section {
             background: linear-gradient(135deg, #e8fff5, #d0ffe8);
-            border-radius: 16px;
-            padding: 20px;
+            border-radius: 20px;
+            padding: 24px;
             margin: 24px 0;
         }
+        
         .price {
-            font-size: 32px;
-            font-weight: 700;
+            font-size: 40px;
+            font-weight: 800;
             color: #00aa88;
             text-align: center;
         }
+        
         .pay-button {
             background: #00aa88;
             color: white;
             border: none;
-            padding: 18px;
-            border-radius: 40px;
-            font-size: 18px;
+            padding: 20px;
+            border-radius: 60px;
+            font-size: 20px;
             font-weight: 700;
             cursor: pointer;
             width: 100%;
-            margin-top: 16px;
+            transition: all 0.3s;
+            font-family: 'Inter', sans-serif;
         }
+        
         .pay-button:hover:not(:disabled) {
             background: #00cc99;
-            transform: translateY(-2px);
-            box-shadow: 0 10px 20px #00aa8860;
+            transform: translateY(-3px);
+            box-shadow: 0 15px 25px #00aa8860;
         }
+        
         .pay-button:disabled {
             background: #ccc;
             cursor: not-allowed;
+            opacity: 0.7;
         }
+        
         .back-link {
             display: inline-block;
             margin-top: 24px;
             color: #666;
             text-decoration: none;
+            font-weight: 500;
         }
+        
         .back-link:hover { color: #00aa88; }
+        
         .status {
             margin-top: 16px;
-            padding: 12px;
-            border-radius: 12px;
+            padding: 16px;
+            border-radius: 16px;
             display: none;
+            font-weight: 500;
         }
+        
         .status.show { display: block; }
+        
         .status.success {
             background: #e8fff5;
             color: #00aa88;
             border: 1px solid #00aa88;
         }
+        
         .status.error {
             background: #ffe6e6;
             color: #cc0000;
             border: 1px solid #ff9999;
         }
+        
         .status.info {
             background: #e6f3ff;
             color: #0066cc;
         }
+        
         .social-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
-            gap: 10px;
+            gap: 12px;
         }
+        
         .contract-input input {
             font-family: monospace;
+        }
+        
+        .char-counter {
+            text-align: right;
+            font-size: 12px;
+            color: #666;
+            margin-top: 6px;
+        }
+        
+        /* Popup success */
+        #success-popup {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            backdrop-filter: blur(8px);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .popup-content {
+            background: white;
+            max-width: 400px;
+            width: 90%;
+            padding: 40px 30px;
+            border-radius: 40px;
+            text-align: center;
+            border: 2px solid #00aa88;
+            box-shadow: 0 20px 60px #00aa8860;
+            animation: popIn 0.3s ease-out;
+        }
+        
+        @keyframes popIn {
+            0% { transform: scale(0.8); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        
+        .popup-icon {
+            font-size: 80px;
+            margin-bottom: 20px;
+        }
+        
+        .popup-content h2 {
+            color: #00aa88;
+            font-size: 32px;
+            margin: 15px 0;
+        }
+        
+        .popup-button {
+            display: block;
+            background: #00aa88;
+            color: white;
+            padding: 16px 30px;
+            border-radius: 60px;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 18px;
+            margin-top: 25px;
+            transition: all 0.2s;
+        }
+        
+        .popup-button:hover {
+            background: #00cc99;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px #00aa8860;
+        }
+        
+        /* Footer */
+        footer {
+            width: 100%;
+            max-width: 1200px;
+            margin-top: 40px;
+            padding: 30px 20px;
+            border-top: 2px solid #00aa8820;
+            text-align: center;
+        }
+        
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+        }
+        
+        .footer-links a {
+            color: #666;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: color 0.2s;
+        }
+        
+        .footer-links a:hover {
+            color: #00aa88;
+        }
+        
+        .footer-copyright {
+            color: #aaa;
+            font-size: 14px;
+        }
+        
+        @media (max-width: 600px) {
+            .social-grid {
+                grid-template-columns: 1fr;
+            }
         }
     </style>
 </head>
@@ -218,7 +386,7 @@
             <div class="form-group">
                 <label>📝 Description (max 200)</label>
                 <textarea id="message" maxlength="200" rows="3" placeholder="Describe your token..." required></textarea>
-                <div style="text-align:right; font-size:12px; color:#666; margin-top:4px">
+                <div class="char-counter">
                     <span id="char-count">0</span>/200
                 </div>
             </div>
@@ -258,18 +426,47 @@
         <a href="plaza.html" class="back-link">← Back to Plaza</a>
     </div>
 
-    <div id="success-popup" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); backdrop-filter: blur(5px); z-index: 1000; align-items: center; justify-content: center;">
-        <div style="background: white; max-width: 400px; padding: 40px; border-radius: 32px; text-align: center; border: 2px solid #00aa88;">
-            <div style="font-size: 80px;">🪙✨</div>
-            <h2 style="color: #00aa88; margin: 20px 0;">TOKEN LISTED!</h2>
-            <p>Pending moderation</p>
-            <a href="plaza.html" style="display: block; background: #00aa88; color: white; padding: 18px; border-radius: 40px; text-decoration: none; margin-top: 20px;">
+    <!-- Success Popup -->
+    <div id="success-popup">
+        <div class="popup-content">
+            <div class="popup-icon">🪙✨</div>
+            <h2>TOKEN LISTED!</h2>
+            <p style="color: #666; font-size: 16px; margin: 10px 0;">Pending moderation</p>
+            <a href="plaza.html" class="popup-button">
                 SEE ON PLAZA
             </a>
         </div>
     </div>
 
+    <!-- Footer harmonisé -->
+    <footer>
+        <div class="footer-links">
+            <a href="index.html">🧱 Home</a>
+            <a href="canvas.html">🎨 Canvas</a>
+            <a href="plaza.html">🪙 Plaza</a>
+            <a href="eternal-moments.html">✨ Eternal</a>
+            <a href="how-it-works.html">📚 How it works</a>
+            <a href="tokenomics.html">📊 Tokenomics</a>
+            <a href="whitepaper.html">📄 Whitepaper</a>
+            <a href="rules.html">⚖️ Rules</a>
+            <a href="daily.html">📅 Daily</a>
+            <a href="referrals.html">🤝 Referrals</a>
+            <a href="https://x.com/BRICK476222" target="_blank">🐦 BRICK on X</a>
+            <a href="https://t.me/brick_fusion_news" target="_blank">📢 Telegram News</a>
+            <a href="https://t.me/brick_community" target="_blank">💬 Telegram Chat</a>
+            <a href="mailto:sycomore.crypto+brick@gmail.com">📧 Email BRICK</a>
+        </div>
+        <div class="footer-copyright">
+            🧱 BRICK · The immortal meme coin · Built on Solana · 2026
+        </div>
+    </footer>
+
     <script>
+        // === CONFIGURATION SUPABASE ===
+        const SUPABASE_URL = "https://bmfuvkylkhjcfsiauzvb.supabase.co";
+        const SUPABASE_ANON = "sb_publishable_VuzUNoj1NnJk1BWSbVzJjQ_WABRhxDh";
+        const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON);
+
         const CONFIG = {
             TO_WALLET: '6ieEMVMJMjjFUW35KrjTdG6cEqy6mxRGZHLdKsXwp6r3'
         };
@@ -461,19 +658,33 @@
                     website: website.value
                 };
                 
-                const plazaData = {
-                    wallet: publicKey,
-                    contract: contract,
-                    message: message,
-                    socials: socialLinks,
-                    image: compressedImage,
-                    timestamp: Date.now(),
-                    signature: typeof signature === 'string' ? signature : signature.signature || signature.toString(),
-                    cell: cell
-                };
+                // === RÉCUPÉRER LE RÉFÉRENT ===
+                const referrerWallet = localStorage.getItem('brick_referrer');
                 
-                localStorage.setItem('plaza_' + cell, JSON.stringify(plazaData));
+                // === ENREGISTRER DANS SUPABASE (table bricks) ===
+                const { data, error } = await supabaseClient
+                    .from('bricks')
+                    .insert([
+                        {
+                            cell: cell,
+                            wallet: publicKey,
+                            message: message,
+                            image_url: compressedImage,
+                            socials: {
+                                twitter: twitter.value,
+                                telegram: telegram.value,
+                                discord: discord.value,
+                                website: website.value,
+                                contract: contract
+                            },
+                            kind: 'plaza',
+                            referred_by: referrerWallet
+                        }
+                    ]);
+
+                if (error) throw error;
                 
+                // Afficher le popup de succès
                 document.getElementById('success-popup').style.display = 'flex';
                 
             } catch (error) {
@@ -490,23 +701,25 @@
             statusDiv.className = 'status show ' + type;
         }
     </script>
+
     <!-- ===== CAPTURE UNIVERSELLE DES RÉFÉRENTS ===== -->
-<script>
-(function() {
-    const urlParams = new URLSearchParams(window.location.search);
-    const referrerWallet = urlParams.get('ref');
-    
-    if (referrerWallet) {
-        localStorage.setItem('brick_referrer', referrerWallet);
-        console.log('✅ Référent détecté:', referrerWallet.slice(0,4) + '...' + referrerWallet.slice(-4));
+    <script>
+    (function() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const referrerWallet = urlParams.get('ref');
         
-        const refMessage = document.createElement('div');
-        refMessage.style.cssText = 'position: fixed; bottom: 20px; right: 20px; background: #FF44AA; color: white; padding: 12px 24px; border-radius: 50px; font-size: 14px; z-index: 9999; box-shadow: 0 4px 20px rgba(255,68,170,0.4);';
-        refMessage.innerHTML = `✨ Referred by ${referrerWallet.slice(0,4)}...${referrerWallet.slice(-4)}`;
-        document.body.appendChild(refMessage);
-        setTimeout(() => refMessage.remove(), 5000);
-    }
-})();
-</script>
+        if (referrerWallet) {
+            localStorage.setItem('brick_referrer', referrerWallet);
+            console.log('✅ Référent détecté:', referrerWallet.slice(0,4) + '...' + referrerWallet.slice(-4));
+            
+            const refMessage = document.createElement('div');
+            refMessage.style.cssText = 'position: fixed; bottom: 20px; right: 20px; background: #00aa88; color: white; padding: 12px 24px; border-radius: 50px; font-size: 14px; z-index: 9999; box-shadow: 0 4px 20px rgba(0,170,136,0.4);';
+            refMessage.innerHTML = `🪙 Referred by ${referrerWallet.slice(0,4)}...${referrerWallet.slice(-4)}`;
+            document.body.appendChild(refMessage);
+            setTimeout(() => refMessage.remove(), 5000);
+        }
+    })();
+    </script>
+    <!-- ===== FIN CAPTURE RÉFÉRENTS ===== -->
 </body>
 </html>
