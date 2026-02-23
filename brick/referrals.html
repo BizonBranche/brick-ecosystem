@@ -11,6 +11,9 @@
     <!-- Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     
+    <!-- Supabase -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    
     <style>
         * {
             margin: 0;
@@ -274,19 +277,19 @@
 
         .gradient-title {
             font-size: 56px;
-            background: linear-gradient(135deg, #FF44AA, #B87CFF, #8b5cf6);
+            background: linear-gradient(135deg, #f97316, #FF44AA, #b87cff);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             font-weight: 800;
             letter-spacing: -1px;
             margin: 0;
             animation: titlePulse 3s infinite ease-in-out;
-            filter: drop-shadow(0 0 20px #ff44aa);
+            filter: drop-shadow(0 0 20px #f97316);
         }
 
         @keyframes titlePulse {
-            0%, 100% { filter: drop-shadow(0 0 10px #FF44AA); }
-            50% { filter: drop-shadow(0 0 30px #FF44AA) drop-shadow(0 0 60px #B87CFF); }
+            0%, 100% { filter: drop-shadow(0 0 10px #f97316); }
+            50% { filter: drop-shadow(0 0 30px #f97316) drop-shadow(0 0 60px #FF44AA); }
         }
 
         .page-header {
@@ -521,88 +524,6 @@
             color: white;
         }
 
-        /* ===== DASHBOARD KPI ===== */
-        .kpi-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 16px;
-            margin-bottom: 24px;
-        }
-
-        .kpi-card {
-            background: #f8fafc;
-            border: 2px solid #FF44AA20;
-            border-radius: 24px;
-            padding: 20px;
-        }
-
-        .kpi-label {
-            font-size: 14px;
-            color: #64748b;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            margin-bottom: 8px;
-        }
-
-        .kpi-value {
-            font-size: 36px;
-            font-weight: 800;
-            color: #FF44AA;
-            line-height: 1;
-        }
-
-        .kpi-unit {
-            font-size: 14px;
-            color: #64748b;
-            margin-left: 4px;
-        }
-
-        /* ===== ACTIVITY LIST ===== */
-        .activity-list {
-            background: #f8fafc;
-            border-radius: 24px;
-            padding: 16px;
-        }
-
-        .activity-item {
-            display: flex;
-            align-items: center;
-            gap: 16px;
-            padding: 16px 0;
-            border-bottom: 1px solid #FF44AA20;
-        }
-
-        .activity-item:last-child {
-            border-bottom: none;
-        }
-
-        .activity-icon {
-            width: 40px;
-            height: 40px;
-            background: #fff0f5;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 20px;
-        }
-
-        .activity-detail {
-            flex: 1;
-            font-size: 14px;
-        }
-
-        .activity-detail span {
-            color: #FF44AA;
-            font-weight: 600;
-        }
-
-        .activity-time {
-            font-size: 12px;
-            color: #94a3b8;
-        }
-
         /* ===== RULES SECTION ===== */
         .rules-grid {
             display: grid;
@@ -669,6 +590,157 @@
             line-height: 1.6;
         }
 
+        /* ===== NOUVEAU : DASHBOARD DOUBLE ===== */
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+            margin: 40px 0;
+        }
+
+        @media (max-width: 1000px) {
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .dashboard-canvas {
+            background: white;
+            border-radius: 32px;
+            padding: 28px;
+            border: 2px solid #FF44AA20;
+            box-shadow: 0 10px 30px rgba(255,68,170,0.1);
+        }
+
+        .dashboard-canvas h2 {
+            color: #FF44AA;
+            font-size: 24px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .dashboard-plaza {
+            background: white;
+            border-radius: 32px;
+            padding: 28px;
+            border: 2px solid #00aa8820;
+            box-shadow: 0 10px 30px rgba(0,170,136,0.1);
+        }
+
+        .dashboard-plaza h2 {
+            color: #00aa88;
+            font-size: 24px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .kpi-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .kpi-card {
+            background: #f8fafc;
+            border-radius: 20px;
+            padding: 20px;
+        }
+
+        .kpi-label {
+            font-size: 14px;
+            color: #64748b;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            margin-bottom: 8px;
+        }
+
+        .kpi-value {
+            font-size: 32px;
+            font-weight: 800;
+            line-height: 1;
+        }
+
+        .canvas-value {
+            color: #FF44AA;
+        }
+
+        .plaza-value {
+            color: #00aa88;
+        }
+
+        .kpi-unit {
+            font-size: 14px;
+            color: #64748b;
+            margin-left: 4px;
+        }
+
+        .activity-list {
+            background: #f8fafc;
+            border-radius: 20px;
+            padding: 16px;
+            margin-top: 20px;
+        }
+
+        .activity-item {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 12px 0;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .activity-item:last-child {
+            border-bottom: none;
+        }
+
+        .activity-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+        }
+
+        .canvas-icon {
+            background: #fff0f5;
+            color: #FF44AA;
+        }
+
+        .plaza-icon {
+            background: #e0fff5;
+            color: #00aa88;
+        }
+
+        .activity-detail {
+            flex: 1;
+            font-size: 14px;
+        }
+
+        .activity-detail span {
+            font-weight: 600;
+        }
+
+        .canvas-address {
+            color: #FF44AA;
+        }
+
+        .plaza-address {
+            color: #00aa88;
+        }
+
+        .activity-time {
+            font-size: 12px;
+            color: #94a3b8;
+        }
+
         /* ===== FOOTER ===== */
         footer {
             margin-top: 60px;
@@ -721,6 +793,9 @@
             .gradient-title {
                 font-size: 42px;
             }
+            .grid, .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
         }
     </style>
 </head>
@@ -748,7 +823,6 @@
             <a href="how-it-works.html">How it works</a>
             <a href="referrals.html" class="active">Referrals</a>
             <a href="daily.html">Daily</a>
-        
         </div>
         
         <div class="spacer"></div>
@@ -792,7 +866,7 @@
         </div>
     </div>
 
-    <!-- Main Grid -->
+    <!-- Main Grid (inchangé) -->
     <div class="grid">
         
         <!-- LEFT COLUMN -->
@@ -950,64 +1024,8 @@
             </div>
         </div>
 
-        <!-- RIGHT COLUMN: Dashboard + FAQ -->
+        <!-- RIGHT COLUMN: FAQ -->
         <div class="col-right">
-            
-            <!-- Dashboard Card -->
-            <div class="card card-glow">
-                <h2 class="title title-sm">📊 My Dashboard</h2>
-                
-                <div class="kpi-grid">
-                    <div class="kpi-card">
-                        <div class="kpi-label">💰 Total earnings</div>
-                        <div class="kpi-value" id="totalEarnings">0</div>
-                        <div class="kpi-unit">USDC</div>
-                    </div>
-                    
-                    <div class="kpi-card">
-                        <div class="kpi-label">👥 Active referrals</div>
-                        <div class="kpi-value" id="activeReferrals">0</div>
-                    </div>
-                    
-                    <div class="kpi-card">
-                        <div class="kpi-label">🔄 Conversions</div>
-                        <div class="kpi-value" id="totalConversions">0</div>
-                    </div>
-                    
-                    <div class="kpi-card">
-                        <div class="kpi-label">⏳ Pending</div>
-                        <div class="kpi-value" id="pendingEarnings">0</div>
-                        <div class="kpi-unit">USDC</div>
-                    </div>
-                </div>
-
-                <!-- Recent Activity -->
-                <h3 style="color: #FF44AA; margin: 20px 0 12px;">📋 Recent activity</h3>
-                <div class="activity-list" id="activityList">
-                    <div class="activity-item">
-                        <div class="activity-icon">🔄</div>
-                        <div class="activity-detail">
-                            <span>0x3f...a2</span> purchased for 50 USDC
-                        </div>
-                        <div class="activity-time">just now</div>
-                    </div>
-                    <div class="activity-item">
-                        <div class="activity-icon">🪙</div>
-                        <div class="activity-detail">
-                            <span>0x7b...1c</span> created a token
-                        </div>
-                        <div class="activity-time">2h ago</div>
-                    </div>
-                    <div class="activity-item">
-                        <div class="activity-icon">💧</div>
-                        <div class="activity-detail">
-                            <span>0x9d...4f</span> added liquidity
-                        </div>
-                        <div class="activity-time">5h ago</div>
-                    </div>
-                </div>
-            </div>
-
             <!-- FAQ Card -->
             <div class="card">
                 <h2 class="title title-sm">❓ Frequently Asked Questions</h2>
@@ -1040,50 +1058,93 @@
         </div>
     </div>
 
-   <!-- FOOTER HARMONISÉ -->
-<footer>
-    <div class="footer-links">
-        <a href="index.html">🧱 Home</a>
-        <a href="canvas.html">🎨 Canvas</a>
-        <a href="plaza.html">🪙 Plaza</a>
-        <a href="eternal-moments.html">✨ Eternal</a>
-        <a href="how-it-works.html">📚 How it works</a>
-        <a href="tokenomics.html">📊 Tokenomics</a>
-        <a href="whitepaper.html">📄 Whitepaper</a>
-        <a href="rules.html">⚖️ Rules</a>
-        <a href="daily.html">📅 Daily</a>
-        <a href="referrals.html">🤝 Referrals</a>
-        <a href="https://x.com/BRICK476222" target="_blank">🐦 BRICK on X</a>
-        <a href="https://t.me/brick_fusion_news" target="_blank">📢 Telegram News</a>
-        <a href="https://t.me/brick_community" target="_blank">💬 Telegram Chat</a>
-        <a href="mailto:sycomore.crypto+brick@gmail.com">📧 Email BRICK</a>
+    <!-- ===== NOUVEAU : DOUBLE DASHBOARD (Canvas + Plaza) ===== -->
+    <div class="dashboard-grid">
+        
+        <!-- CANVAS DASHBOARD (ROSE) -->
+        <div class="dashboard-canvas">
+            <h2>🎨 Canvas Referrals</h2>
+            <div class="kpi-grid">
+                <div class="kpi-card">
+                    <div class="kpi-label">💰 Total earnings</div>
+                    <div class="kpi-value canvas-value" id="canvasTotalEarnings">0</div>
+                    <div class="kpi-unit">SOL</div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-label">📊 Conversions</div>
+                    <div class="kpi-value canvas-value" id="canvasConversions">0</div>
+                </div>
+            </div>
+            <h3 style="color: #FF44AA; margin: 20px 0 12px;">📋 Recent Canvas activity</h3>
+            <div class="activity-list" id="canvasActivity">
+                <div class="activity-item">
+                    <div class="activity-icon canvas-icon">🧱</div>
+                    <div class="activity-detail">
+                        <span class="canvas-address">Loading...</span>
+                    </div>
+                    <div class="activity-time"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- PLAZA DASHBOARD (VERT) -->
+        <div class="dashboard-plaza">
+            <h2>🪙 Plaza Referrals</h2>
+            <div class="kpi-grid">
+                <div class="kpi-card">
+                    <div class="kpi-label">💰 Total earnings</div>
+                    <div class="kpi-value plaza-value" id="plazaTotalEarnings">0</div>
+                    <div class="kpi-unit">SOL</div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-label">📊 Conversions</div>
+                    <div class="kpi-value plaza-value" id="plazaConversions">0</div>
+                </div>
+            </div>
+            <h3 style="color: #00aa88; margin: 20px 0 12px;">📋 Recent Plaza activity</h3>
+            <div class="activity-list" id="plazaActivity">
+                <div class="activity-item">
+                    <div class="activity-icon plaza-icon">🪙</div>
+                    <div class="activity-detail">
+                        <span class="plaza-address">Loading...</span>
+                    </div>
+                    <div class="activity-time"></div>
+                </div>
+            </div>
+        </div>
     </div>
-    <div class="footer-copyright">
-        🧱 BRICK · The immortal meme coin · Built on Solana · 2026
-    </div>
-</footer>
+
+    <!-- FOOTER HARMONISÉ -->
+    <footer>
+        <div class="footer-links">
+            <a href="index.html">🧱 Home</a>
+            <a href="canvas.html">🎨 Canvas</a>
+            <a href="plaza.html">🪙 Plaza</a>
+            <a href="eternal-moments.html">✨ Eternal</a>
+            <a href="how-it-works.html">📚 How it works</a>
+            <a href="tokenomics.html">📊 Tokenomics</a>
+            <a href="whitepaper.html">📄 Whitepaper</a>
+            <a href="rules.html">⚖️ Rules</a>
+            <a href="daily.html">📅 Daily</a>
+            <a href="referrals.html">🤝 Referrals</a>
+            <a href="https://x.com/BRICK476222" target="_blank">🐦 BRICK on X</a>
+            <a href="https://t.me/brick_fusion_news" target="_blank">📢 Telegram News</a>
+            <a href="https://t.me/brick_community" target="_blank">💬 Telegram Chat</a>
+            <a href="mailto:sycomore.crypto+brick@gmail.com">📧 Email BRICK</a>
+        </div>
+        <div class="footer-copyright">
+            🧱 BRICK · The immortal meme coin · Built on Solana · 2026
+        </div>
+    </footer>
 </div>
 
-<!-- Scripts (inchangé) -->
 <script>
-    // === TOUTE TA LOGIQUE RESTE IDENTIQUE ===
-    // Configuration
+    // === CONFIGURATION ===
     const SUPABASE_URL = "https://bmfuvkylkhjcfsiauzvb.supabase.co";
     const SUPABASE_ANON = "sb_publishable_VuzUNoj1NnJk1BWSbVzJjQ_WABRhxDh";
-    
-    let sb = null;
-    let currentUser = null;
+    const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON);
 
-    // Initialize Supabase
-    (async () => {
-        try {
-            const { createClient } = await import('https://esm.sh/@supabase/supabase-js@2');
-            sb = createClient(SUPABASE_URL, SUPABASE_ANON);
-        } catch (e) {
-            console.warn('Supabase fallback mode');
-            sb = { from: () => ({ select: () => Promise.resolve({ data: [] }) }) };
-        }
-    })();
+    let currentUser = null;
 
     // DOM Elements
     const whoamiNav = document.getElementById('whoamiNav');
@@ -1094,167 +1155,142 @@
     const refLink = document.getElementById('refLink');
     const copyRefBtn = document.getElementById('copyRefBtn');
 
-    // Stats elements
-    const totalEarnings = document.getElementById('totalEarnings');
-    const activeReferrals = document.getElementById('activeReferrals');
-    const totalConversions = document.getElementById('totalConversions');
-    const pendingEarnings = document.getElementById('pendingEarnings');
-    const activityList = document.getElementById('activityList');
-
-    // ===== FONCTION CORRIGÉE : Met à jour les liens des images =====
-    function updatePromoLinks() {
-        if (!currentUser) return;
-        
-        // ✅ URL avec /brick/ et www
-        const baseUrl = 'https://www.brick-eternal.live/brick';
-        const refParam = `?ref=${currentUser}`;
-        
-        // Mettre à jour les 3 liens
-        document.getElementById('link1').href = baseUrl + refParam;
-        document.getElementById('link2').href = baseUrl + refParam;
-        document.getElementById('link3').href = baseUrl + refParam;
-        
-        console.log('✅ Liens mis à jour avec:', baseUrl + refParam);
-    }
-
-    // Connect Wallet Function
+    // ===== WALLET FUNCTIONS =====
     window.connectWallet = async function() {
         try {
-            // Detect Phantom or Solflare
             const provider = window.phantom?.solana || window.solflare;
-            
             if (!provider) {
                 alert('Install Phantom or Solflare to continue!');
                 window.open('https://phantom.app/', '_blank');
                 return;
             }
-
-            // Connect
             const resp = await provider.connect();
-            const publicKey = provider.publicKey?.toString() || resp.publicKey?.toString();
+            currentUser = provider.publicKey?.toString() || resp.publicKey?.toString();
             
-            if (!publicKey) throw new Error('No public key');
-
-            // Update UI
-            currentUser = publicKey;
-            
-            whoamiNav.textContent = `Connected: ${publicKey.slice(0,4)}...${publicKey.slice(-4)}`;
+            whoamiNav.textContent = `Connected: ${currentUser.slice(0,4)}...${currentUser.slice(-4)}`;
             whoamiNav.style.color = '#FF44AA';
             
             connectPrompt.style.display = 'none';
             walletInfo.style.display = 'flex';
-            walletAddress.textContent = `${publicKey.slice(0,4)}...${publicKey.slice(-4)}`;
+            walletAddress.textContent = `${currentUser.slice(0,4)}...${currentUser.slice(-4)}`;
             
-            // Generate referral link
             const baseUrl = window.location.origin + '/brick';
-            refLink.value = `${baseUrl}/?ref=${publicKey}`;
+            refLink.value = `${baseUrl}/?ref=${currentUser}`;
             referralCard.style.display = 'block';
             
-            // Mettre à jour les liens des images
             updatePromoLinks();
-            
-            // Save to Supabase
-            if (sb) {
-                await sb.from('referral_links').upsert({
-                    code: publicKey,
-                    referrer_wallet: publicKey
-                }, { onConflict: 'code' });
-            }
-            
-            // Load stats
-            await loadStats(publicKey);
+            await loadAllStats();
             
         } catch (e) {
-            console.error(e);
             alert('Connection error: ' + e.message);
         }
     };
 
-    // Copy referral link
+    // ===== UPDATE PROMO LINKS =====
+    function updatePromoLinks() {
+        if (!currentUser) return;
+        const baseUrl = 'https://www.brick-eternal.live/brick';
+        const refParam = `?ref=${currentUser}`;
+        document.getElementById('link1').href = baseUrl + refParam;
+        document.getElementById('link2').href = baseUrl + refParam;
+        document.getElementById('link3').href = baseUrl + refParam;
+    }
+
+    // ===== COPY REF LINK =====
     window.copyRefLink = function() {
         if (!refLink.value || refLink.value.includes('Connect')) {
             alert('Connect your wallet first!');
             return;
         }
-        
         navigator.clipboard.writeText(refLink.value);
         copyRefBtn.textContent = 'Copied!';
         setTimeout(() => { copyRefBtn.textContent = 'Copy'; }, 2000);
     };
 
-    // Load stats from Supabase
-    async function loadStats(wallet) {
-        if (!sb) return;
-        
+    // ===== LOAD ALL STATS =====
+    async function loadAllStats() {
+        if (!currentUser) return;
+
         try {
-            // Get conversions count and earnings
-            const { data: conversions } = await sb
-                .from('referral_conversions')
+            // Canvas stats (table bricks)
+            const { data: canvasData } = await supabaseClient
+                .from('bricks')
                 .select('*')
-                .eq('referrer_wallet', wallet);
-            
-            const { data: rewards } = await sb
-                .from('referral_rewards')
+                .eq('referred_by', currentUser);
+
+            // Plaza stats (table plaza_purchases)
+            const { data: plazaData } = await supabaseClient
+                .from('plaza_purchases')
                 .select('*')
-                .eq('referrer_wallet', wallet);
-            
-            // Calculate stats
-            const convCount = conversions?.length || 0;
-            const uniqueReferrals = new Set(conversions?.map(c => c.referee_wallet) || []).size;
-            
-            const pendingTotal = rewards
-                ?.filter(r => r.status === 'pending')
-                .reduce((sum, r) => sum + (r.amount_usdc || 0), 0) || 0;
-            
-            const paidTotal = rewards
-                ?.filter(r => r.status === 'paid')
-                .reduce((sum, r) => sum + (r.amount_usdc || 0), 0) || 0;
-            
-            // Update UI
-            totalEarnings.textContent = (paidTotal + pendingTotal).toFixed(2);
-            activeReferrals.textContent = uniqueReferrals;
-            totalConversions.textContent = convCount;
-            pendingEarnings.textContent = pendingTotal.toFixed(2);
-            
-            // Update activity list
-            if (conversions?.length > 0) {
-                const recent = conversions.slice(0, 5);
-                activityList.innerHTML = recent.map(c => {
-                    const timeAgo = c.ts ? new Date(c.ts).toLocaleString() : 'recently';
-                    const shortWallet = c.referee_wallet?.slice(0,4) + '...' + c.referee_wallet?.slice(-4) || 'Unknown';
-                    
-                    return `
-                        <div class="activity-item">
-                            <div class="activity-icon">${c.kind === 'token' ? '🪙' : c.kind === 'liquidity' ? '💧' : '🔄'}</div>
-                            <div class="activity-detail">
-                                <span>${shortWallet}</span> ${c.kind === 'token' ? 'created a token' : c.kind === 'liquidity' ? 'added liquidity' : 'purchased'}
-                            </div>
-                            <div class="activity-time">${timeAgo}</div>
-                        </div>
-                    `;
-                }).join('');
-            }
-            
-        } catch (e) {
-            console.warn('Stats error:', e);
+                .eq('referred_by', currentUser);
+
+            updateCanvasDashboard(canvasData || []);
+            updatePlazaDashboard(plazaData || []);
+
+        } catch (error) {
+            console.error('Error loading stats:', error);
         }
     }
 
-    // Download image with referral code
+    // ===== CANVAS DASHBOARD =====
+    function updateCanvasDashboard(referrals) {
+        const totalEarnings = referrals.length * 0.1;
+        document.getElementById('canvasTotalEarnings').textContent = totalEarnings.toFixed(2);
+        document.getElementById('canvasConversions').textContent = referrals.length;
+
+        const activityHtml = referrals.slice(0, 5).map(ref => {
+            const timeAgo = ref.created_at ? new Date(ref.created_at).toLocaleString() : 'recently';
+            const shortWallet = ref.wallet?.slice(0,4) + '...' + ref.wallet?.slice(-4) || 'Unknown';
+            return `
+                <div class="activity-item">
+                    <div class="activity-icon canvas-icon">🧱</div>
+                    <div class="activity-detail">
+                        <span class="canvas-address">${shortWallet}</span> bought Canvas brick ${ref.cell}
+                    </div>
+                    <div class="activity-time">${timeAgo}</div>
+                </div>
+            `;
+        }).join('') || '<div class="activity-item">No activity yet</div>';
+
+        document.getElementById('canvasActivity').innerHTML = activityHtml;
+    }
+
+    // ===== PLAZA DASHBOARD =====
+    function updatePlazaDashboard(referrals) {
+        const totalEarnings = referrals.length * 0.5;
+        document.getElementById('plazaTotalEarnings').textContent = totalEarnings.toFixed(2);
+        document.getElementById('plazaConversions').textContent = referrals.length;
+
+        const activityHtml = referrals.slice(0, 5).map(ref => {
+            const timeAgo = ref.created_at ? new Date(ref.created_at).toLocaleString() : 'recently';
+            const shortWallet = ref.wallet?.slice(0,4) + '...' + ref.wallet?.slice(-4) || 'Unknown';
+            return `
+                <div class="activity-item">
+                    <div class="activity-icon plaza-icon">🪙</div>
+                    <div class="activity-detail">
+                        <span class="plaza-address">${shortWallet}</span> bought Plaza spot ${ref.cell}
+                    </div>
+                    <div class="activity-time">${timeAgo}</div>
+                </div>
+            `;
+        }).join('') || '<div class="activity-item">No activity yet</div>';
+
+        document.getElementById('plazaActivity').innerHTML = activityHtml;
+    }
+
+    // ===== DOWNLOAD WITH CODE =====
     window.downloadWithCode = async function(type) {
         if (!currentUser) {
-            alert('Connect your wallet first to get your unique code!');
+            alert('Connect your wallet first!');
             return;
         }
         
-        // Show loading
         const btn = document.getElementById(`dl${type.charAt(0).toUpperCase() + type.slice(1)}`);
         const originalText = btn.textContent;
         btn.textContent = '⏳ Generating...';
         btn.disabled = true;
         
         try {
-            // Get the correct image element
             let imgId;
             if (type === 'eternal') imgId = 'promo1-img';
             else if (type === 'canvas') imgId = 'promo2-img';
@@ -1263,7 +1299,6 @@
             const imgElement = document.getElementById(imgId);
             const imgSrc = imgElement.src;
             
-            // Create canvas and draw image
             const canvas = document.createElement('canvas');
             const ctx = canvas.getContext('2d');
             const img = new Image();
@@ -1279,7 +1314,6 @@
             canvas.height = img.height;
             ctx.drawImage(img, 0, 0);
             
-            // Add referral code at bottom
             ctx.font = 'bold 24px "Inter", sans-serif';
             ctx.fillStyle = 'white';
             ctx.shadowColor = 'rgba(0,0,0,0.8)';
@@ -1288,28 +1322,20 @@
             
             const shortCode = currentUser.slice(0, 6) + '...' + currentUser.slice(-4);
             ctx.fillText(`🔗 REF: ${shortCode}`, canvas.width/2, canvas.height - 40);
-            
-            // Add BRICK logo text at top
             ctx.font = 'bold 18px "Inter", sans-serif';
             ctx.fillStyle = 'rgba(255,255,255,0.9)';
             ctx.fillText('🧱 BRICK', canvas.width/2, 50);
             
-            // Download
             const link = document.createElement('a');
             link.download = `brick_${type}_${currentUser.slice(0,4)}.png`;
             link.href = canvas.toDataURL('image/png');
             link.click();
             
         } catch (e) {
-            console.error(e);
-            alert('Error generating image. Opening original instead...');
-            
-            // Fallback: open image in new tab
             let filename;
             if (type === 'eternal') filename = 'etrnalmomentspromo.png';
             else if (type === 'canvas') filename = 'canvascellspromo.png';
             else filename = 'dailyrewardspromo.png';
-            
             window.open(`images/promos/${filename}`, '_blank');
         } finally {
             btn.textContent = originalText;
@@ -1317,49 +1343,90 @@
         }
     };
 
-    // Auto-refresh stats every 30 seconds
-    setInterval(() => {
-        if (currentUser) loadStats(currentUser);
-    }, 30000);
-
-    // Check for existing session
+    // ===== CHECK EXISTING SESSION =====
     window.addEventListener('load', async () => {
         const provider = window.phantom?.solana || window.solflare;
         if (provider?.isConnected && provider.publicKey) {
-            const pubkey = provider.publicKey.toString();
-            currentUser = pubkey;
-            whoamiNav.textContent = `Connected: ${pubkey.slice(0,4)}...${pubkey.slice(-4)}`;
+            currentUser = provider.publicKey.toString();
+            whoamiNav.textContent = `Connected: ${currentUser.slice(0,4)}...${currentUser.slice(-4)}`;
             whoamiNav.style.color = '#FF44AA';
             connectPrompt.style.display = 'none';
             walletInfo.style.display = 'flex';
-            walletAddress.textContent = `${pubkey.slice(0,4)}...${pubkey.slice(-4)}`;
-            refLink.value = `${window.location.origin}/brick/?ref=${pubkey}`;
+            walletAddress.textContent = `${currentUser.slice(0,4)}...${currentUser.slice(-4)}`;
+            refLink.value = `${window.location.origin}/brick/?ref=${currentUser}`;
             referralCard.style.display = 'block';
-            
-            // Mettre à jour les liens des images
             updatePromoLinks();
-            
-            await loadStats(pubkey);
+            await loadAllStats();
         }
     });
 </script>
 <!-- ===== CAPTURE UNIVERSELLE DES RÉFÉRENTS ===== -->
 <script>
 (function() {
+    // Vérifier si un paramètre ref est présent dans l'URL
     const urlParams = new URLSearchParams(window.location.search);
     const referrerWallet = urlParams.get('ref');
     
     if (referrerWallet) {
+        // Sauvegarder dans localStorage
         localStorage.setItem('brick_referrer', referrerWallet);
-        console.log('✅ Référent détecté:', referrerWallet.slice(0,4) + '...' + referrerWallet.slice(-4));
+        console.log('✅ Référent détecté et sauvegardé:', referrerWallet.slice(0,4) + '...' + referrerWallet.slice(-4));
         
+        // Afficher un message de confirmation discret
         const refMessage = document.createElement('div');
-        refMessage.style.cssText = 'position: fixed; bottom: 20px; right: 20px; background: #FF44AA; color: white; padding: 12px 24px; border-radius: 50px; font-size: 14px; z-index: 9999; box-shadow: 0 4px 20px rgba(255,68,170,0.4);';
-        refMessage.innerHTML = `✨ Referred by ${referrerWallet.slice(0,4)}...${referrerWallet.slice(-4)}`;
+        refMessage.style.cssText = `
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #FF44AA;
+            color: white;
+            padding: 12px 24px;
+            border-radius: 50px;
+            font-size: 14px;
+            font-weight: 600;
+            z-index: 9999;
+            box-shadow: 0 4px 20px rgba(255,68,170,0.4);
+            border: 1px solid rgba(255,255,255,0.3);
+            backdrop-filter: blur(5px);
+            animation: slideIn 0.3s ease-out;
+        `;
+        refMessage.innerHTML = `
+            <div style="display: flex; align-items: center; gap: 8px;">
+                <span>🧱</span>
+                <span>✨ Referred by <strong>${referrerWallet.slice(0,4)}...${referrerWallet.slice(-4)}</strong></span>
+            </div>
+        `;
+        
+        // Ajouter l'animation
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes slideIn {
+                from { transform: translateX(100%); opacity: 0; }
+                to { transform: translateX(0); opacity: 1; }
+            }
+        `;
+        document.head.appendChild(style);
+        
         document.body.appendChild(refMessage);
-        setTimeout(() => refMessage.remove(), 5000);
+        
+        // Faire disparaître après 5 secondes
+        setTimeout(() => {
+            refMessage.style.animation = 'slideOut 0.3s ease-out forwards';
+            setTimeout(() => refMessage.remove(), 300);
+        }, 5000);
+        
+        // Ajouter l'animation de sortie
+        const styleOut = document.createElement('style');
+        styleOut.textContent = `
+            @keyframes slideOut {
+                from { transform: translateX(0); opacity: 1; }
+                to { transform: translateX(100%); opacity: 0; }
+            }
+        `;
+        document.head.appendChild(styleOut);
     }
 })();
 </script>
+<!-- ===== FIN CAPTURE RÉFÉRENTS ===== -->
 </body>
 </html>
