@@ -1208,76 +1208,84 @@
     };
 
     // ===== LOAD ALL STATS =====
-    async function loadAllStats() {
-        if (!currentUser) return;
+async function loadAllStats() {
+    if (!currentUser) return;
 
-        try {
-            // Canvas stats (table bricks)
-            const { data: canvasData } = await supabaseClient
-                .from('bricks')
-                .select('*')
-                .eq('referred_by', currentUser);
+    try {
+        // Canvas stats (kind = null ou 'canvas')
+        const { data: canvasData } = await supabaseClient
+            .from('bricks')
+            .select('*')
+            .eq('referred_by', currentUser)
+            .or('kind.is.null,kind.eq.canvas');
 
-            // Plaza stats (table plaza_purchases)
-            const { data: plazaData } = await supabaseClient
-                .from('plaza_purchases')
-                .select('*')
-                .eq('referred_by', currentUser);
+        // Plaza stats (kind = 'plaza')
+        const { data: plazaData } = await supabaseClient
+            .from('bricks')
+            .select('*')
+            .eq('referred_by', currentUser)
+            .eq('kind', 'plaza');
 
-            updateCanvasDashboard(canvasData || []);
-            updatePlazaDashboard(plazaData || []);
+        console.log('📊 Canvas stats:', canvasData?.length || 0);
+        console.log('📊 Plaza stats:', plazaData?.length || 0);
+        
+        updateCanvasDashboard(canvasData || []);
+        updatePlazaDashboard(plazaData || []);
 
-        } catch (error) {
-            console.error('Error loading stats:', error);
-        }
+    } catch (error) {
+        console.error('Error loading stats:', error);
     }
+}
 
-    // ===== CANVAS DASHBOARD =====
-    function updateCanvasDashboard(referrals) {
-        const totalEarnings = referrals.length * 0.1;
-        document.getElementById('canvasTotalEarnings').textContent = totalEarnings.toFixed(2);
-        document.getElementById('canvasConversions').textContent = referrals.length;
+// ===== CANVAS DASHBOARD =====
+function updateCanvasDashboard(referrals) {
+    const totalEarnings = referrals.length * 0.1;
+    const conversions = referrals.length;
 
-        const activityHtml = referrals.slice(0, 5).map(ref => {
-            const timeAgo = ref.created_at ? new Date(ref.created_at).toLocaleString() : 'recently';
-            const shortWallet = ref.wallet?.slice(0,4) + '...' + ref.wallet?.slice(-4) || 'Unknown';
-            return `
-                <div class="activity-item">
-                    <div class="activity-icon canvas-icon">🧱</div>
-                    <div class="activity-detail">
-                        <span class="canvas-address">${shortWallet}</span> bought Canvas brick ${ref.cell}
-                    </div>
-                    <div class="activity-time">${timeAgo}</div>
+    document.getElementById('canvasTotalEarnings').textContent = totalEarnings.toFixed(2);
+    document.getElementById('canvasConversions').textContent = conversions;
+
+    const activityHtml = referrals.slice(0, 5).map(ref => {
+        const timeAgo = ref.created_at ? new Date(ref.created_at).toLocaleString() : 'recently';
+        const shortWallet = ref.wallet?.slice(0,4) + '...' + ref.wallet?.slice(-4) || 'Unknown';
+        return `
+            <div class="activity-item">
+                <div class="activity-icon canvas-icon">🧱</div>
+                <div class="activity-detail">
+                    <span class="canvas-address">${shortWallet}</span> bought Canvas brick ${ref.cell}
                 </div>
-            `;
-        }).join('') || '<div class="activity-item">No activity yet</div>';
+                <div class="activity-time">${timeAgo}</div>
+            </div>
+        `;
+    }).join('') || '<div class="activity-item">No activity yet</div>';
 
-        document.getElementById('canvasActivity').innerHTML = activityHtml;
-    }
+    document.getElementById('canvasActivity').innerHTML = activityHtml;
+}
 
-    // ===== PLAZA DASHBOARD =====
-    function updatePlazaDashboard(referrals) {
-        const totalEarnings = referrals.length * 0.5;
-        document.getElementById('plazaTotalEarnings').textContent = totalEarnings.toFixed(2);
-        document.getElementById('plazaConversions').textContent = referrals.length;
+// ===== PLAZA DASHBOARD =====
+function updatePlazaDashboard(referrals) {
+    const totalEarnings = referrals.length * 0.5;  // ← 0.5 SOL, pas 0.1 !
+    const conversions = referrals.length;
 
-        const activityHtml = referrals.slice(0, 5).map(ref => {
-            const timeAgo = ref.created_at ? new Date(ref.created_at).toLocaleString() : 'recently';
-            const shortWallet = ref.wallet?.slice(0,4) + '...' + ref.wallet?.slice(-4) || 'Unknown';
-            return `
-                <div class="activity-item">
-                    <div class="activity-icon plaza-icon">🪙</div>
-                    <div class="activity-detail">
-                        <span class="plaza-address">${shortWallet}</span> bought Plaza spot ${ref.cell}
-                    </div>
-                    <div class="activity-time">${timeAgo}</div>
+    document.getElementById('plazaTotalEarnings').textContent = totalEarnings.toFixed(2);
+    document.getElementById('plazaConversions').textContent = conversions;
+
+    const activityHtml = referrals.slice(0, 5).map(ref => {
+        const timeAgo = ref.created_at ? new Date(ref.created_at).toLocaleString() : 'recently';
+        const shortWallet = ref.wallet?.slice(0,4) + '...' + ref.wallet?.slice(-4) || 'Unknown';
+        return `
+            <div class="activity-item">
+                <div class="activity-icon plaza-icon">🪙</div>
+                <div class="activity-detail">
+                    <span class="plaza-address">${shortWallet}</span> bought Plaza spot ${ref.cell}
                 </div>
-            `;
-        }).join('') || '<div class="activity-item">No activity yet</div>';
+                <div class="activity-time">${timeAgo}</div>
+            </div>
+        `;
+    }).join('') || '<div class="activity-item">No activity yet</div>';
 
-        document.getElementById('plazaActivity').innerHTML = activityHtml;
-    }
-
+    document.getElementById('plazaActivity').innerHTML = activityHtml;
+}
     // ===== DOWNLOAD WITH CODE =====
     window.downloadWithCode = async function(type) {
         if (!currentUser) {
