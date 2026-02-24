@@ -4,10 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>🧱 BRICK - View a Brick</title>
-    
-    <!-- Supabase -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    
     <style>
         body {
             background: #f8fafc;
@@ -108,7 +105,6 @@
                     .single();
 
                 if (error || !data) {
-                    // Brique non trouvée
                     document.getElementById('content').innerHTML = `
                         <div class="error-emoji">😢</div>
                         <div class="error-message">Brick ${cell} not found</div>
@@ -126,7 +122,6 @@
 
                 // Afficher la brique Canvas
                 const walletShort = data.wallet ? `${data.wallet.slice(0,4)}...${data.wallet.slice(-4)}` : 'Unknown';
-                
                 document.getElementById('content').innerHTML = `
                     <img class="brick-image" src="${data.image_url || 'https://placehold.co/200x200/FF44AA/FFFFFF?text=🧱'}" 
                          onerror="this.src='https://placehold.co/200x200/FF44AA/FFFFFF?text=🧱'">
@@ -145,25 +140,6 @@
         }
 
         loadBrick();
-    </script>
-
-    <!-- ===== CAPTURE UNIVERSELLE DES RÉFÉRENTS ===== -->
-    <script>
-    (function() {
-        const urlParams = new URLSearchParams(window.location.search);
-        const referrerWallet = urlParams.get('ref');
-        
-        if (referrerWallet) {
-            localStorage.setItem('brick_referrer', referrerWallet);
-            console.log('✅ Référent détecté:', referrerWallet.slice(0,4) + '...' + referrerWallet.slice(-4));
-            
-            const refMessage = document.createElement('div');
-            refMessage.style.cssText = 'position: fixed; bottom: 20px; right: 20px; background: #FF44AA; color: white; padding: 12px 24px; border-radius: 50px; font-size: 14px; z-index: 9999; box-shadow: 0 4px 20px rgba(255,68,170,0.4);';
-            refMessage.innerHTML = `🧱 Referred by ${referrerWallet.slice(0,4)}...${referrerWallet.slice(-4)}`;
-            document.body.appendChild(refMessage);
-            setTimeout(() => refMessage.remove(), 5000);
-        }
-    })();
     </script>
 </body>
 </html>
