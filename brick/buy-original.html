@@ -225,7 +225,6 @@
             <span class="badge badge-pink">REJECTED = REFUND</span>
         </div>
 
-        <!-- Cell from URL -->
         <input type="hidden" id="cell-field" value="">
 
         <div class="wallet-section">
@@ -245,7 +244,6 @@
                 </div>
             </div>
 
-            <!-- SOCIAL LINKS -->
             <div class="form-group">
                 <label>🌐 Your links (optional)</label>
                 <div class="social-grid">
@@ -309,12 +307,10 @@
         const SUPABASE_ANON = "sb_publishable_VuzUNoj1NnJk1BWSbVzJjQ_WABRhxDh";
         const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON);
 
-        // === CONFIGURATION ===
         const CONFIG = {
             TO_WALLET: '6ieEMVMJMjjFUW35KrjTdG6cEqy6mxRGZHLdKsXwp6r3'
         };
 
-        // === DOM ELEMENTS ===
         const walletBtn = document.getElementById('wallet-btn');
         const walletInfo = document.getElementById('wallet-info');
         const walletAddress = document.getElementById('wallet-address');
@@ -327,7 +323,6 @@
         const charCount = document.getElementById('char-count');
         const cellField = document.getElementById('cell-field');
         
-        // Social inputs
         const twitter = document.getElementById('twitter');
         const telegram = document.getElementById('telegram');
         const discord = document.getElementById('discord');
@@ -336,12 +331,10 @@
         const email = document.getElementById('email');
         const website = document.getElementById('website');
 
-        // === STATE ===
         let wallet = null;
         let publicKey = null;
         let compressedImage = null;
 
-        // === GET CELL FROM URL ===
         const urlParams = new URLSearchParams(window.location.search);
         const cellFromUrl = urlParams.get('cell');
         let selectedCell = cellFromUrl ? cellFromUrl.toUpperCase() : '';
@@ -349,12 +342,10 @@
             cellField.value = selectedCell;
         }
 
-        // === CHAR COUNT ===
         messageInput.addEventListener('input', function() {
             charCount.textContent = this.value.length;
         });
 
-        // === CONNECT WALLET ===
         async function connectWallet() {
             try {
                 if (!window.solana || !window.solana.isPhantom) {
@@ -382,7 +373,6 @@
 
         walletBtn.addEventListener('click', connectWallet);
 
-        // Auto-connect
         window.addEventListener('load', async () => {
             if (window.solana?.isPhantom) {
                 try {
@@ -398,7 +388,6 @@
             }
         });
 
-        // === IMAGE UPLOAD ===
         imageUpload.addEventListener('click', () => imageInput.click());
         
         imageInput.addEventListener('change', function(e) {
@@ -414,7 +403,6 @@
             reader.onload = function(ev) {
                 const img = new Image();
                 img.onload = function() {
-                    // Resize to max 200px
                     const canvas = document.createElement('canvas');
                     let w = img.width, h = img.height;
                     
@@ -440,7 +428,6 @@
             reader.readAsDataURL(file);
         });
 
-        // === PAYMENT ===
         async function payWithSOL(amount) {
             if (!wallet) throw new Error('Wallet not connected');
             
@@ -462,7 +449,6 @@
             return signature;
         }
 
-        // === UTILITAIRE : dataURL to File ===
         function dataURLtoFile(dataurl, filename) {
             const arr = dataurl.split(',');
             const mime = arr[0].match(/:(.*?);/)[1];
@@ -475,7 +461,6 @@
             return new File([u8arr], filename, { type: mime });
         }
 
-        // === FORM SUBMIT ===
         async function handleSubmit(e) {
             e.preventDefault();
             
@@ -508,7 +493,6 @@
                 
                 const signature = await payWithSOL(0.1);
                 
-                // Collect social links
                 const socialLinks = {
                     twitter: twitter.value,
                     telegram: telegram.value,
@@ -519,7 +503,6 @@
                     website: website.value || ''
                 };
                 
-                // Create brick data
                 const brickData = {
                     wallet: publicKey,
                     message: message,
@@ -530,16 +513,12 @@
                     cell: cell
                 };
                 
-                // Stockage dans localStorage (rapide)
                 localStorage.setItem('brick_' + cell, JSON.stringify(brickData));
                 console.log('✅ Brick sauvegardée dans localStorage');
                 
-                // === SAUVEGARDE DANS SUPABASE ===
                 try {
-                    // Convertir l'image en fichier pour upload
                     const imageFile = dataURLtoFile(compressedImage, `brick_${cell}.jpg`);
                     
-                    // Upload de l'image vers le bucket
                     const fileName = `bricks/${cell}_${Date.now()}.jpg`;
                     const { data: imageData, error: imageError } = await supabaseClient
                         .storage
@@ -554,7 +533,6 @@
                         throw imageError;
                     }
                     
-                    // Obtenir l'URL publique
                     const { data: urlData } = supabaseClient
                         .storage
                         .from('brick-images')
@@ -562,7 +540,6 @@
                     
                     const imageUrl = urlData.publicUrl;
                     
-                    // Sauvegarde des données dans la table bricks
                     const { error: dbError } = await supabaseClient
                         .from('bricks')
                         .insert([
@@ -585,15 +562,12 @@
                     
                 } catch (supaError) {
                     console.error('❌ Erreur sauvegarde Supabase:', supaError);
-                    // On continue même si Supabase échoue (localStorage fonctionne)
                 }
                 
-                // Show success popup
                 const sigString = typeof signature === 'string' ? signature : signature.signature || signature.toString();
                 document.getElementById('popup-tx').textContent = sigString.slice(0, 8) + '...' + sigString.slice(-8);
                 document.getElementById('success-popup').style.display = 'flex';
                 
-                // Reset form
                 messageInput.value = '';
                 imagePreview.src = '';
                 imagePreview.classList.remove('show');
@@ -620,23 +594,5 @@
             statusDiv.className = 'status show ' + type;
         }
     </script>
-    <!-- ===== CAPTURE UNIVERSELLE DES RÉFÉRENTS ===== -->
-<script>
-(function() {
-    const urlParams = new URLSearchParams(window.location.search);
-    const referrerWallet = urlParams.get('ref');
-    
-    if (referrerWallet) {
-        localStorage.setItem('brick_referrer', referrerWallet);
-        console.log('✅ Référent détecté:', referrerWallet.slice(0,4) + '...' + referrerWallet.slice(-4));
-        
-        const refMessage = document.createElement('div');
-        refMessage.style.cssText = 'position: fixed; bottom: 20px; right: 20px; background: #FF44AA; color: white; padding: 12px 24px; border-radius: 50px; font-size: 14px; z-index: 9999; box-shadow: 0 4px 20px rgba(255,68,170,0.4);';
-        refMessage.innerHTML = `✨ Referred by ${referrerWallet.slice(0,4)}...${referrerWallet.slice(-4)}`;
-        document.body.appendChild(refMessage);
-        setTimeout(() => refMessage.remove(), 5000);
-    }
-})();
-</script>
 </body>
 </html>
