@@ -11,6 +11,9 @@
     <!-- Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     
+    <!-- Supabase -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         
@@ -297,15 +300,6 @@
             font-style: italic;
         }
 
-        .daily-card video {
-            width: 100%;
-            max-width: 500px;
-            border-radius: 16px;
-            margin: 20px auto;
-            display: block;
-            box-shadow: 0 10px 30px rgba(255,68,170,0.2);
-        }
-
         .daily-card img {
             width: 100%;
             max-width: 500px;
@@ -509,51 +503,35 @@
             color: #666;
         }
 
-        /* Language selector - 9 langues */
-.language-selector {
-    display: flex;
-    justify-content: center;
-    gap: 8px;
-    margin: 20px 0 30px;
-    flex-wrap: wrap;
-    max-width: 1000px;
-    margin-left: auto;
-    margin-right: auto;
-}
+        /* Language selector */
+        .language-selector {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin: 20px 0 30px;
+            flex-wrap: wrap;
+        }
 
-.lang-btn {
-    background: white;
-    border: 2px solid #FF44AA;
-    color: #FF44AA;
-    padding: 8px 12px;
-    border-radius: 40px;
-    cursor: pointer;
-    font-weight: 600;
-    font-size: 13px;
-    transition: all 0.2s;
-    min-width: 85px;
-}
+        .lang-btn {
+            background: white;
+            border: 2px solid #FF44AA;
+            color: #FF44AA;
+            padding: 8px 20px;
+            border-radius: 40px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.2s;
+        }
 
-.lang-btn:hover {
-    background: #FF44AA;
-    color: white;
-}
+        .lang-btn:hover {
+            background: #FF44AA;
+            color: white;
+        }
 
-.lang-btn.active {
-    background: #FF44AA;
-    color: white;
-}
-
-@media (max-width: 800px) {
-    .language-selector {
-        gap: 5px;
-    }
-    .lang-btn {
-        padding: 5px 8px;
-        font-size: 11px;
-        min-width: 65px;
-    }
-}
+        .lang-btn.active {
+            background: #FF44AA;
+            color: white;
+        }
 
         /* Photo Modal */
         .photo-modal {
@@ -692,7 +670,7 @@
             .stats-grid {
                 grid-template-columns: 1fr;
             }
-            .daily-card video, .daily-card img {
+            .daily-card img {
                 max-width: 100%;
             }
             .logo-title-container {
@@ -774,18 +752,18 @@
         </div>
     </div>
 
-    <!-- Language Selector - 9 langues -->
-<div class="language-selector">
-    <button class="lang-btn" onclick="setPoemLanguage('en')">🇬🇧 English</button>
-    <button class="lang-btn" onclick="setPoemLanguage('fr')">🇫🇷 Français</button>
-    <button class="lang-btn" onclick="setPoemLanguage('es')">🇪🇸 Español</button>
-    <button class="lang-btn" onclick="setPoemLanguage('de')">🇩🇪 Deutsch</button>
-    <button class="lang-btn" onclick="setPoemLanguage('zh')">🇨🇳 中文</button>
-    <button class="lang-btn" onclick="setPoemLanguage('ar')">🇸🇦 العربية</button>
-    <button class="lang-btn" onclick="setPoemLanguage('ja')">🇯🇵 日本語</button>
-    <button class="lang-btn" onclick="setPoemLanguage('nl')">🇳🇱 Nederlands</button>
-    <button class="lang-btn" onclick="setPoemLanguage('ru')">🇷🇺 Русский</button>
-</div>
+    <!-- Language Selector (9 langues) -->
+    <div class="language-selector">
+        <button class="lang-btn" onclick="setPoemLanguage('en')">🇬🇧 English</button>
+        <button class="lang-btn" onclick="setPoemLanguage('fr')">🇫🇷 Français</button>
+        <button class="lang-btn" onclick="setPoemLanguage('es')">🇪🇸 Español</button>
+        <button class="lang-btn" onclick="setPoemLanguage('de')">🇩🇪 Deutsch</button>
+        <button class="lang-btn" onclick="setPoemLanguage('zh')">🇨🇳 中文</button>
+        <button class="lang-btn" onclick="setPoemLanguage('ar')">🇸🇦 العربية</button>
+        <button class="lang-btn" onclick="setPoemLanguage('ja')">🇯🇵 日本語</button>
+        <button class="lang-btn" onclick="setPoemLanguage('nl')">🇳🇱 Nederlands</button>
+        <button class="lang-btn" onclick="setPoemLanguage('ru')">🇷🇺 Русский</button>
+    </div>
 
     <!-- ========== POEM OF THE DAY ========== -->
     <div class="daily-card" id="poem-card">
@@ -844,7 +822,7 @@
     <div class="daily-card">
         <div class="daily-icon">📸</div>
         <h2>Photo of the Day</h2>
-        <img src="images\picsofday\$BrickTeam1.webp" alt="Crypto Lady" id="daily-photo" style="cursor: pointer;">
+        <img src="images/picsofday/$BrickTeam1.webp" alt="Crypto Lady" id="daily-photo" style="cursor: pointer;">
         <p style="font-size:16px; color:#666; margin:10px 0;">"Fly with us" · $Brick.</p>
         
         <div class="like-system">
@@ -859,10 +837,45 @@
         </div>
     </div>
 
-    <!-- Modal pour la photo -->
-    <div id="photoModal" class="photo-modal">
+    <!-- ========== DEUX NOUVEAUX MOMENTS AVEC GIFS ========== -->
+    <div class="daily-card">
+        <div class="daily-icon">⚡</div>
+        <h2>TokenForge Forge</h2>
+        <img src="images/eternal/brickforge.gif" alt="TokenForge Forge" style="width:100%; max-width:500px; border-radius:16px; margin:20px auto; display:block; cursor: pointer;" onclick="openImageModal(this.src)">
+        <p style="font-size:16px; color:#666; margin:10px 0;">"The forge where $BRICK was born"</p>
+        <div class="like-system">
+            <div class="like-btn" id="forge-like">
+                <span>❤️</span>
+                <span class="like-count" id="forge-like-count">0</span>
+            </div>
+            <div class="dislike-btn">
+                <span>👎</span>
+                <span class="dislike-count">0</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="daily-card">
+        <div class="daily-icon">📬</div>
+        <h2>Brick Post</h2>
+        <img src="images/eternal/brickpost.gif" alt="Brick Post" style="width:100%; max-width:500px; border-radius:16px; margin:20px auto; display:block; cursor: pointer;" onclick="openImageModal(this.src)">
+        <p style="font-size:16px; color:#666; margin:10px 0;">"Messages from the wall"</p>
+        <div class="like-system">
+            <div class="like-btn" id="post-like">
+                <span>❤️</span>
+                <span class="like-count" id="post-like-count">0</span>
+            </div>
+            <div class="dislike-btn">
+                <span>👎</span>
+                <span class="dislike-count">0</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal pour les images -->
+    <div id="imageModal" class="photo-modal">
         <span class="photo-modal-close">&times;</span>
-        <img id="modal-photo-img" src="">
+        <img id="modal-image" src="">
     </div>
 
     <!-- ========== STATS SECTION ========== -->
@@ -1012,15 +1025,11 @@
 
     // ===== SYSTÈME DE LIKES COMPLET =====
     document.addEventListener('DOMContentLoaded', function() {
-        // Initialiser tous les likes
         initAllLikes();
-        
-        // Configurer les événements
         setupDailyLikes();
         setupNFTLikes();
         setupPhotoZoom();
         
-        // Charger la langue préférée
         const savedLang = localStorage.getItem('preferredLanguage') || 'en';
         setPoemLanguage(savedLang);
         highlightActiveLang(savedLang);
@@ -1031,6 +1040,8 @@
             { id: 'poem', default: 24 },
             { id: 'video', default: 42 },
             { id: 'photo', default: 18 },
+            { id: 'forge', default: 0 },
+            { id: 'post', default: 0 },
             { id: 'nft1', default: 0 },
             { id: 'nft2', default: 0 },
             { id: 'nft3', default: 0 }
@@ -1043,17 +1054,17 @@
             }
         });
         
-        // Mettre à jour les affichages
         document.getElementById('poem-like-count').textContent = localStorage.getItem('like_poem');
         document.getElementById('video-like-count').textContent = localStorage.getItem('like_video');
         document.getElementById('photo-like-count').textContent = localStorage.getItem('like_photo');
+        document.getElementById('forge-like-count').textContent = localStorage.getItem('like_forge');
+        document.getElementById('post-like-count').textContent = localStorage.getItem('like_post');
         document.getElementById('nft1-like').textContent = localStorage.getItem('like_nft1');
         document.getElementById('nft2-like').textContent = localStorage.getItem('like_nft2');
         document.getElementById('nft3-like').textContent = localStorage.getItem('like_nft3');
     }
 
     function setupDailyLikes() {
-        // Like poème
         document.getElementById('poem-like').addEventListener('click', function(e) {
             e.preventDefault();
             if (sessionStorage.getItem('liked_poem')) {
@@ -1068,7 +1079,6 @@
             this.classList.add('liked');
         });
 
-        // Like vidéo
         document.getElementById('video-like').addEventListener('click', function(e) {
             e.preventDefault();
             if (sessionStorage.getItem('liked_video')) {
@@ -1083,7 +1093,6 @@
             this.classList.add('liked');
         });
 
-        // Like photo
         document.getElementById('photo-like').addEventListener('click', function(e) {
             e.preventDefault();
             if (sessionStorage.getItem('liked_photo')) {
@@ -1095,6 +1104,34 @@
             localStorage.setItem('like_photo', current);
             document.getElementById('photo-like-count').textContent = current;
             sessionStorage.setItem('liked_photo', 'true');
+            this.classList.add('liked');
+        });
+
+        document.getElementById('forge-like').addEventListener('click', function(e) {
+            e.preventDefault();
+            if (sessionStorage.getItem('liked_forge')) {
+                alert('You already liked this!');
+                return;
+            }
+            let current = parseInt(localStorage.getItem('like_forge'));
+            current++;
+            localStorage.setItem('like_forge', current);
+            document.getElementById('forge-like-count').textContent = current;
+            sessionStorage.setItem('liked_forge', 'true');
+            this.classList.add('liked');
+        });
+
+        document.getElementById('post-like').addEventListener('click', function(e) {
+            e.preventDefault();
+            if (sessionStorage.getItem('liked_post')) {
+                alert('You already liked this!');
+                return;
+            }
+            let current = parseInt(localStorage.getItem('like_post'));
+            current++;
+            localStorage.setItem('like_post', current);
+            document.getElementById('post-like-count').textContent = current;
+            sessionStorage.setItem('liked_post', 'true');
             this.classList.add('liked');
         });
     }
@@ -1125,18 +1162,22 @@
 
     function setupPhotoZoom() {
         const photo = document.getElementById('daily-photo');
-        const modal = document.getElementById('photoModal');
-        const modalImg = document.getElementById('modal-photo-img');
+        const modal = document.getElementById('imageModal');
+        const modalImg = document.getElementById('modal-image');
         const closeBtn = document.querySelector('.photo-modal-close');
 
-        photo.addEventListener('click', () => {
-            modalImg.src = photo.src;
-            modal.style.display = 'flex';
-        });
+        if (photo) {
+            photo.addEventListener('click', () => {
+                modalImg.src = photo.src;
+                modal.style.display = 'flex';
+            });
+        }
 
-        closeBtn.addEventListener('click', () => {
-            modal.style.display = 'none';
-        });
+        if (closeBtn) {
+            closeBtn.addEventListener('click', () => {
+                modal.style.display = 'none';
+            });
+        }
 
         modal.addEventListener('click', (e) => {
             if (e.target === modal) {
@@ -1145,44 +1186,51 @@
         });
     }
 
-   // ===== MULTI-LANGUES POUR LE POÈME (9 LANGUES) =====
-const poemTranslations = {
-    en: '"Brick by brick we build,<br>In code we trust,<br>Our words forever sealed,<br>In blockchain dust..." — Boub',
-    fr: '"Brique par brique nous bâtissons,<br>Dans le code nous avons foi,<br>Nos mots scellés à jamais,<br>Dans la poussière de la blockchain..." — Boub',
-    es: '"Ladrillo a ladrillo construimos,<br>En el código confiamos,<br>Nuestras palabras selladas para siempre,<br>En el polvo de blockchain..." — Boub',
-    de: '"Stein für Stein bauen wir,<br>Dem Code vertrauen wir,<br>Unsere Worte für immer versiegelt,<br>Im Blockchain-Staub..." — Boub',
-    zh: '"一砖一瓦我们建造，<br>代码中我们信任，<br>我们的话语永远封存，<br>在区块链的尘埃中..." — Boub',
-    ar: '"لبنة تلو الأخرى نبني،<br>في الكود نثق،<br>كلماتنا محفورة للأبد،<br>في غبار البلوكتشين..." — بوب',
-    ja: '"レンガを積み上げて構築し、<br>コードを信じ、<br>私たちの言葉は永遠に封印され、<br>ブロックチェーンの塵の中へ..." — ブーブ',
-    nl: '"Steen voor steen bouwen we,<br>In code vertrouwen we,<br>Onze woorden voor altijd verzegeld,<br>In blockchain-stof..." — Boub',
-    ru: '"Кирпич за кирпичом мы строим,<br>Коду мы доверяем,<br>Наши слова навсегда запечатаны,<br>В пыли блокчейна..." — Буб'
-};
+    window.openImageModal = function(src) {
+        const modal = document.getElementById('imageModal');
+        const modalImg = document.getElementById('modal-image');
+        modalImg.src = src;
+        modal.style.display = 'flex';
+    };
 
-function setPoemLanguage(lang) {
-    const poemElement = document.getElementById('poem-text');
-    if (poemElement && poemTranslations[lang]) {
-        poemElement.innerHTML = poemTranslations[lang];
-        localStorage.setItem('preferredLanguage', lang);
-        highlightActiveLang(lang);
-    }
-}
+    // ===== MULTI-LANGUES POUR LE POÈME =====
+    const poemTranslations = {
+        en: '"Brick by brick we build,<br>In code we trust,<br>Our words forever sealed,<br>In blockchain dust..." — Boub',
+        fr: '"Brique par brique nous bâtissons,<br>Dans le code nous avons foi,<br>Nos mots scellés à jamais,<br>Dans la poussière de la blockchain..." — Boub',
+        es: '"Ladrillo a ladrillo construimos,<br>En el código confiamos,<br>Nuestras palabras selladas para siempre,<br>En el polvo de blockchain..." — Boub',
+        de: '"Stein für Stein bauen wir,<br>Dem Code vertrauen wir,<br>Unsere Worte für immer versiegelt,<br>Im Blockchain-Staub..." — Boub',
+        zh: '"一砖一瓦我们建造，<br>代码中我们信任，<br>我们的话语永远封存，<br>在区块链的尘埃中..." — Boub',
+        ar: '"لبنة تلو الأخرى نبني،<br>في الكود نثق،<br>كلماتنا محفورة للأبد،<br>في غبار البلوكتشين..." — بوب',
+        ja: '"レンガを積み上げて構築し、<br>コードを信じ、<br>私たちの言葉は永遠に封印され、<br>ブロックチェーンの塵の中へ..." — ブーブ',
+        nl: '"Steen voor steen bouwen we,<br>In code vertrouwen we,<br>Onze woorden voor altijd verzegeld,<br>In blockchain-stof..." — Boub',
+        ru: '"Кирпич за кирпичом мы строим,<br>Коду мы доверяем,<br>Наши слова навсегда запечатаны,<br>В пыли блокчейна..." — Буб'
+    };
 
-function highlightActiveLang(lang) {
-    document.querySelectorAll('.lang-btn').forEach(btn => {
-        btn.classList.remove('active');
-        if ((lang === 'en' && btn.textContent.includes('English')) ||
-            (lang === 'fr' && btn.textContent.includes('Français')) ||
-            (lang === 'es' && btn.textContent.includes('Español')) ||
-            (lang === 'de' && btn.textContent.includes('Deutsch')) ||
-            (lang === 'zh' && btn.textContent.includes('中文')) ||
-            (lang === 'ar' && btn.textContent.includes('العربية')) ||
-            (lang === 'ja' && btn.textContent.includes('日本語')) ||
-            (lang === 'nl' && btn.textContent.includes('Nederlands')) ||
-            (lang === 'ru' && btn.textContent.includes('Русский'))) {
-            btn.classList.add('active');
+    function setPoemLanguage(lang) {
+        const poemElement = document.getElementById('poem-text');
+        if (poemElement && poemTranslations[lang]) {
+            poemElement.innerHTML = poemTranslations[lang];
+            localStorage.setItem('preferredLanguage', lang);
+            highlightActiveLang(lang);
         }
-    });
-}
+    }
+
+    function highlightActiveLang(lang) {
+        document.querySelectorAll('.lang-btn').forEach(btn => {
+            btn.classList.remove('active');
+            if ((lang === 'en' && btn.textContent.includes('English')) ||
+                (lang === 'fr' && btn.textContent.includes('Français')) ||
+                (lang === 'es' && btn.textContent.includes('Español')) ||
+                (lang === 'de' && btn.textContent.includes('Deutsch')) ||
+                (lang === 'zh' && btn.textContent.includes('中文')) ||
+                (lang === 'ar' && btn.textContent.includes('العربية')) ||
+                (lang === 'ja' && btn.textContent.includes('日本語')) ||
+                (lang === 'nl' && btn.textContent.includes('Nederlands')) ||
+                (lang === 'ru' && btn.textContent.includes('Русский'))) {
+                btn.classList.add('active');
+            }
+        });
+    }
 
     // Check if already connected
     window.addEventListener('load', () => {
@@ -1192,7 +1240,6 @@ function highlightActiveLang(lang) {
             whoamiNav.textContent = `Connected: ${pubkey.slice(0,4)}...${pubkey.slice(-4)}`;
         }
         
-        // Vérifier les likes déjà effectués dans cette session
         if (sessionStorage.getItem('liked_poem')) {
             document.getElementById('poem-like').classList.add('liked');
         }
@@ -1202,6 +1249,12 @@ function highlightActiveLang(lang) {
         if (sessionStorage.getItem('liked_photo')) {
             document.getElementById('photo-like').classList.add('liked');
         }
+        if (sessionStorage.getItem('liked_forge')) {
+            document.getElementById('forge-like').classList.add('liked');
+        }
+        if (sessionStorage.getItem('liked_post')) {
+            document.getElementById('post-like').classList.add('liked');
+        }
         document.querySelectorAll('.nft-like-btn').forEach((btn, index) => {
             if (sessionStorage.getItem(`liked_nft${index+1}`)) {
                 btn.classList.add('liked');
@@ -1210,6 +1263,7 @@ function highlightActiveLang(lang) {
         });
     });
 </script>
+
 <!-- ===== CAPTURE UNIVERSELLE DES RÉFÉRENTS ===== -->
 <script>
 (function() {
@@ -1218,15 +1272,42 @@ function highlightActiveLang(lang) {
     
     if (referrerWallet) {
         localStorage.setItem('brick_referrer', referrerWallet);
-        console.log('✅ Référent détecté:', referrerWallet.slice(0,4) + '...' + referrerWallet.slice(-4));
+        console.log('✅ Référent détecté et sauvegardé:', referrerWallet.slice(0,4) + '...' + referrerWallet.slice(-4));
         
         const refMessage = document.createElement('div');
-        refMessage.style.cssText = 'position: fixed; bottom: 20px; right: 20px; background: #FF44AA; color: white; padding: 12px 24px; border-radius: 50px; font-size: 14px; z-index: 9999; box-shadow: 0 4px 20px rgba(255,68,170,0.4);';
-        refMessage.innerHTML = `✨ Referred by ${referrerWallet.slice(0,4)}...${referrerWallet.slice(-4)}`;
+        refMessage.style.cssText = `
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #FF44AA;
+            color: white;
+            padding: 12px 24px;
+            border-radius: 50px;
+            font-size: 14px;
+            font-weight: 600;
+            z-index: 9999;
+            box-shadow: 0 4px 20px rgba(255,68,170,0.4);
+            border: 1px solid rgba(255,255,255,0.3);
+            backdrop-filter: blur(5px);
+            animation: slideIn 0.3s ease-out;
+        `;
+        refMessage.innerHTML = `
+            <div style="display: flex; align-items: center; gap: 8px;">
+                <span>🧱</span>
+                <span>✨ Referred by <strong>${referrerWallet.slice(0,4)}...${referrerWallet.slice(-4)}</strong></span>
+            </div>
+        `;
+        
         document.body.appendChild(refMessage);
-        setTimeout(() => refMessage.remove(), 5000);
+        
+        setTimeout(() => {
+            refMessage.style.animation = 'slideOut 0.3s ease-out forwards';
+            setTimeout(() => refMessage.remove(), 300);
+        }, 5000);
     }
 })();
 </script>
+<!-- ===== FIN CAPTURE RÉFÉRENTS ===== -->
+
 </body>
 </html>
