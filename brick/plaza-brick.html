@@ -48,22 +48,15 @@
             color: #00aa88;
         }
         
-        .brick-header {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 15px;
-            margin-bottom: 30px;
-        }
-        
         .brick-icon {
             font-size: 64px;
+            margin-bottom: 20px;
         }
         
         h1 {
             color: #00aa88;
-            font-size: 48px;
-            margin: 0;
+            font-size: 36px;
+            margin-bottom: 20px;
         }
         
         .cell-display {
@@ -199,6 +192,12 @@
             transform: translateY(-2px);
             box-shadow: 0 10px 20px #00aa8860;
         }
+        
+        footer {
+            margin-top: 40px;
+            color: #aaa;
+            font-size: 14px;
+        }
     </style>
 </head>
 <body>
@@ -208,6 +207,8 @@
         <div id="brick-content">
             <!-- Le contenu sera injecté par JavaScript -->
         </div>
+        
+        <footer>🧱 BRICK · The immortal meme coin · Built on Solana · 2026</footer>
     </div>
 
     <script>
@@ -233,22 +234,19 @@
             }
 
             try {
-                // Chercher la brique Plaza dans Supabase
                 const { data, error } = await supabaseClient
                     .from('bricks')
                     .select('*')
                     .eq('cell', cell)
-                    .eq('kind', 'plaza')
                     .single();
 
-                if (error || !data) {
-                    // Brique non trouvée
+                if (error || !data || data.kind !== 'plaza') {
                     container.innerHTML = `
                         <div class="error-state">
                             <div class="error-emoji">😢</div>
-                            <div class="error-message">Brick ${cell} not found</div>
-                            <p style="color: #666; margin: 20px 0;">This plaza brick hasn't been claimed yet!</p>
-                            <a href="plaza.html?cell=${cell}" class="claim-button">🪙 Claim this brick</a>
+                            <div class="error-message">Plaza brick ${cell} not found</div>
+                            <p style="color: #666; margin: 20px 0;">This plaza spot hasn't been claimed yet!</p>
+                            <a href="buy-plaza.html?cell=${cell}" class="claim-button">🪙 Claim this spot</a>
                             <div style="margin-top: 20px;">
                                 <a href="plaza.html" class="back-link">← Back to Plaza</a>
                             </div>
@@ -257,10 +255,8 @@
                     return;
                 }
 
-                // Afficher la brique
                 const walletShort = data.wallet ? `${data.wallet.slice(0,4)}...${data.wallet.slice(-4)}` : 'Unknown';
                 
-                // Générer les liens sociaux
                 let socialLinks = '';
                 if (data.socials) {
                     const socials = data.socials;
@@ -278,16 +274,12 @@
                     }
                 }
 
-                // Système de likes
                 const likesKey = 'likes_' + cell;
                 let likesData = JSON.parse(localStorage.getItem(likesKey)) || { count: 0, likers: [] };
 
                 container.innerHTML = `
-                    <div class="brick-header">
-                        <span class="brick-icon">🪙</span>
-                        <h1>PLAZA BRICK</h1>
-                    </div>
-                    
+                    <div class="brick-icon">🪙</div>
+                    <h1>PLAZA BRICK</h1>
                     <div class="cell-display">${cell}</div>
                     
                     <img src="${data.image_url || 'https://placehold.co/200x200/00aa88/FFFFFF?text=🪙'}" 
@@ -313,13 +305,12 @@
                     </div>
                 `;
 
-                // Gestionnaire de like
                 const likeBtn = document.getElementById('like-btn');
                 const likeCount = document.getElementById('like-count');
                 
                 likeBtn.addEventListener('click', function() {
                     likesData.count++;
-                    likesData.likers.push('anonymous'); // Simple pour l'instant
+                    likesData.likers.push('anonymous');
                     localStorage.setItem(likesKey, JSON.stringify(likesData));
                     likeCount.innerHTML = `❤️ ${likesData.count}`;
                     this.classList.add('liked');
@@ -339,24 +330,6 @@
         }
 
         loadBrick();
-    </script>
-    <!-- ===== CAPTURE UNIVERSELLE DES RÉFÉRENTS ===== -->
-    <script>
-    (function() {
-        const urlParams = new URLSearchParams(window.location.search);
-        const referrerWallet = urlParams.get('ref');
-        
-        if (referrerWallet) {
-            localStorage.setItem('brick_referrer', referrerWallet);
-            console.log('✅ Référent détecté:', referrerWallet.slice(0,4) + '...' + referrerWallet.slice(-4));
-            
-            const refMessage = document.createElement('div');
-            refMessage.style.cssText = 'position: fixed; bottom: 20px; right: 20px; background: #00aa88; color: white; padding: 12px 24px; border-radius: 50px; font-size: 14px; z-index: 9999; box-shadow: 0 4px 20px rgba(0,170,136,0.4);';
-            refMessage.innerHTML = `🪙 Referred by ${referrerWallet.slice(0,4)}...${referrerWallet.slice(-4)}`;
-            document.body.appendChild(refMessage);
-            setTimeout(() => refMessage.remove(), 5000);
-        }
-    })();
     </script>
 </body>
 </html>
