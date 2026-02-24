@@ -21,7 +21,7 @@
             padding: 20px;
         }
 
-        /* ===== STICKY MENU (harmonisé) ===== */
+        /* ===== STICKY MENU ===== */
         .nav {
             background: white;
             backdrop-filter: blur(10px);
@@ -180,7 +180,7 @@
             margin: 0 auto;
         }
 
-        /* ===== HEADER AVEC LOGO JUICY ===== */
+        /* ===== HEADER ===== */
         .header {
             text-align: center;
             padding: 20px 0 20px;
@@ -296,6 +296,45 @@
             line-height: 1.6;
         }
 
+        /* Bannière d'explication */
+        .info-banner {
+            background: linear-gradient(135deg, #FF44AA20, #B87CFF30);
+            border: 2px solid #FF44AA;
+            border-radius: 60px;
+            padding: 20px 30px;
+            margin: 20px auto 40px;
+            max-width: 800px;
+            text-align: center;
+        }
+
+        .info-banner h3 {
+            color: #FF44AA;
+            margin: 10px 0;
+            font-size: 22px;
+        }
+
+        .info-banner p {
+            color: #333;
+            font-size: 16px;
+            line-height: 1.6;
+        }
+
+        .tag-cloud {
+            margin-top: 15px;
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .tag {
+            background: white;
+            padding: 8px 16px;
+            border-radius: 40px;
+            border: 1px solid #FF44AA;
+            font-size: 14px;
+        }
+
         /* Stats bar */
         .stats-bar {
             display: flex;
@@ -374,23 +413,19 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            color: #FF44AA;
-            font-size: 3rem;
             border-bottom: 2px solid #FF44AA20;
             overflow: hidden;
             position: relative;
         }
 
-        .moment-image img,
-        .moment-image video {
+        .moment-image img {
             width: 100%;
             height: 100%;
             object-fit: cover;
             transition: transform 0.3s;
         }
 
-        .moment-card:hover .moment-image img,
-        .moment-card:hover .moment-image video {
+        .moment-card:hover .moment-image img {
             transform: scale(1.05);
         }
 
@@ -497,14 +532,6 @@
             left: 0;
         }
 
-        .tip-box {
-            margin-top: 30px;
-            background: #ffe6f0;
-            padding: 25px;
-            border-radius: 24px;
-            border: 2px solid #FF44AA;
-        }
-
         .btn {
             display: inline-block;
             background: linear-gradient(135deg, #FF44AA, #ff2288);
@@ -605,7 +632,7 @@
 </head>
 <body>
 
-<!-- ===== STICKY MENU AVEC LOGO JUICY ===== -->
+<!-- ===== STICKY MENU ===== -->
 <div class="nav">
     <div class="nav-inner">
         <div class="brand">
@@ -627,7 +654,6 @@
             <a href="how-it-works.html">How it works</a>
             <a href="referrals.html">Referrals</a>
             <a href="daily.html">Daily</a>
-            
         </div>
         
         <div class="spacer"></div>
@@ -644,7 +670,7 @@
 </div>
 
 <div class="container">
-    <!-- Header avec gros logo juicy -->
+    <!-- Header -->
     <div class="header">
         <div class="logo-title-container">
             <div class="header-juicy-cube">
@@ -666,6 +692,24 @@
             Real moments. Real people. Forever on Solana.<br>
             Each brick tells a story that will never fade.
         </div>
+
+        <!-- Bannière d'explication EN ANGLAIS -->
+        <div class="info-banner">
+            <span style="font-size: 24px;">💡</span>
+            <h3>INSPIRATION GALLERY</h3>
+            <p>
+                These moments are not actual bricks yet, but EXAMPLES of what YOU can immortalize on the Canvas. 
+                Each image represents an idea for an eternal memory.
+            </p>
+            <div class="tag-cloud">
+                <span class="tag">🎓 Diploma</span>
+                <span class="tag">👶 Birth</span>
+                <span class="tag">💍 Wedding</span>
+                <span class="tag">🏔️ Travel</span>
+                <span class="tag">🐾 Pet</span>
+                <span class="tag">🎸 Concert</span>
+            </div>
+        </div>
         
         <!-- Stats -->
         <div class="stats-bar">
@@ -680,19 +724,12 @@
         </div>
     </div>
 
-    <!-- Galerie des moments -->
+    <!-- Galerie des moments avec GIFs -->
     <div class="moments-grid">
         <!-- 1. DIPLÔME -->
         <div class="moment-card">
             <div class="moment-image">
-                <video 
-                    src="images/eternal/diploma.webm" 
-                    muted 
-                    loop 
-                    playsinline
-                    onmouseover="this.play()"
-                    onmouseout="this.pause(); this.currentTime=0;"
-                ></video>
+                <img src="images/eternal/diploma.gif" alt="Diploma">
             </div>
             <div class="moment-content">
                 <div class="moment-title">🎓 High school diploma</div>
@@ -707,14 +744,7 @@
         <!-- 2. NAISSANCE -->
         <div class="moment-card">
             <div class="moment-image">
-                <video 
-                    src="images/eternal/baby.webm" 
-                    muted 
-                    loop 
-                    playsinline
-                    onmouseover="this.play()"
-                    onmouseout="this.pause(); this.currentTime=0;"
-                ></video>
+                <img src="images/eternal/baby.gif" alt="Baby">
             </div>
             <div class="moment-content">
                 <div class="moment-title">👶 Welcome, Léo</div>
@@ -729,14 +759,7 @@
         <!-- 3. DEMANDE EN MARIAGE -->
         <div class="moment-card">
             <div class="moment-image">
-                <video 
-                    src="images/eternal/proposal.webm" 
-                    muted 
-                    loop 
-                    playsinline
-                    onmouseover="this.play()"
-                    onmouseout="this.pause(); this.currentTime=0;"
-                ></video>
+                <img src="images/eternal/proposal.gif" alt="Proposal">
             </div>
             <div class="moment-content">
                 <div class="moment-title">💍 She said YES</div>
@@ -751,14 +774,7 @@
         <!-- 4. SELFIE PAPE -->
         <div class="moment-card">
             <div class="moment-image">
-                <video 
-                    src="images/eternal/pope.webm" 
-                    muted 
-                    loop 
-                    playsinline
-                    onmouseover="this.play()"
-                    onmouseout="this.pause(); this.currentTime=0;"
-                ></video>
+                <img src="images/eternal/pope.gif" alt="Pope">
             </div>
             <div class="moment-content">
                 <div class="moment-title">🤳 I met the Pope</div>
@@ -773,14 +789,7 @@
         <!-- 5. RÉVEILLON -->
         <div class="moment-card">
             <div class="moment-image">
-                <video 
-                    src="images/eternal/newyear.webm" 
-                    muted 
-                    loop 
-                    playsinline
-                    onmouseover="this.play()"
-                    onmouseout="this.pause(); this.currentTime=0;"
-                ></video>
+                <img src="images/eternal/newyear.gif" alt="New Year">
             </div>
             <div class="moment-content">
                 <div class="moment-title">🎄 New Year 2026</div>
@@ -795,14 +804,7 @@
         <!-- 6. PHOTO DE CLASSE -->
         <div class="moment-card">
             <div class="moment-image">
-                <video 
-                    src="images/eternal/class.webm" 
-                    muted 
-                    loop 
-                    playsinline
-                    onmouseover="this.play()"
-                    onmouseout="this.pause(); this.currentTime=0;"
-                ></video>
+                <img src="images/eternal/class.gif" alt="Class">
             </div>
             <div class="moment-content">
                 <div class="moment-title">📸 Class of 2025</div>
@@ -817,14 +819,7 @@
         <!-- 7. PREMIÈRE MAISON -->
         <div class="moment-card">
             <div class="moment-image">
-                <video 
-                    src="images/eternal/house.webm" 
-                    muted 
-                    loop 
-                    playsinline
-                    onmouseover="this.play()"
-                    onmouseout="this.pause(); this.currentTime=0;"
-                ></video>
+                <img src="images/eternal/house.gif" alt="House">
             </div>
             <div class="moment-content">
                 <div class="moment-title">🏠 First house</div>
@@ -839,14 +834,7 @@
         <!-- 8. ADIEU ANIMAL -->
         <div class="moment-card">
             <div class="moment-image">
-                <video 
-                    src="images/eternal/pet.webm" 
-                    muted 
-                    loop 
-                    playsinline
-                    onmouseover="this.play()"
-                    onmouseout="this.pause(); this.currentTime=0;"
-                ></video>
+                <img src="images/eternal/pet.gif" alt="Pet">
             </div>
             <div class="moment-content">
                 <div class="moment-title">🐾 Goodbye, Max</div>
@@ -861,14 +849,7 @@
         <!-- 9. CONCERT -->
         <div class="moment-card">
             <div class="moment-image">
-                <video 
-                    src="images/eternal/concert.webm" 
-                    muted 
-                    loop 
-                    playsinline
-                    onmouseover="this.play()"
-                    onmouseout="this.pause(); this.currentTime=0;"
-                ></video>
+                <img src="images/eternal/concert.gif" alt="Concert">
             </div>
             <div class="moment-content">
                 <div class="moment-title">🎸 Metallica live</div>
@@ -883,14 +864,7 @@
         <!-- 10. MACHU PICCHU -->
         <div class="moment-card">
             <div class="moment-image">
-                <video 
-                    src="images/eternal/machupicchu.webm" 
-                    muted 
-                    loop 
-                    playsinline
-                    onmouseover="this.play()"
-                    onmouseout="this.pause(); this.currentTime=0;"
-                ></video>
+                <img src="images/eternal/machupicchu.gif" alt="Machu Picchu">
             </div>
             <div class="moment-content">
                 <div class="moment-title">🏔️ Machu Picchu</div>
@@ -902,18 +876,11 @@
             </div>
         </div>
 
-        <!-- 11. DOCUMENTS (NOUVEAU) -->
+        <!-- 11. DOCUMENTS -->
         <div class="moment-card">
             <div class="moment-image" style="position: relative;">
                 <div class="new-badge">NEW</div>
-                <video 
-                    src="images/eternal/documents.webm" 
-                    muted 
-                    loop 
-                    playsinline
-                    onmouseover="this.play()"
-                    onmouseout="this.pause(); this.currentTime=0;"
-                ></video>
+                <img src="images/eternal/documents.gif" alt="Documents">
             </div>
             <div class="moment-content">
                 <div class="moment-title">📄 Life documents</div>
@@ -925,18 +892,11 @@
             </div>
         </div>
 
-        <!-- 12. INVENTION (NOUVEAU) -->
+        <!-- 12. INVENTION -->
         <div class="moment-card">
             <div class="moment-image" style="position: relative;">
                 <div class="new-badge">NEW</div>
-                <video 
-                    src="images/eternal/brevet.webm" 
-                    muted 
-                    loop 
-                    playsinline
-                    onmouseover="this.play()"
-                    onmouseout="this.pause(); this.currentTime=0;"
-                ></video>
+                <img src="images/eternal/brevet.gif" alt="Brevet">
             </div>
             <div class="moment-content">
                 <div class="moment-title">⚡ First invention</div>
@@ -968,29 +928,29 @@
                 <li>"One day, your grandchildren will find your message."</li>
             </ul>
         </div>
-        
-        <div class="tip-box">
-            <div style="font-size: 1.5rem; color: #FF44AA; margin-bottom: 10px;">🎯 TIP</div>
-            <p style="font-size: 1.2rem; color: #333;">Don't sell "crypto". Sell memories. Sell moments. Sell forever.</p>
-        </div>
+    </div>
 
-        <div style="text-align: center; margin: 40px 0; padding: 30px; background: linear-gradient(135deg, #f8f8ff, #fff); border-radius: 30px; border: 2px solid #FF44AA30;">
-            <span style="font-size: 2rem; display: block; margin-bottom: 10px;">🚀</span>
-            <h3 style="color: #FF44AA; font-size: 28px; margin-bottom: 15px;">Become an affiliate</h3>
-            <p style="color: #555; font-size: 18px; max-width: 500px; margin: 0 auto 25px;">
-                Earn <strong>15-25%</strong> on every brick sold through your link.
+    <!-- ===== TIP BOX AMÉLIORÉ (2 LIGNES) ===== -->
+    <div style="background: #ffe6f0; border-radius: 60px; padding: 40px; text-align: center; margin: 40px 0; border: 2px solid #FF44AA; box-shadow: 0 0 50px #FF44AA60;">
+        <div style="font-size: 2rem; color: #FF44AA; margin-bottom: 20px;">🎯 TIP</div>
+        <div style="display: flex; flex-direction: column; gap: 20px; align-items: center;">
+            <p style="font-size: 1.5rem; color: #FF44AA; text-shadow: 0 0 15px #FF44AA, 0 0 30px #B87CFF; font-weight: 800; margin: 0; animation: glowTip 2s infinite;">
+                ✨ Don't sell "crypto". Sell memories. Sell moments. Sell forever. ✨
             </p>
-            <a href="referrals.html" 
-               style="display: inline-block; background: #FF44AA; color: white; padding: 15px 40px; border-radius: 50px; text-decoration: none; font-weight: 700; font-size: 18px; box-shadow: 0 10px 20px rgba(255,68,170,0.3); transition: transform 0.2s;"
-               onmouseover="this.style.transform='scale(1.05)'" 
-               onmouseout="this.style.transform='scale(1)'">
-                🔥 Start Earning Now
-            </a>
-            <p style="color: #999; font-size: 14px; margin-top: 15px;">
-                (The page is ready — your dashboard awaits!)
-            </p>
+            <p style="font-size: 1.5rem; color: #6B8CFF; text-shadow: 0 0 15px #6B8CFF, 0 0 30px #8B5CF6; font-weight: 800; margin: 0; animation: glowTip 2s infinite 0.5s;">
+    ✨ Don't buy crypto. Buy memories. Buy moments. Buy forever. ✨
+</p>
         </div>
     </div>
+
+    <style>
+    @keyframes glowTip {
+        0% { opacity: 0.7; transform: scale(1); }
+        50% { opacity: 1; transform: scale(1.05); text-shadow: 0 0 30px currentColor, 0 0 60px #B87CFF, 0 0 90px #FF44AA; }
+        100% { opacity: 0.7; transform: scale(1); }
+    }
+    </style>
+    <!-- ===== FIN TIP BOX ===== -->
 
     <!-- PSYCHOLOGY SECTION -->
     <div class="psychology-box">
@@ -1011,29 +971,28 @@
         </div>
     </div>
 
-   <!-- FOOTER HARMONISÉ -->
-<footer>
-    <div class="footer-links">
-        <a href="index.html">🧱 Home</a>
-        <a href="canvas.html">🎨 Canvas</a>
-        <a href="plaza.html">🪙 Plaza</a>
-        <a href="eternal-moments.html">✨ Eternal</a>
-        <a href="how-it-works.html">📚 How it works</a>
-        <a href="tokenomics.html">📊 Tokenomics</a>
-        <a href="whitepaper.html">📄 Whitepaper</a>
-        <a href="rules.html">⚖️ Rules</a>
-        <a href="daily.html">📅 Daily</a>
-        <a href="referrals.html">🤝 Referrals</a>
-        <a href="https://x.com/BRICK476222" target="_blank">🐦 BRICK on X</a>
-        <a href="https://t.me/brick_fusion_news" target="_blank">📢 Telegram News</a>
-        <a href="https://t.me/brick_community" target="_blank">💬 Telegram Chat</a>
-        <a href="mailto:sycomore.crypto+brick@gmail.com">📧 Email BRICK</a>
-    </div>
-    <div class="footer-copyright">
-        🧱 BRICK · The immortal meme coin · Built on Solana · 2026
-    </div>
-</footer>
-    </div>
+    <!-- FOOTER HARMONISÉ -->
+    <footer>
+        <div class="footer-links">
+            <a href="index.html">🧱 Home</a>
+            <a href="canvas.html">🎨 Canvas</a>
+            <a href="plaza.html">🪙 Plaza</a>
+            <a href="eternal-moments.html">✨ Eternal</a>
+            <a href="how-it-works.html">📚 How it works</a>
+            <a href="tokenomics.html">📊 Tokenomics</a>
+            <a href="whitepaper.html">📄 Whitepaper</a>
+            <a href="rules.html">⚖️ Rules</a>
+            <a href="daily.html">📅 Daily</a>
+            <a href="referrals.html">🤝 Referrals</a>
+            <a href="https://x.com/BRICK476222" target="_blank">🐦 BRICK on X</a>
+            <a href="https://t.me/brick_fusion_news" target="_blank">📢 Telegram News</a>
+            <a href="https://t.me/brick_community" target="_blank">💬 Telegram Chat</a>
+            <a href="mailto:sycomore.crypto+brick@gmail.com">📧 Email BRICK</a>
+        </div>
+        <div class="footer-copyright">
+            🧱 BRICK · The immortal meme coin · Built on Solana · 2026
+        </div>
+    </footer>
 </div>
 
 <script>
@@ -1073,15 +1032,41 @@
     
     if (referrerWallet) {
         localStorage.setItem('brick_referrer', referrerWallet);
-        console.log('✅ Référent détecté:', referrerWallet.slice(0,4) + '...' + referrerWallet.slice(-4));
+        console.log('✅ Référent détecté et sauvegardé:', referrerWallet.slice(0,4) + '...' + referrerWallet.slice(-4));
         
         const refMessage = document.createElement('div');
-        refMessage.style.cssText = 'position: fixed; bottom: 20px; right: 20px; background: #FF44AA; color: white; padding: 12px 24px; border-radius: 50px; font-size: 14px; z-index: 9999; box-shadow: 0 4px 20px rgba(255,68,170,0.4);';
-        refMessage.innerHTML = `✨ Referred by ${referrerWallet.slice(0,4)}...${referrerWallet.slice(-4)}`;
+        refMessage.style.cssText = `
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #FF44AA;
+            color: white;
+            padding: 12px 24px;
+            border-radius: 50px;
+            font-size: 14px;
+            font-weight: 600;
+            z-index: 9999;
+            box-shadow: 0 4px 20px rgba(255,68,170,0.4);
+            border: 1px solid rgba(255,255,255,0.3);
+            backdrop-filter: blur(5px);
+            animation: slideIn 0.3s ease-out;
+        `;
+        refMessage.innerHTML = `
+            <div style="display: flex; align-items: center; gap: 8px;">
+                <span>🧱</span>
+                <span>✨ Referred by <strong>${referrerWallet.slice(0,4)}...${referrerWallet.slice(-4)}</strong></span>
+            </div>
+        `;
+        
         document.body.appendChild(refMessage);
-        setTimeout(() => refMessage.remove(), 5000);
+        
+        setTimeout(() => {
+            refMessage.style.animation = 'slideOut 0.3s ease-out forwards';
+            setTimeout(() => refMessage.remove(), 300);
+        }, 5000);
     }
 })();
 </script>
+<!-- ===== FIN CAPTURE RÉFÉRENTS ===== -->
 </body>
 </html>
