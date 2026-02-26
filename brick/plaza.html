@@ -28,7 +28,7 @@
             position: relative;
         }
 
-        /* ===== STICKY MENU ===== */
+        /* ===== STICKY MENU (harmonisé avec rules.html) ===== */
         .nav {
             background: white;
             backdrop-filter: blur(10px);
@@ -39,6 +39,7 @@
             z-index: 1000;
             box-shadow: 0 4px 20px rgba(0,170,136,0.1);
             margin-bottom: 20px;
+            border-radius: 60px;
         }
 
         .nav-inner {
@@ -121,6 +122,64 @@
         .btn-connect:hover {
             transform: translateY(-2px);
             box-shadow: 0 8px 20px rgba(0,170,136,0.4);
+        }
+
+        /* ===== LOGO DU MENU (JUICY CUBE) ===== */
+        .juicy-cube-mini {
+            width: 45px;
+            height: 45px;
+            position: relative;
+            transform-style: preserve-3d;
+            animation: spinSlow 10s infinite linear;
+            margin-right: 8px;
+        }
+
+        .cube-face-mini {
+            position: absolute;
+            width: 15px;
+            height: 15px;
+            border: 2px solid white;
+            border-radius: 4px;
+            box-shadow: 0 0 15px currentColor;
+        }
+
+        .cube-face-mini:nth-child(1) {
+            background: #ff44aa;
+            transform: rotateY(0deg) translateZ(22px);
+            box-shadow: 0 0 15px #ff44aa;
+        }
+        .cube-face-mini:nth-child(2) {
+            background: #b87cff;
+            transform: rotateY(90deg) translateZ(22px);
+            box-shadow: 0 0 15px #b87cff;
+        }
+        .cube-face-mini:nth-child(3) {
+            background: #8b5cf6;
+            transform: rotateX(90deg) translateZ(22px);
+            box-shadow: 0 0 15px #8b5cf6;
+        }
+
+        .brand-text {
+            font-weight: 900;
+            font-size: 28px;
+            background: linear-gradient(135deg, #ff44aa, #b87cff, #8b5cf6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            filter: drop-shadow(0 0 10px #ff44aa) drop-shadow(0 0 20px #b87cff);
+            animation: haloSoft 3s infinite ease-in-out;
+            letter-spacing: -0.5px;
+        }
+
+        @keyframes spinSlow {
+            0% { transform: rotateX(0deg) rotateY(0deg); }
+            100% { transform: rotateX(360deg) rotateY(360deg); }
+        }
+
+        @keyframes haloSoft {
+            0% { filter: drop-shadow(0 0 10px #ff44aa) drop-shadow(0 0 20px #b87cff); }
+            50% { filter: drop-shadow(0 0 20px #ff44aa) drop-shadow(0 0 40px #b87cff) drop-shadow(0 0 60px #8b5cf6); }
+            100% { filter: drop-shadow(0 0 10px #ff44aa) drop-shadow(0 0 20px #b87cff); }
         }
 
         .container {
@@ -441,23 +500,24 @@
 </head>
 <body>
 
-<!-- ===== STICKY MENU ===== -->
+<!-- ===== STICKY MENU AVEC LOGO JUICY ===== -->
 <div class="nav">
     <div class="nav-inner">
         <div class="brand">
-            <a href="index.html" style="display: flex; align-items: center; text-decoration: none;">
-                <img src="images/logo/brick_token.png" 
-                     alt="BRICK" 
-                     height="36" 
-                     style="margin-right: 8px; border-radius: 8px;">
-                <span style="font-weight: 800; font-size: 22px; background: linear-gradient(135deg, #00aa88, #2b8f5f); -webkit-background-clip: text; -webkit-text-fill-color: transparent; letter-spacing: -0.5px;">$BRICK</span>
+            <a href="index.html" style="display: flex; align-items: center; text-decoration: none; gap: 8px;">
+                <div class="juicy-cube-mini">
+                    <div class="cube-face-mini"></div>
+                    <div class="cube-face-mini"></div>
+                    <div class="cube-face-mini"></div>
+                </div>
+                <span class="brand-text">$BRICK</span>
             </a>
         </div>
         
         <div class="nav-links">
             <a href="index.html">Home</a>
             <a href="canvas.html">Canvas</a>
-            <a href="plaza.html">Plaza</a>
+            <a href="plaza.html" class="active">Plaza</a>
             <a href="eternal-moments.html">Eternal</a>
             <a href="how-it-works.html">How it works</a>
             <a href="referrals.html">Referrals</a>
