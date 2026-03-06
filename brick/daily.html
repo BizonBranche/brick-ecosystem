@@ -779,12 +779,13 @@
         <div class="daily-icon">📝</div>
         <h2>Poem of the Day</h2>
         <p id="poem-text">
-            "Brick by brick we build,<br>
-            In code we trust,<br>
-            Our words forever sealed,<br>
-            In blockchain dust..."
+            "389 âmes guidées vers la lumière,<br>
+            Un phare sans valeur, une étoile solitaire.<br>
+            Bientôt 500, puis 1000, la vague déferle,<br>
+            Sur l'océan Solana, un murmure éternel."<br>
+            — La communauté BRICK
         </p>
-        <div style="color: #888; margin-bottom: 20px;">— Boub</div>
+        <div style="color: #888; margin-bottom: 20px;">— La communauté BRICK</div>
         
         <div class="like-system">
             <div class="like-btn" id="poem-like">
@@ -805,7 +806,7 @@
         
         <div style="width:100%; max-width:500px; margin:20px auto; position:relative; border-radius:16px; overflow:hidden; box-shadow:0 10px 30px rgba(255,68,170,0.2);">
             <iframe 
-                src="https://www.youtube.com/embed/lRzFqW4Xh2k"
+                src="https://www.youtube.com/embed/9K7j75W-8cc"
                 style="width:100%; aspect-ratio:16/9; display:block;"
                 frameborder="0"
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
@@ -813,7 +814,7 @@
             </iframe>
         </div>
         
-        <p style="font-size:16px; color:#666; margin:10px 0;">"Jack Parow - Cooler as Ekke"</p>
+        <p style="font-size:16px; color:#666; margin:10px 0;">"AT NIGHT - I’m coming back again"</p>
         
         <div class="like-system">
             <div class="like-btn" id="video-like">
@@ -827,17 +828,25 @@
         </div>
     </div>
 
-    <!-- ========== PHOTO OF THE DAY ========== -->
+    <!-- ========== VIBE OF THE DAY (EX-PHOTO OF THE DAY) ========== -->
     <div class="daily-card">
-        <div class="daily-icon">📸</div>
-        <h2>Photo of the Day</h2>
-        <img src="images/picsofday/$BrickTeam1.webp" alt="Crypto Lady" id="daily-photo" style="cursor: pointer;">
-        <p style="font-size:16px; color:#666; margin:10px 0;">"Fly with us" · $Brick.</p>
+        <div class="daily-icon">🎬</div>
+        <h2>VIBE of the Day</h2>
+        <div style="width:100%; max-width:500px; margin:20px auto; position:relative; border-radius:16px; overflow:hidden; box-shadow:0 10px 30px rgba(255,68,170,0.2);">
+            <iframe 
+                src="https://www.youtube.com/embed/vwIVuB6b3ko"
+                style="width:100%; aspect-ratio:16/9; display:block;"
+                frameborder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowfullscreen>
+            </iframe>
+        </div>
+        <p style="font-size:16px; color:#666; margin:10px 0;">"B777 MIA 🇺🇸 Miami | LANDING 12"</p>
         
         <div class="like-system">
-            <div class="like-btn" id="photo-like">
+            <div class="like-btn" id="vibe-like">
                 <span>❤️</span>
-                <span class="like-count" id="photo-like-count">18</span>
+                <span class="like-count" id="vibe-like-count">18</span>
             </div>
             <div class="dislike-btn">
                 <span>👎</span>
@@ -1048,7 +1057,7 @@
         const likeItems = [
             { id: 'poem', default: 24 },
             { id: 'video', default: 42 },
-            { id: 'photo', default: 18 },
+            { id: 'vibe', default: 18 },
             { id: 'forge', default: 0 },
             { id: 'post', default: 0 },
             { id: 'nft1', default: 0 },
@@ -1065,7 +1074,7 @@
         
         document.getElementById('poem-like-count').textContent = localStorage.getItem('like_poem');
         document.getElementById('video-like-count').textContent = localStorage.getItem('like_video');
-        document.getElementById('photo-like-count').textContent = localStorage.getItem('like_photo');
+        document.getElementById('vibe-like-count').textContent = localStorage.getItem('like_vibe');
         document.getElementById('forge-like-count').textContent = localStorage.getItem('like_forge');
         document.getElementById('post-like-count').textContent = localStorage.getItem('like_post');
         document.getElementById('nft1-like').textContent = localStorage.getItem('like_nft1');
@@ -1102,17 +1111,17 @@
             this.classList.add('liked');
         });
 
-        document.getElementById('photo-like').addEventListener('click', function(e) {
+        document.getElementById('vibe-like').addEventListener('click', function(e) {
             e.preventDefault();
-            if (sessionStorage.getItem('liked_photo')) {
-                alert('You already liked this photo!');
+            if (sessionStorage.getItem('liked_vibe')) {
+                alert('You already liked this vibe!');
                 return;
             }
-            let current = parseInt(localStorage.getItem('like_photo'));
+            let current = parseInt(localStorage.getItem('like_vibe'));
             current++;
-            localStorage.setItem('like_photo', current);
-            document.getElementById('photo-like-count').textContent = current;
-            sessionStorage.setItem('liked_photo', 'true');
+            localStorage.setItem('like_vibe', current);
+            document.getElementById('vibe-like-count').textContent = current;
+            sessionStorage.setItem('liked_vibe', 'true');
             this.classList.add('liked');
         });
 
@@ -1170,17 +1179,9 @@
     }
 
     function setupPhotoZoom() {
-        const photo = document.getElementById('daily-photo');
         const modal = document.getElementById('imageModal');
         const modalImg = document.getElementById('modal-image');
         const closeBtn = document.querySelector('.photo-modal-close');
-
-        if (photo) {
-            photo.addEventListener('click', () => {
-                modalImg.src = photo.src;
-                modal.style.display = 'flex';
-            });
-        }
 
         if (closeBtn) {
             closeBtn.addEventListener('click', () => {
@@ -1204,15 +1205,15 @@
 
     // ===== MULTI-LANGUES POUR LE POÈME =====
     const poemTranslations = {
-        en: '"Brick by brick we build,<br>In code we trust,<br>Our words forever sealed,<br>In blockchain dust..." — Boub',
-        fr: '"Brique par brique nous bâtissons,<br>Dans le code nous avons foi,<br>Nos mots scellés à jamais,<br>Dans la poussière de la blockchain..." — Boub',
-        es: '"Ladrillo a ladrillo construimos,<br>En el código confiamos,<br>Nuestras palabras selladas para siempre,<br>En el polvo de blockchain..." — Boub',
-        de: '"Stein für Stein bauen wir,<br>Dem Code vertrauen wir,<br>Unsere Worte für immer versiegelt,<br>Im Blockchain-Staub..." — Boub',
-        zh: '"一砖一瓦我们建造，<br>代码中我们信任，<br>我们的话语永远封存，<br>在区块链的尘埃中..." — Boub',
-        ar: '"لبنة تلو الأخرى نبني،<br>في الكود نثق،<br>كلماتنا محفورة للأبد،<br>في غبار البلوكتشين..." — بوب',
-        ja: '"レンガを積み上げて構築し、<br>コードを信じ、<br>私たちの言葉は永遠に封印され、<br>ブロックチェーンの塵の中へ..." — ブーブ',
-        nl: '"Steen voor steen bouwen we,<br>In code vertrouwen we,<br>Onze woorden voor altijd verzegeld,<br>In blockchain-stof..." — Boub',
-        ru: '"Кирпич за кирпичом мы строим,<br>Коду мы доверяем,<br>Наши слова навсегда запечатаны,<br>В пыли блокчейна..." — Буб'
+        en: '"389 souls guided to the light,<br>A worthless lighthouse, a star in the night.<br>Soon 500, then 1000, the wave breaks,<br>On the Solana ocean, an eternal whisper."<br>— The BRICK Community',
+        fr: '"389 âmes guidées vers la lumière,<br>Un phare sans valeur, une étoile solitaire.<br>Bientôt 500, puis 1000, la vague déferle,<br>Sur l\'océan Solana, un murmure éternel."<br>— La communauté BRICK',
+        es: '"389 almas guiadas a la luz,<br>Un faro sin valor, una estrella en la noche.<br>Pronto 500, luego 1000, la ola rompe,<br>En el océano Solana, un susurro eterno."<br>— La comunidad BRICK',
+        de: '"389 Seelen zum Licht geführt,<br>Ein Leuchtturm ohne Wert, ein Stern in der Nacht.<br>Bald 500, dann 1000, die Welle bricht,<br>Auf dem Solana-Ozean, ein ewiges Flüstern."<br>— Die BRICK-Community',
+        zh: '"389 个灵魂被引向光明，<br>一座无价值的灯塔，夜空中的一颗星。<br>很快 500，然后 1000，浪潮破碎，<br>在 Solana 的海洋上，永恒的耳语。"<br>— BRICK 社区',
+        ar: '"389 روحًا هُديت إلى النور،<br>منارة بلا قيمة، نجم في الليل.<br>قريبًا 500، ثم 1000، تتحطم الموجة،<br>على محيط سولانا، همس أبدي."<br>— مجتمع BRICK',
+        ja: '"389の魂が光へ導かれ、<br>価値のない灯台、夜の星。<br>やがて500、そして1000、波が砕ける、<br>Solanaの海に、永遠のささやき。"<br>— BRICKコミュニティ',
+        nl: '"389 zielen naar het licht geleid,<br>Een vuurtoren zonder waarde, een ster in de nacht.<br>Binnenkort 500, dan 1000, de golf breekt,<br>Op de Solana-oceaan, een eeuwige fluistering."<br>— De BRICK-gemeenschap',
+        ru: '"389 душ приведены к свету,<br>Бесполезный маяк, звезда в ночи.<br>Скоро 500, затем 1000, волна разбивается,<br>В океане Solana, вечный шепот."<br>— Сообщество BRICK'
     };
 
     function setPoemLanguage(lang) {
@@ -1255,8 +1256,8 @@
         if (sessionStorage.getItem('liked_video')) {
             document.getElementById('video-like').classList.add('liked');
         }
-        if (sessionStorage.getItem('liked_photo')) {
-            document.getElementById('photo-like').classList.add('liked');
+        if (sessionStorage.getItem('liked_vibe')) {
+            document.getElementById('vibe-like').classList.add('liked');
         }
         if (sessionStorage.getItem('liked_forge')) {
             document.getElementById('forge-like').classList.add('liked');
